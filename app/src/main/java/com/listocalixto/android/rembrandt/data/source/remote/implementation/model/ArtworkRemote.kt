@@ -39,8 +39,12 @@ data class ArtworkRemote(
     val hasNotBeenViewedMuch: Boolean?,
     @SerialName("id")
     val id: Long,
+    @kotlinx.serialization.Transient
+    val isFavorite: Boolean = false,
     @SerialName("image_id")
     val imageId: String?,
+    @kotlinx.serialization.Transient
+    val imageUrl: String = "",
     @SerialName("latitude")
     val latitude: Double?,
     @SerialName("longitude")
@@ -56,5 +60,5 @@ data class ArtworkRemote(
     @SerialName("thumbnail")
     val thumbnail: ThumbnailRemote?,
     @SerialName("title")
-    val title: String?
+    val title: String?,
 )

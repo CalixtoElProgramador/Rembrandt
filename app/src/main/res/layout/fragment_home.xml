@@ -11,10 +11,17 @@
 
     </data>
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listArtworks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf"
-        android:textAppearance="?attr/textAppearanceHeadlineMedium" />
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/grid_0_5"
+        android:paddingTop="@dimen/grid_1"
+        android:paddingBottom="@dimen/_56sdp"
+        android:transitionGroup="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:spanCount="1"
+        tools:listitem="@layout/list_item_artwork" />
 
 </layout>

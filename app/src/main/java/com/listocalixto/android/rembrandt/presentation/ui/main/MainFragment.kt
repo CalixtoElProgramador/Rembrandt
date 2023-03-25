@@ -1,6 +1,7 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,8 +33,8 @@ class MainFragment :
                 childFragmentManager.findFragmentById(navHostMainFragment.id) as NavHostFragment
             val navController = navHostFragment.navController
             bottomNav.setupWithNavController(navController)
-            bottomNav.setOnItemReselectedListener {
-                scrollContainer.smoothScrollTo(0, 0)
+            appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                Log.d(TAG, "addOnOffsetChangedListener: $verticalOffset")
             }
         }
     }
@@ -41,7 +42,11 @@ class MainFragment :
     override fun onDestinationChanged(
         controller: NavController,
         destination: NavDestination,
-        arguments: Bundle?
+        arguments: Bundle?,
     ) {
+    }
+
+    companion object {
+        const val TAG = "MainFragment"
     }
 }

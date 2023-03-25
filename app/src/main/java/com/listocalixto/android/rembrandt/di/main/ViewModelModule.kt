@@ -8,6 +8,7 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.Remo
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSourceImpl
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworksByPageUseCase
+import com.listocalixto.android.rembrandt.domain.usecase.main.GetImageUrlUseCase
 import com.listocalixto.android.rembrandt.domain.usecase.main.HomeUseCases
 import dagger.Binds
 import dagger.Module
@@ -18,36 +19,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object ViewModelModule {
-
-    @Provides
-    @ViewModelScoped
-    fun provideColorRemoteToDomain() = ColorRemoteToDomain()
-
-    @Provides
-    @ViewModelScoped
-    fun provideThumbnailRemoteToDomain() = ThumbnailRemoteToDomain()
-
-    @Provides
-    @ViewModelScoped
-    fun provideArtworkRemoteToEntity(
-        colorMapper: ColorRemoteToDomain,
-        thumbnailMapper: ThumbnailRemoteToDomain,
-    ) = ArtworkRemoteToEntity(
-        colorMapper = colorMapper,
-        thumbnailMapper = thumbnailMapper,
-    )
-
-    @Provides
-    @ViewModelScoped
-    fun provideHomeUseCases(repo: ArtworkRepo) = HomeUseCases(
-        getArtworksByPage = GetArtworksByPageUseCase(repo),
-    )
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class ViewModelModule2 {
+abstract class ViewModelModule {
 
     @Binds
     @ViewModelScoped
@@ -56,4 +28,34 @@ abstract class ViewModelModule2 {
     @Binds
     @ViewModelScoped
     abstract fun bindArtworkRepo(artworkRepoImpl: ArtworkRepoImpl): ArtworkRepo
+
+    companion object {
+        @Provides
+        @ViewModelScoped
+        fun provideGetImageUrlUseCase() = GetImageUrlUseCase()
+
+        @Provides
+        @ViewModelScoped
+        fun provideColorRemoteToDomain() = ColorRemoteToDomain()
+
+        @Provides
+        @ViewModelScoped
+        fun provideThumbnailRemoteToDomain() = ThumbnailRemoteToDomain()
+
+        @Provides
+        @ViewModelScoped
+        fun provideArtworkRemoteToEntity(
+            colorMapper: ColorRemoteToDomain,
+            thumbnailMapper: ThumbnailRemoteToDomain,
+        ) = ArtworkRemoteToEntity(
+            colorMapper = colorMapper,
+            thumbnailMapper = thumbnailMapper,
+        )
+
+        @Provides
+        @ViewModelScoped
+        fun provideHomeUseCases(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) = HomeUseCases(
+            getArtworksByPage = GetArtworksByPageUseCase(repo, getImageUrl),
+        )
+    }
 }
