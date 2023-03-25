@@ -10,12 +10,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ArtworkDao {
 
-    @Query("SELECT * FROM artwork")
-    fun getArtworks(): Flow<ArtworkTable>
+    @Query("SELECT * FROM artworks")
+    fun getArtworks(): Flow<List<ArtworkTable>>
 
-    @Query("SELECT * FROM artwork WHERE id = :artworkId")
+    @Query("SELECT * FROM artworks WHERE id = :artworkId")
     fun getArtworkById(artworkId: Long): Flow<ArtworkTable?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArtwork(artwork: ArtworkTable)
+
+    @Query("DELETE FROM artworks")
+    suspend fun deleteAllArtworks()
 }

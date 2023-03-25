@@ -17,7 +17,7 @@ data class ArtworkUiState(
             id = artwork.id,
             imageUrl = artwork.imageUrl,
             type = artwork.artworkTypeTitle,
-            caption = artwork.categoryTitles.first(),
+            caption = if (artwork.categoryTitles.isEmpty()) "IS EMPTY" else artwork.categoryTitles.first(),
             title = artwork.title,
             artistName = artwork.artistTitle,
             isFavorite = artwork.isFavorite,

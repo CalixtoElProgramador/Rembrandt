@@ -1,3 +1,14 @@
 package com.listocalixto.android.rembrandt.data.source.local.configuration
 
-class RembrandtDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.listocalixto.android.rembrandt.data.source.local.implementation.table.main.ArtworkTable
+
+@Database(entities = [ArtworkTable::class], version = 1, exportSchema = false)
+abstract class RembrandtDatabase : RoomDatabase() {
+    abstract fun artworkDao(): ArtworkDao
+
+    companion object {
+        const val NAME = "REMBRANDT_DATABASE"
+    }
+}
