@@ -14,9 +14,7 @@ import com.listocalixto.android.rembrandt.data.source.local.implementation.Local
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSource
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSourceImpl
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
-import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworksByPageUseCase
-import com.listocalixto.android.rembrandt.domain.usecase.main.GetImageUrlUseCase
-import com.listocalixto.android.rembrandt.domain.usecase.main.HomeUseCases
+import com.listocalixto.android.rembrandt.domain.usecase.main.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -90,6 +88,8 @@ abstract class ViewModelModule {
         @ViewModelScoped
         fun provideHomeUseCases(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) = HomeUseCases(
             getArtworksByPage = GetArtworksByPageUseCase(repo, getImageUrl),
+            updateArtwork = UpdateArtworkUseCase(repo),
+            getArtworkById = GetArtworkByIdUseCase(repo),
         )
     }
 }

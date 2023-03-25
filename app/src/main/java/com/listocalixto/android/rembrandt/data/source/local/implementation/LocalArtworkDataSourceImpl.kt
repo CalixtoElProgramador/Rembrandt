@@ -13,13 +13,13 @@ class LocalArtworkDataSourceImpl @Inject constructor(
     private val mapper: ArtworkLocalToEntity,
 ) : LocalArtworkDataSource {
 
-    override fun getArtworks(): Flow<Set<Artwork>> {
-        return dao.getArtworks().map { artworks ->
+    override fun observeArtworks(): Flow<Set<Artwork>> {
+        return dao.observeArtworks().map { artworks ->
             mapper.map(artworks.toList()).toSet()
         }
     }
 
-    override fun getArtworkById(id: Long): Flow<Artwork> = flow {
+    override fun observeArtworkById(id: Long): Flow<Artwork> = flow {
     }
 
     override fun getArtworksByConcept(concept: String): Flow<List<Artwork>> {
@@ -44,5 +44,17 @@ class LocalArtworkDataSourceImpl @Inject constructor(
 
     override suspend fun deleteFavorite(artworkId: Long) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun updateArtwork(artwork: Artwork) {
+        dao.updateArtwork(mapper.reverseMap(artwork))
+    }
+
+    override suspend fun getArtworkById(id: Long): Artwork {
+        return mapper.map(dao.getArtworkById(id))
+    }
+
+    override suspend fun getArtworks(): Set<Artwork> {
+        return dao.getArtworks().map { mapper.map(it) }.toSet()
     }
 }

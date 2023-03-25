@@ -5,13 +5,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface ArtworkRepo {
 
-    fun getArtworksByPage(page: String): Flow<Result<Set<Artwork>>>
+    fun observeArtworksByPage(page: String): Flow<Result<Set<Artwork>>>
 
-    fun getArtworkById(id: Long): Flow<Artwork>
+    fun observeArtworkById(id: Long): Flow<Artwork>
 
     fun getArtworksByConcept(concept: String): Flow<Set<Artwork>>
 
     fun getArtworksByArtistId(id: Long): Flow<Set<Artwork>>
 
     suspend fun deleteAllArtworks()
+
+    suspend fun updateArtwork(artwork: Artwork)
+
+    suspend fun getArtworkById(id: Long): Artwork
 }

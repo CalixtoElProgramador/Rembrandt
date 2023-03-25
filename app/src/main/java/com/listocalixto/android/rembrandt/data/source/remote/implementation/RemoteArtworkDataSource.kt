@@ -4,7 +4,6 @@ import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteArtworkDataSource {
-
     suspend fun getArtworksByPage(page: String): Flow<Set<Artwork>>
     fun getArtworkById(id: Long): Flow<Artwork>
     fun getArtworksByConcept(concept: String): Flow<List<Artwork>>

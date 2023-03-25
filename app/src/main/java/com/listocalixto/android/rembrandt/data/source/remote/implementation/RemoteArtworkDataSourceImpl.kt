@@ -46,7 +46,7 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
         private const val JUST_PUBLIC_DOMAIN_VALUE = "true"
         private const val PAGE_NAME = "page"
         private const val LIMIT_NAME = "limit"
-        private const val LIMIT_VALUE = "10"
+        private const val LIMIT_VALUE = "100"
         private const val FIELDS_NAME = "fields"
         private const val FIELDS_VALUE =
             "id,title,thumbnail,has_not_been_viewed_much,date_start,date_end,date_display,artist_display,place_of_origin,dimensions,medium_display,credit_line,color,latitude,longitude,gallery_title,gallery_id,artwork_type_title,artwork_type_id,artist_id,artist_title,category_ids,category_titles,term_titles,image_id"

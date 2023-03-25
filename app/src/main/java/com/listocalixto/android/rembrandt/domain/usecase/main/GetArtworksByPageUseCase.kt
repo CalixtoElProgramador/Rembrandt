@@ -13,7 +13,7 @@ class GetArtworksByPageUseCase @Inject constructor(
 ) {
     operator fun invoke(page: Int): Flow<Result<GetArtworksByPageResult>> = flow {
         val pageString = page.toString()
-        repo.getArtworksByPage(pageString).collect { result ->
+        repo.observeArtworksByPage(pageString).collect { result ->
             result.onSuccess { artworks ->
                 val artworksWithImages = artworks.map { artwork ->
                     artwork.copy(imageUrl = getImageUrl(artwork.imageId, qualityType = MEDIUM))

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -18,20 +19,24 @@ class ArtworkRepoImpl @Inject constructor(
     private val remoteDataSource: RemoteArtworkDataSource,
 ) : ArtworkRepo {
 
-    override fun getArtworksByPage(page: String): Flow<Result<Set<Artwork>>> = networkBoundResource(
-        query = {
-            localDataSource.getArtworks()
-        },
-        fetch = {
-            remoteDataSource.getArtworksByPage(page)
-        },
-        saveFetchResult = { artworks ->
-            localDataSource.deleteAllArtworks()
-            artworks.first().forEach { localDataSource.insertArtwork(it) }
-        },
-    ).flowOn(Dispatchers.IO)
+    override fun observeArtworksByPage(page: String): Flow<Result<Set<Artwork>>> =
+        networkBoundResource(
+            query = {
+                localDataSource.observeArtworks()
+            },
+            fetch = {
+                remoteDataSource.getArtworksByPage(page)
+            },
+            saveFetchResult = { artworks ->
+                localDataSource.deleteAllArtworks()
+                artworks.first().forEach { localDataSource.insertArtwork(it) }
+            },
+            shouldFetch = {
+                localDataSource.getArtworks().isEmpty()
+            },
+        ).flowOn(Dispatchers.IO)
 
-    override fun getArtworkById(id: Long): Flow<Artwork> = flow {
+    override fun observeArtworkById(id: Long): Flow<Artwork> = flow {
     }
 
     override fun getArtworksByConcept(concept: String): Flow<Set<Artwork>> {
@@ -43,5 +48,13 @@ class ArtworkRepoImpl @Inject constructor(
     }
 
     override suspend fun deleteAllArtworks() = withContext(Dispatchers.IO) {
+    }
+
+    override suspend fun updateArtwork(artwork: Artwork) = withContext<Unit>(Dispatchers.IO) {
+        launch { localDataSource.updateArtwork(artwork) }
+    }
+
+    override suspend fun getArtworkById(id: Long): Artwork {
+        return localDataSource.getArtworkById(id)
     }
 }

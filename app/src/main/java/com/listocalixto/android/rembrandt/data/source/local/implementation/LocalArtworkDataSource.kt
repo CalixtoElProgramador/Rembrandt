@@ -5,12 +5,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalArtworkDataSource {
 
-    fun getArtworks(): Flow<Set<Artwork>>
-    fun getArtworkById(id: Long): Flow<Artwork>
+    fun observeArtworks(): Flow<Set<Artwork>>
+    fun observeArtworkById(id: Long): Flow<Artwork>
     fun getArtworksByConcept(concept: String): Flow<List<Artwork>>
     fun getArtworksByArtistId(id: Long): Flow<List<Artwork>>
     suspend fun insertArtwork(artwork: Artwork)
     suspend fun deleteAllArtworks()
     suspend fun saveFavorite(artworkId: Long)
     suspend fun deleteFavorite(artworkId: Long)
+    suspend fun updateArtwork(artwork: Artwork)
+    suspend fun getArtworkById(id: Long): Artwork
+    suspend fun getArtworks(): Set<Artwork>
 }

@@ -39,7 +39,13 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onEvent(event: HomeUiEvent): Unit = when (event) {
-        is HomeUiEvent.ObFavorite -> {}
+        is HomeUiEvent.ObFavorite -> {
+            viewModelScope.launch(viewModelDispatcher) {
+                val artwork = useCases.getArtworkById(event.artworkId)
+                useCases.updateArtwork(artwork.copy(isFavorite = !artwork.isFavorite))
+            }
+            Unit
+        }
         is HomeUiEvent.OnShare -> {}
     }
 

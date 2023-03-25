@@ -5,7 +5,9 @@
 
     <data>
 
-        <import type="android.R" />
+        <import type="com.google.android.material.R" />
+
+        <import type="androidx.core.content.ContextCompat" />
 
         <variable
             name="artwork"
@@ -133,7 +135,9 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="@id/textNameArtist"
                 app:layout_constraintTop_toBottomOf="@id/textNameArtist"
-                app:srcCompat="@drawable/ic_favorite_border" />
+                app:srcCompat="@{artwork.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
+                app:tint="@{artwork.favorite ? R.attr.colorTertiary : R.attr.colorOutline}"
+                tools:src="@drawable/ic_favorite_border" />
 
             <ImageButton
                 android:id="@+id/iconButtonShare"

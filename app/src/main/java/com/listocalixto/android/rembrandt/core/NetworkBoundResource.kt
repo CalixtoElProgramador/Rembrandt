@@ -10,7 +10,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
-    crossinline shouldFetch: (ResultType) -> Boolean = { true },
+    crossinline shouldFetch: suspend (ResultType) -> Boolean = { true },
     crossinline onLoading: (data: ResultType?) -> Unit = {}
 ) = flow {
     // onLoading(null)
