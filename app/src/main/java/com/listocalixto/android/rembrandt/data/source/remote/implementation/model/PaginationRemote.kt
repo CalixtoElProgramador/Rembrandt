@@ -1,11 +1,11 @@
-package com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main
+package com.listocalixto.android.rembrandt.data.source.remote.implementation.model
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PaginationResponse(
+data class PaginationRemote(
     @SerialName("current_page")
     val currentPage: Int?,
     @SerialName("limit")

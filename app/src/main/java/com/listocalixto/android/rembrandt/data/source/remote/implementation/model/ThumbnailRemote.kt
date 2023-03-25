@@ -1,10 +1,10 @@
-package com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main
+package com.listocalixto.android.rembrandt.data.source.remote.implementation.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ThumbnailResponse(
+data class ThumbnailRemote(
     @SerialName("alt_text")
     val altText: String?,
     @SerialName("height")

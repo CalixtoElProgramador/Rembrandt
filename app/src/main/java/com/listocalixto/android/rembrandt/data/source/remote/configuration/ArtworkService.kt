@@ -4,6 +4,5 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.resp
 import kotlinx.coroutines.flow.Flow
 
 interface ArtworkService {
-
     fun fetchArtworksByPage(page: Int): Flow<GetArtworksResponse>
 }

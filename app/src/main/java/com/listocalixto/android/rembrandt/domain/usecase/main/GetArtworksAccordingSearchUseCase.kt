@@ -21,12 +21,11 @@ class GetArtworksAccordingSearchUseCase {
             val querySplit = query.split(BLANK_SPACE).toMutableList()
             querySplit.removeIf { it.isEmpty() || it == "\\n" || it == "\\t" }
             var queryFormatted: String = BLANK_SPACE
-            querySplit.forEach {
-                queryFormatted += "$it$BLANK_SPACE"
+            querySplit.forEach { word ->
+                queryFormatted += "$word$BLANK_SPACE"
             }
             return queryFormatted.trim()
         }
-
         private const val BLANK_SPACE = " "
     }
 }

@@ -17,11 +17,6 @@ class LocalArtworkDataSourceImpl(
     }
 
     override fun getArtworkById(id: Long): Flow<Artwork> = flow {
-        dao.getArtworkById(id).collect { artwork ->
-            artwork?.let { emit(mapper.map(it)) } ?: run {
-                throw NoSuchElementException()
-            }
-        }
     }
 
     override fun getArtworksByConcept(concept: String): Flow<List<Artwork>> {
@@ -33,7 +28,6 @@ class LocalArtworkDataSourceImpl(
     }
 
     override suspend fun insertArtwork(artwork: Artwork) {
-        dao.insertArtwork(artwork = mapper.reverseMap(artwork))
     }
 
     override suspend fun deleteAllArtworks() {

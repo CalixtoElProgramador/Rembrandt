@@ -1,21 +1,32 @@
 package com.listocalixto.android.rembrandt.data.source.remote.implementation
 
-import com.listocalixto.android.rembrandt.data.mapper.remote.ArtworkResponseToEntity
-import com.listocalixto.android.rembrandt.data.source.remote.configuration.ArtworkService
+import com.listocalixto.android.rembrandt.data.mapper.remote.ArtworkRemoteToEntity
+import com.listocalixto.android.rembrandt.data.source.remote.configuration.HttpRoutes
+import com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main.GetArtworksResponse
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
-import kotlinx.coroutines.Dispatchers
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class RemoteArtworkDataSourceImpl(
-    private val service: ArtworkService,
-    private val mapper: ArtworkResponseToEntity
+class RemoteArtworkDataSourceImpl @Inject constructor(
+    private val mapper: ArtworkRemoteToEntity,
+    private val client: HttpClient,
 ) : RemoteArtworkDataSource {
 
-    override suspend fun getArtworks(): List<Artwork> = withContext(Dispatchers.IO) {
-        val response = service.fetchArtworksByPage(1).first()
-        mapper.map(response.data)
+    override suspend fun getArtworksByPage(page: String): Flow<Set<Artwork>> = flow {
+        val response: GetArtworksResponse = client.get(HttpRoutes.ARTWORKS) {
+            url {
+                parameters.append(JUST_PUBLIC_DOMAIN_NAME, JUST_PUBLIC_DOMAIN_VALUE)
+                parameters.append(PAGE_NAME, page)
+                parameters.append(LIMIT_NAME, LIMIT_VALUE)
+                parameters.append(LIMIT_NAME, LIMIT_VALUE)
+                parameters.append(FIELDS_NAME, FIELDS_VALUE)
+            }
+        }
+        val artworks = response.data.map { mapper.map(it) }
+        emit(artworks.toSet())
     }
 
     override fun getArtworkById(id: Long): Flow<Artwork> {
@@ -28,5 +39,16 @@ class RemoteArtworkDataSourceImpl(
 
     override fun getArtworksByArtistId(id: Long): Flow<List<Artwork>> {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        private const val JUST_PUBLIC_DOMAIN_NAME = "query[term][is_public_domain]"
+        private const val JUST_PUBLIC_DOMAIN_VALUE = "true"
+        private const val PAGE_NAME = "page"
+        private const val LIMIT_NAME = "limit"
+        private const val LIMIT_VALUE = "10"
+        private const val FIELDS_NAME = "fields"
+        private const val FIELDS_VALUE =
+            "id,title,thumbnail,has_not_been_viewed_much,date_start,date_end,date_display,artist_display,place_of_origin,dimensions,medium_display,credit_line,color,latitude,longitude,gallery_title,gallery_id,artwork_type_title,artwork_type_id,artist_id,artist_title,category_ids,category_titles,term_titles,image_id"
     }
 }

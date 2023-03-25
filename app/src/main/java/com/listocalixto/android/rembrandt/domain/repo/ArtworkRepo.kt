@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ArtworkRepo {
 
-    fun getAllArtworks(): Flow<Result<Set<Artwork>>>
+    fun getArtworksByPage(page: String): Flow<Result<Set<Artwork>>>
 
     fun getArtworkById(id: Long): Flow<Artwork>
 

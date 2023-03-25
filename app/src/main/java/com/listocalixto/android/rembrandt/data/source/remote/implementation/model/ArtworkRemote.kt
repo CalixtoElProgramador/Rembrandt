@@ -1,10 +1,10 @@
-package com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main
+package com.listocalixto.android.rembrandt.data.source.remote.implementation.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ArtworkResponse(
+data class ArtworkRemote(
     @SerialName("artist_display")
     val artistDisplay: String?,
     @SerialName("artist_id")
@@ -16,11 +16,11 @@ data class ArtworkResponse(
     @SerialName("artwork_type_title")
     val artworkTypeTitle: String?,
     @SerialName("category_ids")
-    val categoryIds: List<String?>?,
+    val categoryIds: List<String>,
     @SerialName("category_titles")
-    val categoryTitles: List<String?>?,
+    val categoryTitles: List<String>,
     @SerialName("color")
-    val color: ColorResponse?,
+    val color: ColorRemote?,
     @SerialName("credit_line")
     val creditLine: String?,
     @SerialName("date_display")
@@ -52,9 +52,9 @@ data class ArtworkResponse(
     @SerialName("_score")
     val score: Double?,
     @SerialName("term_titles")
-    val termTitles: List<String?>?,
+    val termTitles: List<String>,
     @SerialName("thumbnail")
-    val thumbnail: ThumbnailResponse?,
+    val thumbnail: ThumbnailRemote?,
     @SerialName("title")
     val title: String?
 )

@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt.presentation.ui.main.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel: HomeViewModel by hiltNavGraphViewModels(R.id.main_module_graph)
 
     private var binding: FragmentHomeBinding? = null
 

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "artwork")
-data class ArtworkLocal(
+data class ArtworkTable(
     @PrimaryKey
     val id: Long
 )
