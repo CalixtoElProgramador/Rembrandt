@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="homeViewModel"
+            type="com.listocalixto.android.rembrandt.presentation.ui.main.home.HomeViewModel" />
+
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf ASD sadjaskdj aksdjl askd laskdj laskdj laskdj laskdj lkawjd iwadj aidj awid jljasndfl kjasdnbf usehiusahelfua sehfasl dfjhasleu fhase lfuashef lasuefhalseifuh lvbsdfhjv lsaduih asfjae lfiuhsvlsadfl ajshdfl aisufh lasdjhf lasdkjhf lasiudhf lajfsb dsvblsiduh uhelwejq lsadhfb asldfj asldfjh lqwkejb lasdvb lsdfjhals djfhnalskdjb lasbfl asdhf uhfl kasdlfasjdfh lasdjfh alsdjfh aseouh aslfjhasdlfjahsdlfjah sdlfjk ha sdlfjh alsdjhf alsjhf euf wuer oqwuier lwqjehl jasdhf"
+        android:textAppearance="?attr/textAppearanceHeadlineMedium" />
+
+</layout>
