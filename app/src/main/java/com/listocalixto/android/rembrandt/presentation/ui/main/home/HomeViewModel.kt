@@ -1,13 +1,14 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main.home
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.domain.usecase.main.HomeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,15 +25,14 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(viewModelDispatcher) {
-            useCases.getArtworksByPage(1).catch { exception ->
-                Log.e(TAG, "exception: $exception ")
-            }.collect { result ->
+            _uiState.update { it.copy(isLoading = true) }
+            useCases.getArtworksByPage(1).collect { result ->
                 result.onSuccess { data ->
-                    Log.d(TAG, "onSuccess: ${data.artworks}")
                     val artworks = data.artworks.map { ArtworkUiState.domainToUiState(it) }
                     _uiState.update { it.copy(artworks = artworks) }
+                    _uiState.update { it.copy(isLoading = false) }
                 }.onFailure {
-                    Log.e(TAG, "onFailure: $it")
+                    _uiState.update { it.copy(isLoading = false) }
                 }
             }
         }

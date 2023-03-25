@@ -32,6 +32,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:showAnimationBehavior="inward" />
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navHostMainFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
