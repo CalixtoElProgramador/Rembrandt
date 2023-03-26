@@ -14,10 +14,12 @@ class ArtworkViewHolder private constructor(
     inline fun bind(
         item: ArtworkUiState,
         crossinline onEvent: (event: HomeUiEvent) -> Unit,
+        crossinline onArtwork: (artworkId: Long) -> Unit,
     ) = binding.apply {
         artwork = item
         iconButtonFavorite.setOnClickListener { onEvent(HomeUiEvent.ObFavorite(item.id)) }
         iconButtonShare.setOnClickListener { onEvent(HomeUiEvent.OnShare(item.id)) }
+        root.setOnClickListener { onArtwork(item.id) }
         executePendingBindings()
     }
 

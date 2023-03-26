@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.presentation.adapter.ArtworkAdapter
@@ -44,9 +45,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun Binding.setupRecyclerView() {
-        adapter = ArtworkAdapter(viewModel::onEvent).also {
+        adapter = ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId ->
+            navigateToArtworkDetail(artworkId)
+        }).also {
             listArtworks.adapter = it
         }
+    }
+
+    private fun navigateToArtworkDetail(artworkId: Long) {
+        val direction = HomeFragmentDirections.actionHomeFragmentToDetailFragment(artworkId)
+        findNavController().navigate(direction)
     }
 
     private fun initExteriorViews() {

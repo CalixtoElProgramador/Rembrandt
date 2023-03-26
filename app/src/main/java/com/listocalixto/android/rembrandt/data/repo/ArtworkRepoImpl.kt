@@ -6,10 +6,7 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.Remo
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,24 +19,30 @@ class ArtworkRepoImpl @Inject constructor(
     override fun observeArtworksByPage(page: String): Flow<Result<Set<Artwork>>> =
         networkBoundResource(
             query = {
-                localDataSource.observeArtworks()
+                localDataSource.observeAllArtworks()
             },
             fetch = {
                 remoteDataSource.getArtworksByPage(page)
             },
             saveFetchResult = { artworks ->
                 localDataSource.deleteAllArtworks()
-                artworks.first().forEach { localDataSource.insertArtwork(it) }
+                artworks.forEach { localDataSource.insertArtwork(it) }
             },
             shouldFetch = {
-                localDataSource.getArtworks().isEmpty()
+                localDataSource.getAllArtworks().isEmpty()
             },
         ).flowOn(Dispatchers.IO)
 
-    override fun observeArtworkById(id: Long): Flow<Artwork> = flow {
-    }
+    override fun observeArtworkById(id: Long): Flow<Result<Artwork>> = flow {
+        try {
+            val artwork = localDataSource.observeArtworkById(id).first()
+            emit(Result.success(artwork))
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }.flowOn(Dispatchers.IO)
 
-    override fun getArtworksByConcept(concept: String): Flow<Set<Artwork>> {
+    override fun observeArtworksByQuery(concept: String): Flow<Set<Artwork>> {
         TODO("Not yet implemented")
     }
 
@@ -57,4 +60,17 @@ class ArtworkRepoImpl @Inject constructor(
     override suspend fun getArtworkById(id: Long): Artwork {
         return localDataSource.getArtworkById(id)
     }
+
+    override fun getArtworksByQuery(concept: String): List<Artwork> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAllArtworks(): List<Artwork> =
+        withContext(Dispatchers.IO) {
+            return@withContext localDataSource.getAllArtworks().ifEmpty {
+                val remoteArtworks = remoteDataSource.getArtworksByPage()
+                remoteArtworks.forEach { localDataSource.insertArtwork(it) }
+                localDataSource.getAllArtworks()
+            }
+        }
 }

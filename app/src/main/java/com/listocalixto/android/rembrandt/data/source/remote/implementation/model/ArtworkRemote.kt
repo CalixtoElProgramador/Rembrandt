@@ -43,8 +43,6 @@ data class ArtworkRemote(
     val isFavorite: Boolean = false,
     @SerialName("image_id")
     val imageId: String?,
-    @kotlinx.serialization.Transient
-    val imageUrl: String = "",
     @SerialName("latitude")
     val latitude: Double?,
     @SerialName("longitude")

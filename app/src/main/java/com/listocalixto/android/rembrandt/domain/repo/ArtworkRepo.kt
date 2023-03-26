@@ -7,9 +7,10 @@ interface ArtworkRepo {
 
     fun observeArtworksByPage(page: String): Flow<Result<Set<Artwork>>>
 
-    fun observeArtworkById(id: Long): Flow<Artwork>
+    fun observeArtworkById(id: Long): Flow<Result<Artwork>>
 
-    fun getArtworksByConcept(concept: String): Flow<Set<Artwork>>
+    fun observeArtworksByQuery(concept: String): Flow<Set<Artwork>>
+    fun getArtworksByQuery(concept: String): List<Artwork>
 
     fun getArtworksByArtistId(id: Long): Flow<Set<Artwork>>
 
@@ -18,4 +19,6 @@ interface ArtworkRepo {
     suspend fun updateArtwork(artwork: Artwork)
 
     suspend fun getArtworkById(id: Long): Artwork
+
+    suspend fun getAllArtworks(): List<Artwork>
 }

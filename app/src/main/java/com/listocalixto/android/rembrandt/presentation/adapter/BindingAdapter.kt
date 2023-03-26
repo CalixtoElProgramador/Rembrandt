@@ -11,7 +11,7 @@ import com.google.android.material.color.MaterialColors
 import com.listocalixto.android.rembrandt.R
 
 @BindingAdapter("loadImage")
-fun ImageView.bindingLoadImage(imageUrl: String) {
+fun ImageView.bindingLoadImage(imageUrl: String?) {
     load(imageUrl) {
         crossfade(true)
         placeholder(R.drawable.ic_explore)

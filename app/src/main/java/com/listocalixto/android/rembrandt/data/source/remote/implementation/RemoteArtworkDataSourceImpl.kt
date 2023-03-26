@@ -7,7 +7,6 @@ import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoteArtworkDataSourceImpl @Inject constructor(
@@ -15,7 +14,7 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
     private val client: HttpClient,
 ) : RemoteArtworkDataSource {
 
-    override suspend fun getArtworksByPage(page: String): Flow<Set<Artwork>> = flow {
+    override suspend fun getArtworksByPage(page: String): List<Artwork> {
         val response: GetArtworksResponse = client.get(HttpRoutes.ARTWORKS) {
             url {
                 parameters.append(JUST_PUBLIC_DOMAIN_NAME, JUST_PUBLIC_DOMAIN_VALUE)
@@ -25,8 +24,7 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
                 parameters.append(FIELDS_NAME, FIELDS_VALUE)
             }
         }
-        val artworks = response.data.map { mapper.map(it) }
-        emit(artworks.toSet())
+        return response.data.map { mapper.map(it) }
     }
 
     override fun getArtworkById(id: Long): Flow<Artwork> {

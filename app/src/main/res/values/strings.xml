@@ -7,4 +7,16 @@
     <string name="hello_home_fragment">Hello home fragment</string>
     <string name="hello_explore_fragment">Hello explore fragment</string>
     <string name="hello_favorites_fragment">Hello favorites fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save_to_favorites">Save to favorites</string>
+    <string name="download_image">Download image</string>
+    <string name="share">Share</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="add_to_collection">Add to collection</string>
+    <string name="recommended">Recommended:</string>
+    <string name="reason_it_was_recommended_same_artist">From the same artist</string>
+    <string name="reason_it_was_recommended_same_artwork_type">The same type of artwork</string>
+    <string name="reason_it_was_recommended_same_category">Belongs to the same category</string>
+    <string name="reason_it_was_recommended_same_gallery">From the same gallery</string>
 </resources>

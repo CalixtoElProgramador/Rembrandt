@@ -33,7 +33,6 @@ data class ArtworkTable(
     val id: Long,
     val isFavorite: Boolean,
     val imageId: String,
-    val imageUrl: String,
     val latitude: Double,
     val longitude: Double,
     val mediumDisplay: String,

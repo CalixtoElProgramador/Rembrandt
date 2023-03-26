@@ -76,6 +76,26 @@ abstract class ViewModelModule {
 
         @Provides
         @ViewModelScoped
+        fun provideObserveArtworkById(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) =
+            ObserveArtworkByIdUseCase(repo, getImageUrl)
+
+        @Provides
+        @ViewModelScoped
+        fun provideGetRecommendedArtworkByRecommendationTypeUseCase() =
+            GetRecommendedArtworkByRecommendationTypeUseCase()
+
+        @Provides
+        @ViewModelScoped
+        fun provideBuildRecommendationTypesByArtworkUseCase() =
+            GenerateRecommendationTypesByArtworkUseCase()
+
+        @Provides
+        @ViewModelScoped
+        fun provideGetAllWorksUseCase(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) =
+            GetAllArtworksUseCase(repo, getImageUrl)
+
+        @Provides
+        @ViewModelScoped
         fun provideArtworkRemoteToEntity(
             colorMapper: ColorRemoteToDomain,
             thumbnailMapper: ThumbnailRemoteToDomain,
@@ -90,6 +110,14 @@ abstract class ViewModelModule {
             getArtworksByPage = GetArtworksByPageUseCase(repo, getImageUrl),
             updateArtwork = UpdateArtworkUseCase(repo),
             getArtworkById = GetArtworkByIdUseCase(repo),
+        )
+
+        @Provides
+        @ViewModelScoped
+        fun provideArtworkDetailUseCases(
+            getArtworkDetail: ObserveArtworkDetailUseCase,
+        ) = ArtworkDetailUseCases(
+            observeArtworkDetail = getArtworkDetail,
         )
     }
 }

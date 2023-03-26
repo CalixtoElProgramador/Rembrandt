@@ -6,6 +6,11 @@
         <item name="cornerSize">@dimen/_40sdp</item>
     </style>
 
+    <style name="ShapeAppearance.Rembrandt.SmallComponent.ArtworkDetailRecommended" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_24sdp</item>
+    </style>
+
     <style name="ShapeAppearance.Rembrandt.SmallComponent.ChipArtworkType" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerFamily">cut</item>
         <item name="cornerSize">@dimen/_8sdp</item>

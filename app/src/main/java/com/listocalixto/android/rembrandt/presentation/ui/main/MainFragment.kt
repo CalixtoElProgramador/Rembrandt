@@ -1,7 +1,6 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,9 +32,6 @@ class MainFragment :
                 childFragmentManager.findFragmentById(navHostMainFragment.id) as NavHostFragment
             val navController = navHostFragment.navController
             bottomNav.setupWithNavController(navController)
-            appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-                Log.d(TAG, "addOnOffsetChangedListener: $verticalOffset")
-            }
         }
     }
 
