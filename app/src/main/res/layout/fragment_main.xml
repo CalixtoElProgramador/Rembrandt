@@ -26,9 +26,10 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:titleCentered="true"
                 app:layout_scrollEffect="compress"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:title="Hello world" />
+                app:title="@string/app_name" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

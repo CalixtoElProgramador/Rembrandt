@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.Rembrandt.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/bungee_shade_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_57sdp</item>
+        <item name="android:letterSpacing">-0.004385964</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/bebas_neue_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_45sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_36sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/bungee_shade_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_32sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/bebas_neue_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_28sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_24sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/bebas_neue_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_22sdp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/pt_serif_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:letterSpacing">0.009375</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:letterSpacing">0.007142857</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:letterSpacing">0.007142857</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:letterSpacing">0.04166666667</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/pt_sans_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:letterSpacing">0.04545454545</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/pt_serif_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:letterSpacing">0.03125</item>
+        <item name="android:lineHeight">@dimen/_24sdp</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/pt_mono_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:letterSpacing">0.01785714286</item>
+        <item name="android:lineHeight">@dimen/_20sdp</item>
+    </style>
+
+    <style name="TextAppearance.Rembrandt.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/pt_serif_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:lineHeight">@dimen/_16sdp</item>
+    </style>
+
+</resources>

@@ -31,7 +31,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/grid_3"
                 android:paddingBottom="@dimen/_56sdp"
                 tools:context=".presentation.ui.main.detail.artwork.ArtworkDetailFragment">
 
@@ -39,7 +38,7 @@
                     android:id="@+id/image"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_320sdp"
-                    android:layout_marginHorizontal="@dimen/grid_3"
+                    android:layout_marginHorizontal="@dimen/grid_2"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +149,7 @@
                     android:alpha="?attr/emphasisMediumAlpha"
                     android:text="@{artworkDetailViewModel.uiState.artistName}"
                     android:textAlignment="center"
-                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="?attr/colorPrimary"
                     app:layout_constraintEnd_toEndOf="@id/textTitle"
                     app:layout_constraintStart_toStartOf="@id/textTitle"
@@ -173,7 +172,7 @@
                     android:layout_marginTop="@dimen/grid_2"
                     android:alpha="?attr/emphasisMediumAlpha"
                     android:text="@{artworkDetailViewModel.uiState.description}"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
                     app:layout_constraintEnd_toEndOf="@id/textNameArtist"
                     app:layout_constraintStart_toStartOf="@id/textNameArtist"
                     app:layout_constraintTop_toBottomOf="@id/divider"
