@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.transition.MaterialElevationScale
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.presentation.adapter.ArtworkAdapter
-import com.listocalixto.android.rembrandt.presentation.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
@@ -22,7 +23,6 @@ import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Bin
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels()
-    private val sharedViewModel: MainViewModel by hiltNavGraphViewModels(R.id.main_module_graph)
 
     private var adapter: ArtworkAdapter? = null
     private var binding: Binding? = null
@@ -30,6 +30,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
         binding = Binding.bind(view)
         binding?.run {
             setupBinding()
@@ -45,16 +47,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun Binding.setupRecyclerView() {
-        adapter = ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId ->
-            navigateToArtworkDetail(artworkId)
+        adapter = ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId, card ->
+            navigateToArtworkDetail(artworkId, card)
         }).also {
             listArtworks.adapter = it
         }
     }
 
-    private fun navigateToArtworkDetail(artworkId: Long) {
+    private fun navigateToArtworkDetail(artworkId: Long, card: View) {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+        }
+        val detailTransitionName = getString(R.string.item_card_detail_transition_name)
+        val extras = FragmentNavigatorExtras(card to detailTransitionName)
         val direction = HomeFragmentDirections.actionHomeFragmentToDetailFragment(artworkId)
-        findNavController().navigate(direction)
+        findNavController().navigate(direction, extras)
     }
 
     private fun initExteriorViews() {

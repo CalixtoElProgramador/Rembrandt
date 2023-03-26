@@ -19,4 +19,6 @@
     <string name="reason_it_was_recommended_same_artwork_type">The same type of artwork</string>
     <string name="reason_it_was_recommended_same_category">Belongs to the same category</string>
     <string name="reason_it_was_recommended_same_gallery">From the same gallery</string>
+    <string name="item_card_transition_name">item_card_%1$s</string>
+    <string name="item_card_detail_transition_name">item_card_detail</string>
 </resources>

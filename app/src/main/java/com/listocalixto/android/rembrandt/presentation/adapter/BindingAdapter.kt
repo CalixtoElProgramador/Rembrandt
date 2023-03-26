@@ -7,15 +7,13 @@ import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.bumptech.glide.Glide
 import com.google.android.material.color.MaterialColors
 import com.listocalixto.android.rembrandt.R
 
 @BindingAdapter("loadImage")
 fun ImageView.bindingLoadImage(imageUrl: String?) {
-    load(imageUrl) {
-        crossfade(true)
-        placeholder(R.drawable.ic_explore)
-    }
+    Glide.with(this.context).load(imageUrl).placeholder(R.drawable.ic_explore).into(this)
 }
 
 @BindingAdapter("tint")

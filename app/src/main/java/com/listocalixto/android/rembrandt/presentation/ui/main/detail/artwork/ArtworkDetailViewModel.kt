@@ -11,9 +11,9 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.Same
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtworkType
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameCategory
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameGallery
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnArtworkRecommended
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnBackPressed
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.Start
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_DEFAULT_VALUE
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,16 +36,28 @@ class ArtworkDetailViewModel @Inject constructor(
     fun onEvent(event: ArtworkDetailUiEvent): Unit = when (event) {
         is Start -> {
             viewModelScope.launch(viewModelDispatcher) {
-                setupContentByArtworkId(event.artworkId)
+                savedStateHandle.getStateFlow(ARTWORK_ID_KEY, ARTWORK_ID_DEFAULT_VALUE)
+                    .collect { artworkId ->
+                        val artwork = data.value.artwork
+                        val artworksRecommended = data.value.artworksRecommended
+                        val recommendedTypes = data.value.recommendationTypes
+                        if (artwork != null) {
+                            // Data is kept in memory
+                            setupContent(artwork, artworksRecommended, recommendedTypes)
+                        } else {
+                            setupContentByArtworkId(artworkId)
+                        }
+                    }
             }
             Unit
         }
         is OnArtworkRecommended -> {
             viewModelScope.launch(viewModelDispatcher) {
-                addArtworkInTheBackStack()
-                val artworksRecommended = data.value.artworksRecommended
-                val artworkClicked = artworksRecommended[event.position]
-                setupContentByArtworkId(artworkClicked.id)
+                val recommended = data.value.artworksRecommended
+                val artworkClicked = recommended.find { event.artworkId == it.id } ?: return@launch
+                if (currentDataWasAddedInTheBackStack()) {
+                    setupContentByArtworkId(artworkClicked.id)
+                }
             }
             Unit
         }
@@ -65,13 +77,19 @@ class ArtworkDetailViewModel @Inject constructor(
 
             Unit
         }
+        SaveCurrentArtworkId -> {
+            savedStateHandle[ARTWORK_ID_KEY] = data.value.artwork?.id ?: ARTWORK_ID_DEFAULT_VALUE
+        }
     }
 
-    private fun addArtworkInTheBackStack() {
+    private fun currentDataWasAddedInTheBackStack(): Boolean {
         val currentData = data.value
         val dataInTheBackStack = _uiState.value.dataInTheBackStack
-        if (dataInTheBackStack.add(currentData)) {
+        return if (dataInTheBackStack.add(currentData)) {
             _uiState.update { it.copy(dataInTheBackStack = dataInTheBackStack) }
+            true
+        } else {
+            false
         }
     }
 
@@ -107,6 +125,7 @@ class ArtworkDetailViewModel @Inject constructor(
         val recommendationsUiState =
             mArtworksRecommended.mapIndexed { index, artworkRecommended ->
                 ArtworkRecommendedUiState(
+                    id = artworkRecommended.id,
                     imageUrl = artworkRecommended.imageUrl,
                     title = artworkRecommended.title,
                     reasonItWasRecommended = when (mRecommendationTypes[index]) {

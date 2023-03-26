@@ -10,10 +10,10 @@ class ArtworkRecommendedViewHolder private constructor(
     val binding: ListItemRecommendedBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    inline fun bind(item: ArtworkRecommendedUiState, crossinline onArtwork: () -> Unit) =
+    inline fun bind(item: ArtworkRecommendedUiState, crossinline onArtwork: (artworkId: Long) -> Unit) =
         binding.run {
             artwork = item
-            root.setOnClickListener { onArtwork() }
+            root.setOnClickListener { onArtwork(item.id) }
             executePendingBindings()
         }
 

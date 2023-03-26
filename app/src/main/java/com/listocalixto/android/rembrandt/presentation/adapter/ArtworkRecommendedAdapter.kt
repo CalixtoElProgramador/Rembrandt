@@ -8,7 +8,7 @@ import com.listocalixto.android.rembrandt.presentation.holder.ArtworkRecommended
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkRecommendedUiState
 
 class ArtworkRecommendedAdapter(
-    private val onArtwork: (position: Int) -> Unit,
+    private val onArtwork: (artworkId: Long) -> Unit,
 ) : ListAdapter<ArtworkRecommendedUiState, RecyclerView.ViewHolder>(ArtworkRecommendedDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -17,7 +17,7 @@ class ArtworkRecommendedAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ArtworkRecommendedViewHolder)?.apply {
-            bind(getItem(position)) { onArtwork(position) }
+            bind(getItem(position), onArtwork)
         }
     }
 

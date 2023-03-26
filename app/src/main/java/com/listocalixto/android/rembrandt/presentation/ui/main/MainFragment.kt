@@ -2,8 +2,9 @@ package com.listocalixto.android.rembrandt.presentation.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -17,7 +18,7 @@ class MainFragment :
     Fragment(R.layout.fragment_main),
     NavController.OnDestinationChangedListener {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private var binding: FragmentMainBinding? = null
 
