@@ -12,9 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.transition.MaterialElevationScale
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.presentation.adapter.ArtworkAdapter
+import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementExitTransition
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
@@ -55,12 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun navigateToArtworkDetail(artworkId: Long, card: View) {
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
-        }
+        applySharedElementExitTransition()
         val detailTransitionName = getString(R.string.item_card_detail_transition_name)
         val extras = FragmentNavigatorExtras(card to detailTransitionName)
         val direction = HomeFragmentDirections.actionHomeFragmentToDetailFragment(artworkId)

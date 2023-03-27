@@ -5,6 +5,6 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
 
 data class ArtworkDetailData(
     val artwork: Artwork? = null,
-    val artworksRecommended: List<Artwork> = emptyList(),
-    val recommendationTypes: List<RecommendationType> = emptyList(),
+    val artworksRecommended: List<Artwork>? = null,
+    val recommendationTypes: List<RecommendationType>? = null,
 )

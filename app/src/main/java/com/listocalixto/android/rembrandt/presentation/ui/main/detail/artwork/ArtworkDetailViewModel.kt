@@ -13,9 +13,12 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.Same
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameGallery
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_DEFAULT_VALUE
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.*
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.Start
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -33,6 +36,8 @@ class ArtworkDetailViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
     private val viewModelDispatcher = viewModelScope.coroutineContext + Dispatchers.Main
 
+    private var updateArtworkJob: Job? = null
+
     fun onEvent(event: ArtworkDetailUiEvent): Unit = when (event) {
         is Start -> {
             viewModelScope.launch(viewModelDispatcher) {
@@ -41,9 +46,10 @@ class ArtworkDetailViewModel @Inject constructor(
                         val artwork = data.value.artwork
                         val artworksRecommended = data.value.artworksRecommended
                         val recommendedTypes = data.value.recommendationTypes
-                        if (artwork != null) {
+                        if (artwork != null && artworksRecommended != null && recommendedTypes != null) {
                             // Data is kept in memory
-                            setupContent(artwork, artworksRecommended, recommendedTypes)
+                            setupArtwork(artwork)
+                            setupRecommendedArtworks(artworksRecommended, recommendedTypes)
                         } else {
                             setupContentByArtworkId(artworkId)
                         }
@@ -51,108 +57,89 @@ class ArtworkDetailViewModel @Inject constructor(
             }
             Unit
         }
-        is OnArtworkRecommended -> {
-            viewModelScope.launch(viewModelDispatcher) {
-                val recommended = data.value.artworksRecommended
-                val artworkClicked = recommended.find { event.artworkId == it.id } ?: return@launch
-                if (currentDataWasAddedInTheBackStack()) {
-                    setupContentByArtworkId(artworkClicked.id)
-                }
-            }
-            Unit
-        }
-        OnBackPressed -> {
-            val dataInTheBackStack = _uiState.value.dataInTheBackStack
-            if (dataInTheBackStack.isNotEmpty()) {
-                val previousData = dataInTheBackStack.last()
-                previousData.artwork?.let { previousArtwork ->
-                    dataInTheBackStack.removeLast()
-                    setupContent(
-                        artwork = previousArtwork,
-                        artworksRecommended = previousData.artworksRecommended,
-                        recommendationTypes = previousData.recommendationTypes,
-                    )
-                }
-            }
-
-            Unit
-        }
         SaveCurrentArtworkId -> {
             savedStateHandle[ARTWORK_ID_KEY] = data.value.artwork?.id ?: ARTWORK_ID_DEFAULT_VALUE
         }
-    }
-
-    private fun currentDataWasAddedInTheBackStack(): Boolean {
-        val currentData = data.value
-        val dataInTheBackStack = _uiState.value.dataInTheBackStack
-        return if (dataInTheBackStack.add(currentData)) {
-            _uiState.update { it.copy(dataInTheBackStack = dataInTheBackStack) }
-            true
-        } else {
-            false
+        OnChipFavorite -> Unit.apply {
+            if (updateArtworkJob != null) return@apply
+            updateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
+                val currentArtwork = data.value.artwork ?: run {
+                    updateArtworkJob = null
+                    return@launch
+                }
+                useCases.updateArtwork(currentArtwork.copy(isFavorite = !currentArtwork.isFavorite))
+                updateArtworkJob = null
+            }
         }
     }
 
     private suspend fun setupContentByArtworkId(id: Long) {
-        useCases.observeArtworkDetail(id).collect { result ->
-            result.onSuccess { useCaseResult ->
-                setupContent(
-                    artwork = useCaseResult.artwork,
-                    artworksRecommended = useCaseResult.artworksRecommended,
-                    recommendationTypes = useCaseResult.recommendationTypes,
-                )
+        useCases.observeArtworkById(id).collect { result ->
+            result.onSuccess { artwork ->
+                setupArtwork(artwork)
+                if (recommendationsHaveNotBeenInitialized()) {
+                    fetchAndSetupRecommendedArtworks(artwork)
+                }
             }.onFailure {
             }
         }
     }
 
-    private fun setupContent(
-        artwork: Artwork,
+    private suspend fun fetchAndSetupRecommendedArtworks(artwork: Artwork) {
+        useCases.getRecommendedArtworksByArtwork(artwork).apply {
+            setupRecommendedArtworks(artworksRecommended, recommendationTypes)
+        }
+    }
+
+    private fun recommendationsHaveNotBeenInitialized(): Boolean {
+        return data.value.artworksRecommended == null || data.value.recommendationTypes == null
+    }
+
+    private fun setupRecommendedArtworks(
         artworksRecommended: List<Artwork>,
         recommendationTypes: List<RecommendationType>,
-    ) = Unit.run {
+    ) {
+        if (artworksRecommended.size != recommendationTypes.size) return
+        val recommendationsUiState = artworksRecommended.mapIndexed { index, artworkRecommended ->
+            ArtworkRecommendedUiState(
+                id = artworkRecommended.id,
+                imageUrl = artworkRecommended.imageUrl,
+                title = artworkRecommended.title,
+                reasonItWasRecommended = when (recommendationTypes[index]) {
+                    is SameArtist -> {
+                        R.string.reason_it_was_recommended_same_artist
+                    }
+                    is SameArtworkType -> {
+                        R.string.reason_it_was_recommended_same_artwork_type
+                    }
+                    is SameCategory -> {
+                        R.string.reason_it_was_recommended_same_category
+                    }
+                    is SameGallery -> {
+                        R.string.reason_it_was_recommended_same_gallery
+                    }
+                },
+            )
+        }
         data.update {
             it.copy(
-                artwork = artwork,
                 artworksRecommended = artworksRecommended,
                 recommendationTypes = recommendationTypes,
             )
         }
-        val mArtwork = data.value.artwork ?: return@run
-        val mArtworksRecommended = data.value.artworksRecommended
-        val mRecommendationTypes = data.value.recommendationTypes
-        if (mArtworksRecommended.size != mRecommendationTypes.size) return@run
-        val recommendationsUiState =
-            mArtworksRecommended.mapIndexed { index, artworkRecommended ->
-                ArtworkRecommendedUiState(
-                    id = artworkRecommended.id,
-                    imageUrl = artworkRecommended.imageUrl,
-                    title = artworkRecommended.title,
-                    reasonItWasRecommended = when (mRecommendationTypes[index]) {
-                        is SameArtist -> {
-                            R.string.reason_it_was_recommended_same_artist
-                        }
-                        is SameArtworkType -> {
-                            R.string.reason_it_was_recommended_same_artwork_type
-                        }
-                        is SameCategory -> {
-                            R.string.reason_it_was_recommended_same_category
-                        }
-                        is SameGallery -> {
-                            R.string.reason_it_was_recommended_same_gallery
-                        }
-                    },
-                )
-            }
+        _uiState.update { it.copy(artworksRecommended = recommendationsUiState) }
+    }
+
+    private fun setupArtwork(artwork: Artwork) {
+        data.update { it.copy(artwork = artwork) }
         _uiState.update {
             it.copy(
-                imageUrl = mArtwork.imageUrl,
-                isFavorite = mArtwork.isFavorite,
-                category = mArtwork.categoryTitles.first(),
-                title = mArtwork.title,
-                artistName = mArtwork.artistTitle,
-                description = mArtwork.thumbnail.altText,
-                artworksRecommended = recommendationsUiState,
+                imageUrl = artwork.imageUrl,
+                isFavorite = artwork.isFavorite,
+                category = artwork.categoryTitles.first(),
+                title = artwork.title,
+                artistName = artwork.artistTitle,
+                description = artwork.thumbnail.altText,
             )
         }
     }

@@ -35,8 +35,9 @@ class ArtworkRepoImpl @Inject constructor(
 
     override fun observeArtworkById(id: Long): Flow<Result<Artwork>> = flow {
         try {
-            val artwork = localDataSource.observeArtworkById(id).first()
-            emit(Result.success(artwork))
+            localDataSource.observeArtworkById(id).collect {
+                emit(Result.success(it))
+            }
         } catch (e: Exception) {
             emit(Result.failure(e))
         }

@@ -28,10 +28,14 @@
         android:id="@+id/artworkDetailFragment"
         android:name="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment"
         android:label="ArtworkDetailFragment"
-        tools:layout="@layout/fragment_artwork_detail" >
+        tools:layout="@layout/fragment_artwork_detail">
         <argument
             android:name="artworkId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_artworkDetailFragment_self"
+            app:destination="@id/artworkDetailFragment" />
     </fragment>
+
 </navigation>

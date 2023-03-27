@@ -8,5 +8,4 @@ data class ArtworkDetailUiState(
     val artistName: String = "",
     val description: String = "",
     val artworksRecommended: List<ArtworkRecommendedUiState> = emptyList(),
-    val dataInTheBackStack: MutableList<ArtworkDetailData> = mutableListOf(),
 )

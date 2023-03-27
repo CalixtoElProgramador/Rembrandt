@@ -96,6 +96,18 @@ abstract class ViewModelModule {
 
         @Provides
         @ViewModelScoped
+        fun provideGetRecommendedArtworksByArtworkUseCase(
+            getAllArtworks: GetAllArtworksUseCase,
+            getRecommendedArtworkByRecommendationType: GetRecommendedArtworkByRecommendationTypeUseCase,
+            generateRecommendationTypesByArtwork: GenerateRecommendationTypesByArtworkUseCase,
+        ) = GetRecommendedArtworksByArtworkUseCase(
+            getAllArtworks = getAllArtworks,
+            getRecommendedArtworkByRecommendationType = getRecommendedArtworkByRecommendationType,
+            generateRecommendationTypesByArtwork = generateRecommendationTypesByArtwork,
+        )
+
+        @Provides
+        @ViewModelScoped
         fun provideArtworkRemoteToEntity(
             colorMapper: ColorRemoteToDomain,
             thumbnailMapper: ThumbnailRemoteToDomain,
@@ -115,9 +127,13 @@ abstract class ViewModelModule {
         @Provides
         @ViewModelScoped
         fun provideArtworkDetailUseCases(
-            getArtworkDetail: ObserveArtworkDetailUseCase,
+            observeArtworkById: ObserveArtworkByIdUseCase,
+            getRecommendedArtworksByArtwork: GetRecommendedArtworksByArtworkUseCase,
+            updateArtwork: UpdateArtworkUseCase,
         ) = ArtworkDetailUseCases(
-            observeArtworkDetail = getArtworkDetail,
+            observeArtworkById = observeArtworkById,
+            getRecommendedArtworksByArtwork = getRecommendedArtworksByArtwork,
+            updateArtwork = updateArtwork,
         )
     }
 }

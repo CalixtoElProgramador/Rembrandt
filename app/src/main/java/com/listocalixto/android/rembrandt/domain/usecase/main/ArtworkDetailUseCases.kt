@@ -1,5 +1,7 @@
 package com.listocalixto.android.rembrandt.domain.usecase.main
 
 data class ArtworkDetailUseCases(
-    val observeArtworkDetail: ObserveArtworkDetailUseCase,
+    val observeArtworkById: ObserveArtworkByIdUseCase,
+    val getRecommendedArtworksByArtwork: GetRecommendedArtworksByArtworkUseCase,
+    val updateArtwork: UpdateArtworkUseCase,
 )
