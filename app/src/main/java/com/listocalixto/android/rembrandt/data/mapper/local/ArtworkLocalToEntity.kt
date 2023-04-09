@@ -9,7 +9,8 @@ import javax.inject.Inject
 class ArtworkLocalToEntity @Inject constructor(
     private val colorMapper: ColorLocalToDomain,
     private val thumbnailMapper: ThumbnailLocalToDomain,
-    private val manifestMapper: ManifestLocalToModel
+    private val manifestMapper: ManifestLocalToModel,
+    private val translationMapper: TranslationLocalToModel
 ) : Mapper<ArtworkTable, Artwork> {
     override fun map(value: ArtworkTable) = Artwork(
         artistDisplay = value.artistDisplay,
@@ -39,6 +40,7 @@ class ArtworkLocalToEntity @Inject constructor(
         placeOfOrigin = value.placeOfOrigin,
         score = value.score,
         termTitles = value.termTitles,
+        translation = value.translation?.let { translationMapper.map(it) },
         thumbnail = thumbnailMapper.map(value.thumbnail),
         title = value.title
     )
@@ -74,6 +76,7 @@ class ArtworkLocalToEntity @Inject constructor(
         placeOfOrigin = value.placeOfOrigin,
         score = value.score,
         termTitles = value.termTitles,
+        translation = value.translation?.let { translationMapper.reverseMap(it) },
         thumbnail = thumbnailMapper.reverseMap(value.thumbnail),
         title = value.title
     )

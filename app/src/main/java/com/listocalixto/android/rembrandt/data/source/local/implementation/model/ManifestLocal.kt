@@ -1,11 +1,10 @@
-package com.listocalixto.android.rembrandt.data.source.local.implementation.table.main
+package com.listocalixto.android.rembrandt.data.source.local.implementation.model
 
 import androidx.room.ColumnInfo
 import androidx.room.TypeConverters
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ListConverter
-import com.listocalixto.android.rembrandt.data.source.local.implementation.model.MetadataLocal
 
-data class ManifestTable(
+data class ManifestLocal(
     val artworkId: Long,
     @ColumnInfo(name = "manifest_id")
     val id: String,

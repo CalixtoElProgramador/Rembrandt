@@ -8,5 +8,6 @@ data class ArtworkDetailUseCases @Inject constructor(
     val observeArtworkById: ObserveArtworkByIdUseCase,
     val getRecommendedArtworksByArtwork: GetRecommendedArtworksByArtworkUseCase,
     val updateArtwork: UpdateArtworkUseCase,
-    val getArtworkDescription: GetArtworkDescriptionUseCase
+    val getArtworkDescription: GetArtworkDescriptionUseCase,
+    val setTranslationByArtwork: SetTranslationByArtworkUseCase
 )

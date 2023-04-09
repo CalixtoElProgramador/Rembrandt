@@ -6,7 +6,9 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ListConverter
 import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ColorLocal
+import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ManifestLocal
 import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ThumbnailLocal
+import com.listocalixto.android.rembrandt.data.source.local.implementation.model.TranslationLocal
 
 @Entity(tableName = "artworks")
 data class ArtworkTable(
@@ -36,12 +38,14 @@ data class ArtworkTable(
     val latitude: Double,
     val longitude: Double,
     @Embedded
-    val manifest: ManifestTable?,
+    val manifest: ManifestLocal?,
     val mediumDisplay: String,
     val placeOfOrigin: String,
     val score: Double,
     @TypeConverters(value = [ListConverter::class])
     val termTitles: List<String>,
+    @Embedded
+    val translation: TranslationLocal?,
     @Embedded
     val thumbnail: ThumbnailLocal,
     val title: String

@@ -18,6 +18,7 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -86,6 +87,12 @@ class ArtworkDetailViewModel @Inject constructor(
                 updateArtworkJob = null
             }
         }
+        TranslateContent -> Unit.apply {
+            viewModelScope.launch {
+                val artwork = data.value.artwork ?: return@launch
+                useCases.setTranslationByArtwork(artwork)
+            }
+        }
     }
 
     private suspend fun setupContentByArtworkId(id: Long) {
@@ -104,7 +111,15 @@ class ArtworkDetailViewModel @Inject constructor(
         val manifestDescription = artwork.manifest?.description ?: EMPTY
         val description = useCases.getArtworkDescription(manifestDescription, altText)
         val descriptionUiText = getDescriptionUiText(description)
-        _uiState.update { it.copy(descriptionUiText = descriptionUiText) }
+        _uiState.update {
+            it.copy(
+                descriptionUiText = artwork.translation?.content?.let { content ->
+                    UiText.StringValue(
+                        content
+                    )
+                } ?: descriptionUiText
+            )
+        }
     }
 
     private fun getDescriptionUiText(description: String) = if (description == NO_DESCRIPTION) {
@@ -168,8 +183,8 @@ class ArtworkDetailViewModel @Inject constructor(
             it.copy(
                 imageUrl = artwork.imageUrl,
                 isFavorite = artwork.isFavorite,
-                category = artwork.categoryTitles.first(),
-                title = artwork.title,
+                category = artwork.translation?.category ?: artwork.categoryTitles.first(),
+                title = artwork.translation?.title ?: artwork.title,
                 artistName = artwork.artistTitle,
                 altText = artwork.thumbnail.altText
             )

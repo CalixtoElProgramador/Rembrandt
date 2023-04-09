@@ -41,6 +41,7 @@ class ArtworkRemoteToEntity @Inject constructor(
         placeOfOrigin = value.placeOfOrigin ?: "",
         score = value.score ?: -1.0,
         termTitles = value.termTitles,
+        translation = null,
         thumbnail = value.thumbnail?.let { thumbnailMapper.map(it) } ?: Thumbnail.defaultInstance,
         title = value.title ?: ""
     )

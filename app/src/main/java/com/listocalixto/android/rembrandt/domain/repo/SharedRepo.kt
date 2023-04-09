@@ -1,3 +1,6 @@
 package com.listocalixto.android.rembrandt.domain.repo
 
-interface SharedRepo
+interface SharedRepo {
+
+    suspend fun translateText(text: String, targetLang: String): String
+}

@@ -61,6 +61,9 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                     extendedFab?.shrink()
                 }
             }
+            extendedFab?.setOnClickListener {
+                viewModel.onEvent(ArtworkDetailUiEvent.TranslateContent)
+            }
         }
     }
 

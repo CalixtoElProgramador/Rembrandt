@@ -43,7 +43,7 @@ object SingletonModule {
         install(ContentNegotiation) {
             json(
                 Json {
-                    encodeDefaults = false
+                    encodeDefaults = true
                     ignoreUnknownKeys = true
                     isLenient = true
                     allowSpecialFloatingPointValues = true

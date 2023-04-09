@@ -10,6 +10,16 @@ plugins {
     id "org.jlleitschuh.gradle.ktlint" version "11.3.1"
 }
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = project.file("${projectDir}/../keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     namespace 'com.listocalixto.android.rembrandt'
     compileSdk 33
@@ -28,6 +38,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "DEEPL_API_KEY", "\"" + keystoreProperties['deepl.api.key'] + "\""
+        }
+        debug {
+            buildConfigField "String", "DEEPL_API_KEY", "\"" + keystoreProperties['deepl.api.key'] + "\""
         }
     }
     compileOptions {
@@ -134,9 +148,6 @@ dependencies {
 
     // Kotlin Serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
-
-    // DeepL
-    implementation "com.deepl.api:deepl-java:1.0.0"
 
     // Utils: Scalable size unit
     implementation 'com.intuit.sdp:sdp-android:1.0.6'

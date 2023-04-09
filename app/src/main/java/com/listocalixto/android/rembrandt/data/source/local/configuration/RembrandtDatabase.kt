@@ -9,7 +9,6 @@ import com.listocalixto.android.rembrandt.data.source.local.implementation.table
 @TypeConverters(value = [ListConverter::class])
 abstract class RembrandtDatabase : RoomDatabase() {
     abstract fun artworkDao(): ArtworkDao
-    abstract fun manifestDao(): ManifestDao
 
     companion object {
         const val NAME = "REMBRANDT_DATABASE"

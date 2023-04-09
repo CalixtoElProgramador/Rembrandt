@@ -3,6 +3,7 @@ package com.listocalixto.android.rembrandt.domain.entity
 import com.listocalixto.android.rembrandt.domain.model.Color
 import com.listocalixto.android.rembrandt.domain.model.Manifest
 import com.listocalixto.android.rembrandt.domain.model.Thumbnail
+import com.listocalixto.android.rembrandt.domain.model.Translation
 
 data class Artwork(
     val artistDisplay: String,
@@ -31,6 +32,7 @@ data class Artwork(
     val mediumDisplay: String,
     val placeOfOrigin: String,
     val score: Double,
+    val translation: Translation?,
     val termTitles: List<String>,
     val thumbnail: Thumbnail,
     val title: String
