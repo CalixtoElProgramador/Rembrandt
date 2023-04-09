@@ -5,5 +5,5 @@ enum class QualityImageType(val value: String) {
 
     MEDIUM("843"),
 
-    HIGH("1686"),
+    HIGH("1686")
 }

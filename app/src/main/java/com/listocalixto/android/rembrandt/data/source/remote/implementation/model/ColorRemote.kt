@@ -14,5 +14,5 @@ data class ColorRemote(
     @SerialName("population")
     val population: Int?,
     @SerialName("s")
-    val s: Int?,
+    val s: Int?
 )

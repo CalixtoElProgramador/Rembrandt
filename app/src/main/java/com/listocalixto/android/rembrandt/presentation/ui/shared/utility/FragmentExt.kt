@@ -6,8 +6,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.google.android.material.R.attr.motionEasingEmphasizedInterpolator
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.motion.MotionUtils
 import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialContainerTransform.FADE_MODE_IN
 import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialFadeThrough
 import com.listocalixto.android.rembrandt.R
@@ -15,7 +19,7 @@ import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.ColorCo
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.ColorContainerType.DifferentContainerColors
 
 fun Fragment.applyFadeThroughEnterTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = R.integer.motion_duration_large
 ) = run {
     enterTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -23,7 +27,7 @@ fun Fragment.applyFadeThroughEnterTransition(
 }
 
 fun Fragment.applyFadeThroughExitTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = R.integer.motion_duration_large
 ) = run {
     exitTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -34,21 +38,27 @@ fun Fragment.applySharedElementEnterTransition(
     @IdRes drawingViewIdRes: Int,
     @IntegerRes durationRes: Int = R.integer.motion_duration_large,
     @ColorInt scrimColorInt: Int = Color.TRANSPARENT,
-    colorContainerType: ColorContainerType,
+    colorContainerType: ColorContainerType
 ) = run {
     val context = context ?: return@run
     sharedElementEnterTransition = MaterialContainerTransform().apply {
         drawingViewId = drawingViewIdRes
         duration = resources.getInteger(durationRes).toLong()
         scrimColor = scrimColorInt
+        interpolator = MotionUtils.resolveThemeInterpolator(
+            context,
+            motionEasingEmphasizedInterpolator,
+            FastOutSlowInInterpolator()
+        )
+        fadeMode = FADE_MODE_IN
         when (colorContainerType) {
             is AllContainerColors -> {
                 setAllContainerColors(
                     MaterialColors.getColor(
                         context,
                         colorContainerType.colorAttr,
-                        Color.MAGENTA,
-                    ),
+                        Color.MAGENTA
+                    )
                 )
             }
             is DifferentContainerColors -> {
@@ -61,13 +71,24 @@ fun Fragment.applySharedElementEnterTransition(
 }
 
 fun Fragment.applySharedElementExitTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = R.integer.motion_duration_large
 ) = run {
+    val context = context ?: return@run
     exitTransition = MaterialElevationScale(false).apply {
         duration = resources.getInteger(durationRes).toLong()
+        interpolator = MotionUtils.resolveThemeInterpolator(
+            context,
+            motionEasingEmphasizedInterpolator,
+            FastOutSlowInInterpolator()
+        )
     }
     reenterTransition = MaterialElevationScale(true).apply {
         duration = resources.getInteger(durationRes).toLong()
+        interpolator = MotionUtils.resolveThemeInterpolator(
+            context,
+            motionEasingEmphasizedInterpolator,
+            FastOutSlowInInterpolator()
+        )
     }
 }
 
@@ -76,6 +97,6 @@ sealed interface ColorContainerType {
     data class DifferentContainerColors(
         @AttrRes val containerColor: Int,
         @AttrRes val startContainerColor: Int,
-        @AttrRes val endContainerColor: Int,
+        @AttrRes val endContainerColor: Int
     ) : ColorContainerType
 }

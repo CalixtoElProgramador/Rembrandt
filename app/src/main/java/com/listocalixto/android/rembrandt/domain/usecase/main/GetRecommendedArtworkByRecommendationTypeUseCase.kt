@@ -6,8 +6,9 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.Same
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtworkType
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameCategory
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameGallery
+import javax.inject.Inject
 
-class GetRecommendedArtworkByRecommendationTypeUseCase() {
+class GetRecommendedArtworkByRecommendationTypeUseCase @Inject constructor() {
 
     operator fun invoke(type: RecommendationType, artworks: List<Artwork>): Artwork? {
         val recommendations = when (type) {

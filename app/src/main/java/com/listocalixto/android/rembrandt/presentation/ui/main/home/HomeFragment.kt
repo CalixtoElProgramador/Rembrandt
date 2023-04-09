@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.transition.Hold
 import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.presentation.adapter.ArtworkAdapter
+import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
+import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkAdapter
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementExitTransition
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -27,6 +28,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var adapter: ArtworkAdapter? = null
     private var binding: Binding? = null
     private var linearProgress: LinearProgressIndicator? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Fragment A’s exitTransition can be set any time before Fragment A is
+        // replaced with Fragment B. Ensure Hold's duration is set to the same
+        // duration as your MaterialContainerTransform.
+        exitTransition = Hold().apply {
+            duration =
+                requireContext().resources.getInteger(R.integer.motion_duration_large).toLong()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,18 +59,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun Binding.setupRecyclerView() {
-        adapter = ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId, card ->
-            navigateToArtworkDetail(artworkId, card)
-        }).also {
-            listArtworks.adapter = it
-        }
+        adapter =
+            ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId, card, memoryCacheKey ->
+                navigateToArtworkDetail(artworkId, card, memoryCacheKey)
+            }).also {
+                listArtworks.adapter = it
+            }
     }
 
-    private fun navigateToArtworkDetail(artworkId: Long, card: View) {
+    private fun navigateToArtworkDetail(artworkId: Long, card: View, memoryCacheKey: String?) {
         applySharedElementExitTransition()
         val detailTransitionName = getString(R.string.item_card_detail_transition_name)
         val extras = FragmentNavigatorExtras(card to detailTransitionName)
-        val direction = HomeFragmentDirections.actionHomeFragmentToDetailFragment(artworkId)
+        val direction = HomeFragmentDirections.toArtworkDetailFragment(
+            artworkId,
+            memoryCacheKey
+        )
         findNavController().navigate(direction, extras)
     }
 

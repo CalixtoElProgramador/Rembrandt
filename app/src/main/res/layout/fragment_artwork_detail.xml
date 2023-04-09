@@ -32,7 +32,10 @@
             style="@style/Widget.Material3.CardView.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:transitionName="@string/item_card_detail_transition_name"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
             app:strokeWidth="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +53,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:loadImage="@{artworkDetailViewModel.uiState.imageUrl}"
+                    app:loadFromCache="@{artworkDetailViewModel.uiState.imageUrl}"
+                    app:memoryCacheKey="@{artworkDetailViewModel.uiState.memoryCacheKey}"
                     tools:src="@tools:sample/backgrounds/scenic" />
 
                 <HorizontalScrollView
@@ -181,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_2"
                     android:alpha="?attr/emphasisMediumAlpha"
-                    android:text="@{artworkDetailViewModel.uiState.description}"
+                    app:uiText="@{artworkDetailViewModel.uiState.descriptionUiText}"
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     app:layout_constraintEnd_toEndOf="@id/textNameArtist"
                     app:layout_constraintStart_toStartOf="@id/textNameArtist"
@@ -216,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
-                    android:paddingHorizontal="@dimen/grid_2"
+                    android:paddingHorizontal="@dimen/grid_1"
                     android:paddingVertical="@dimen/grid_1"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"

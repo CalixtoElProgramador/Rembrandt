@@ -3,11 +3,12 @@ package com.listocalixto.android.rembrandt.domain.usecase.main
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.result.GetRecommendedArtworksByArtworkResult
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
+import javax.inject.Inject
 
-class GetRecommendedArtworksByArtworkUseCase(
+class GetRecommendedArtworksByArtworkUseCase @Inject constructor(
     private val getAllArtworks: GetAllArtworksUseCase,
     private val getRecommendedArtworkByRecommendationType: GetRecommendedArtworkByRecommendationTypeUseCase,
-    private val generateRecommendationTypesByArtwork: GenerateRecommendationTypesByArtworkUseCase,
+    private val generateRecommendationTypesByArtwork: GenerateRecommendationTypesByArtworkUseCase
 ) {
 
     suspend operator fun invoke(currentArtwork: Artwork): GetRecommendedArtworksByArtworkResult {

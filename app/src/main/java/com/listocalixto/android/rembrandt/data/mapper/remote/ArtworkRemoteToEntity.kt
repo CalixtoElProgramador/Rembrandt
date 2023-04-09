@@ -6,10 +6,11 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.mode
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.model.Color
 import com.listocalixto.android.rembrandt.domain.model.Thumbnail
+import javax.inject.Inject
 
-class ArtworkRemoteToEntity(
+class ArtworkRemoteToEntity @Inject constructor(
     private val colorMapper: ColorRemoteToDomain,
-    private val thumbnailMapper: ThumbnailRemoteToDomain,
+    private val thumbnailMapper: ThumbnailRemoteToDomain
 ) : Mapper<ArtworkRemote, Artwork> {
 
     override fun map(value: ArtworkRemote) = Artwork(
@@ -40,7 +41,7 @@ class ArtworkRemoteToEntity(
         score = value.score ?: -1.0,
         termTitles = value.termTitles,
         thumbnail = value.thumbnail?.let { thumbnailMapper.map(it) } ?: Thumbnail.defaultInstance,
-        title = value.title ?: "",
+        title = value.title ?: ""
     )
 
     override fun map(values: List<ArtworkRemote>) = values.map { map(it) }
@@ -72,7 +73,7 @@ class ArtworkRemoteToEntity(
         score = value.score,
         termTitles = value.termTitles,
         thumbnail = thumbnailMapper.reverseMap(value.thumbnail),
-        title = value.title,
+        title = value.title
     )
 
     override fun reverseMap(values: List<Artwork>): List<ArtworkRemote> {

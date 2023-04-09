@@ -6,12 +6,12 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.resp
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class RemoteArtworkDataSourceImpl @Inject constructor(
     private val mapper: ArtworkRemoteToEntity,
-    private val client: HttpClient,
+    private val client: HttpClient
 ) : RemoteArtworkDataSource {
 
     override suspend fun getArtworksByPage(page: String): List<Artwork> {
