@@ -23,5 +23,6 @@
     <string name="item_card_transition_name">item_card_%1$s</string>
     <string name="item_card_detail_transition_name">item_card_detail</string>
     <string name="frag_artwork_detail_no_description_available">"No description available. "</string>
-    <string name="frag_artwork_detail_extended_fab_text">Translate</string>
+    <string name="frag_artwork_detail_extended_fab_translate">Translate</string>
+    <string name="frag_artwork_detail_extended_fab_show_original">Original</string>
 </resources>

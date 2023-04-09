@@ -7,7 +7,6 @@ import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.Constants.EMPTY
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.usecase.main.ArtworkDetailUseCases
-import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworkDescriptionUseCase.Companion.NO_DESCRIPTION
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtist
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtworkType
@@ -19,7 +18,6 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
-import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -87,7 +85,8 @@ class ArtworkDetailViewModel @Inject constructor(
                     val newTranslation = useCases.getTranslationByArtwork(artwork)
                     useCases.setTranslationByArtwork(artwork, newTranslation)
                 } else {
-                    // Show original language scenario
+                    // Toggle translation.
+                    _uiState.update { it.copy(translate = !it.translate) }
                 }
             }
             translateArtworkJob = null
@@ -98,38 +97,10 @@ class ArtworkDetailViewModel @Inject constructor(
         useCases.observeArtworkWithManifest(id).catch {
         }.collect { artwork ->
             setupArtworkDetailScreen(artwork)
-            setupArtworkDescription()
             if (recommendationsHaveNotBeenInitialized()) {
                 fetchAndSetupRecommendedArtworks(artwork)
             }
         }
-    }
-
-    private fun setupArtworkDescription() {
-        val artwork = _uiState.value.artwork ?: return
-        val altText = _uiState.value.altText
-        val manifestDescription = artwork.manifest?.description ?: EMPTY
-        val description = useCases.getArtworkDescription(manifestDescription, altText)
-        val descriptionUiText = getDescriptionUiText(description)
-        _uiState.update {
-            it.copy(
-                descriptionUiText = artwork.translation?.content?.let { content ->
-                    UiText.StringValue(
-                        content
-                    )
-                } ?: descriptionUiText
-            )
-        }
-    }
-
-    private fun getDescriptionUiText(description: String) = if (description == NO_DESCRIPTION) {
-        UiText.StringResource(
-            R.string.frag_artwork_detail_no_description_available
-        )
-    } else {
-        UiText.StringValue(
-            description
-        )
     }
 
     private suspend fun fetchAndSetupRecommendedArtworks(artwork: Artwork) {

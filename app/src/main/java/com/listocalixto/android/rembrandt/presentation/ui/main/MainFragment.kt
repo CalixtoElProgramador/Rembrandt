@@ -56,7 +56,7 @@ class MainFragment :
                         show()
                         text =
                             context.resources.getText(
-                                R.string.frag_artwork_detail_extended_fab_text
+                                R.string.frag_artwork_detail_extended_fab_translate
                             )
                         icon = ResourcesCompat.getDrawable(
                             context.resources,

@@ -79,7 +79,11 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
     private fun Binding.collectUiState() = viewLifecycleOwner.lifecycleScope.launch {
         viewModel.uiState.flowWithLifecycle(lifecycle).collect { state ->
             artworkRecommendedAdapter.submitList(state.artworksRecommended)
-            // reloadPreviousArtworkOnBackPressed.isEnabled = state.dataInTheBackStack.isNotEmpty()
+            extendedFab?.text = if (state.isTranslationDisplayed) {
+                context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_show_original)
+            } else {
+                context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_translate)
+            }
         }
     }
 
