@@ -4,4 +4,5 @@ sealed interface ArtworkDetailUiEvent {
     object SaveCurrentArtworkId : ArtworkDetailUiEvent
     object OnChipFavorite : ArtworkDetailUiEvent
     object TranslateContent : ArtworkDetailUiEvent
+    object RefreshAnimationTriggered : ArtworkDetailUiEvent
 }

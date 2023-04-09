@@ -11,7 +11,8 @@ data class ArtworkDetailUiState(
     val artworksRecommended: List<ArtworkRecommendedUiState>? = null,
     val recommendationTypes: List<RecommendationType>? = null,
     val memoryCacheKey: String? = null,
-    val translate: Boolean = true
+    val translate: Boolean = true,
+    val triggerRefreshAnimation: Unit? = null
 ) {
     val isTranslationDisplayed: Boolean = translate && artwork?.translation != null
     val imageUrl: String = artwork?.imageUrl ?: EMPTY

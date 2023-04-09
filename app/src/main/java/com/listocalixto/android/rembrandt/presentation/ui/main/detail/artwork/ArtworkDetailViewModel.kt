@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.R
+import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
 import com.listocalixto.android.rembrandt.core.Constants.EMPTY
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.usecase.main.ArtworkDetailUseCases
@@ -16,12 +17,14 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.RefreshAnimationTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -78,18 +81,27 @@ class ArtworkDetailViewModel @Inject constructor(
         }
         TranslateContent -> Unit.apply {
             if (translateArtworkJob != null) return@apply
-            translateArtworkJob = viewModelScope.launch {
-                val artwork = _uiState.value.artwork ?: return@launch
-                val translation = artwork.translation
-                if (translation == null) {
+            val artwork = _uiState.value.artwork ?: return@apply
+            val translation = artwork.translation
+            if (translation == null) {
+                translateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
                     val newTranslation = useCases.getTranslationByArtwork(artwork)
+                    _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
+                    delay(ANIMATION_REFRESH_DURATION)
                     useCases.setTranslationByArtwork(artwork, newTranslation)
-                } else {
-                    // Toggle translation.
+                    translateArtworkJob = null
+                }
+            } else {
+                // Toggle translation.
+                viewModelScope.launch {
+                    _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
+                    delay(ANIMATION_REFRESH_DURATION)
                     _uiState.update { it.copy(translate = !it.translate) }
                 }
             }
-            translateArtworkJob = null
+        }
+        RefreshAnimationTriggered -> {
+            _uiState.update { it.copy(triggerRefreshAnimation = null) }
         }
     }
 

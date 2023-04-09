@@ -21,7 +21,7 @@ class ManifestLocalToModel @Inject constructor(
     override fun reverseMap(value: Manifest) = ManifestLocal(
         artworkId = value.artworkId,
         id = value.id,
-        description = value.description.trim().replace("\n", "\n\n"),
+        description = value.description.trim(),
         metadata = metadataMapper.reverseMap(value.metadata)
     )
 

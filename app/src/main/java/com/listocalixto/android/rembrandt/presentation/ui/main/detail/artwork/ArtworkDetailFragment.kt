@@ -15,6 +15,7 @@ import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.ColorCo
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementEnterTransition
+import com.listocalixto.android.rembrandt.presentation.utility.fader
 import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -83,6 +84,12 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                 context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_show_original)
             } else {
                 context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_translate)
+            }
+            if (state.triggerRefreshAnimation != null) {
+                textCategory.fader(viewTrigger = extendedFab)
+                textTitle.fader(viewTrigger = extendedFab)
+                textDescription.fader(viewTrigger = extendedFab)
+                viewModel.onEvent(ArtworkDetailUiEvent.RefreshAnimationTriggered)
             }
         }
     }
