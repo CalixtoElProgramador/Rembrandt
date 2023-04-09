@@ -28,6 +28,7 @@ class RemoteSharedDataSourceImpl @Inject constructor(
             parameter(PARAM_TEXT_KEY, text)
             parameter(PARAM_SOURCE_LANG_KEY, PARAM_SOURCE_LANG_VALUE)
             parameter(PARAM_TARGET_LANG_KEY, targetLang)
+            parameter(PARAM_FORMALITY_KEY, PARAM_FORMALITY_VALUE)
         }.body()
         val translations = textTranslated.translations
         return if (translations.isEmpty()) EMPTY else translations.first().text
@@ -38,6 +39,8 @@ class RemoteSharedDataSourceImpl @Inject constructor(
         private const val PARAM_SOURCE_LANG_KEY = "source_lang"
         private const val PARAM_SOURCE_LANG_VALUE = "EN"
         private const val PARAM_TARGET_LANG_KEY = "target_lang"
+        private const val PARAM_FORMALITY_KEY = "formality"
+        private const val PARAM_FORMALITY_VALUE = "prefer_more"
         private const val AUTHORIZATION_LEY = "DeepL-Auth-Key"
     }
 }

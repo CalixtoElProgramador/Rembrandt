@@ -25,4 +25,6 @@
     <string name="frag_artwork_detail_no_description_available">"No description available. "</string>
     <string name="frag_artwork_detail_extended_fab_translate">Translate</string>
     <string name="frag_artwork_detail_extended_fab_show_original">Original</string>
+    <string name="frag_artwork_detail_err_translation_not_available">Translation not available 😔</string>
+    <string name="frag_artwork_detail_snackbar_action_text">OK, thanks</string>
 </resources>

@@ -9,15 +9,20 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentArtworkDetailBinding as Binding
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementEnterTransition
+import com.listocalixto.android.rembrandt.presentation.utility.SnackbarDuration
+import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import com.listocalixto.android.rembrandt.presentation.utility.fader
+import com.listocalixto.android.rembrandt.presentation.utility.showSnackbar
 import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -63,7 +68,12 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                 }
             }
             extendedFab?.setOnClickListener {
-                viewModel.onEvent(ArtworkDetailUiEvent.TranslateContent)
+                val currentLanguage = Locale.getDefault().language
+                val currentCountry = Locale.getDefault().country
+                val targetLang = "$currentLanguage-$currentCountry"
+                viewModel.onEvent(
+                    ArtworkDetailUiEvent.TranslateContent(targetLang = targetLang)
+                )
             }
         }
     }
@@ -78,18 +88,27 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
     }
 
     private fun Binding.collectUiState() = viewLifecycleOwner.lifecycleScope.launch {
+        val context = context ?: return@launch
+        val resources = context.resources ?: return@launch
         viewModel.uiState.flowWithLifecycle(lifecycle).collect { state ->
             artworkRecommendedAdapter.submitList(state.artworksRecommended)
             extendedFab?.text = if (state.isTranslationDisplayed) {
-                context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_show_original)
+                resources.getText(R.string.frag_artwork_detail_extended_fab_show_original)
             } else {
-                context?.resources?.getText(R.string.frag_artwork_detail_extended_fab_translate)
+                resources.getText(R.string.frag_artwork_detail_extended_fab_translate)
             }
             if (state.triggerRefreshAnimation != null) {
                 textCategory.fader(viewTrigger = extendedFab)
                 textTitle.fader(viewTrigger = extendedFab)
                 textDescription.fader(viewTrigger = extendedFab)
                 viewModel.onEvent(ArtworkDetailUiEvent.RefreshAnimationTriggered)
+            }
+            val errorMessage = state.errorMessage
+            if (errorMessage != null) {
+                showSnackbar(root, errorMessage, SnackbarDuration.SHORT) {
+                    it.dismiss()
+                }
+                viewModel.onEvent(ArtworkDetailUiEvent.ErrorMessageTriggered)
             }
         }
     }

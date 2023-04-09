@@ -7,6 +7,8 @@ import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
 import com.listocalixto.android.rembrandt.core.Constants.EMPTY
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
+import com.listocalixto.android.rembrandt.domain.model.Translation
+import com.listocalixto.android.rembrandt.domain.model.Translation.Exception.TargetLanguageNotAvailable
 import com.listocalixto.android.rembrandt.domain.usecase.main.ArtworkDetailUseCases
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtist
@@ -16,10 +18,12 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.Same
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_DEFAULT_VALUE
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY_ID_KEY
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.ErrorMessageTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.RefreshAnimationTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
+import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -79,17 +83,33 @@ class ArtworkDetailViewModel @Inject constructor(
                 updateArtworkJob = null
             }
         }
-        TranslateContent -> Unit.apply {
+        is TranslateContent -> Unit.apply {
             if (translateArtworkJob != null) return@apply
             val artwork = _uiState.value.artwork ?: return@apply
             val translation = artwork.translation
             if (translation == null) {
                 translateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
-                    val newTranslation = useCases.getTranslationByArtwork(artwork)
-                    _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
-                    delay(ANIMATION_REFRESH_DURATION)
-                    useCases.setTranslationByArtwork(artwork, newTranslation)
-                    translateArtworkJob = null
+                    try {
+                        val targetLang = event.targetLang
+                        val newTranslation = useCases.getTranslationByArtwork(artwork, targetLang)
+                        _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
+                        delay(ANIMATION_REFRESH_DURATION)
+                        useCases.setTranslationByArtwork(artwork, newTranslation)
+                    } catch (e: Translation.Exception) {
+                        when (e) {
+                            TargetLanguageNotAvailable -> {
+                                _uiState.update {
+                                    it.copy(
+                                        errorMessage = UiText.StringResource(
+                                            R.string.frag_artwork_detail_err_translation_not_available
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    } finally {
+                        translateArtworkJob = null
+                    }
                 }
             } else {
                 // Toggle translation.
@@ -102,6 +122,9 @@ class ArtworkDetailViewModel @Inject constructor(
         }
         RefreshAnimationTriggered -> {
             _uiState.update { it.copy(triggerRefreshAnimation = null) }
+        }
+        ErrorMessageTriggered -> {
+            _uiState.update { it.copy(errorMessage = null) }
         }
     }
 

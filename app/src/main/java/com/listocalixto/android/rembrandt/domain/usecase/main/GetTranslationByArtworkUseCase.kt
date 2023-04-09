@@ -12,7 +12,7 @@ class GetTranslationByArtworkUseCase @Inject constructor(
 
     suspend operator fun invoke(
         artwork: Artwork,
-        targetLang: String = TARGET_LANG_DEFAULT_VALUE
+        targetLang: String
     ): Translation {
         val translation = Translation(
             category = artwork.categoryTitles.first(),
@@ -24,9 +24,5 @@ class GetTranslationByArtworkUseCase @Inject constructor(
             title = translateText(translation.title, targetLang),
             content = translateText(translation.content, targetLang)
         )
-    }
-
-    companion object {
-        private const val TARGET_LANG_DEFAULT_VALUE = "ES"
     }
 }
