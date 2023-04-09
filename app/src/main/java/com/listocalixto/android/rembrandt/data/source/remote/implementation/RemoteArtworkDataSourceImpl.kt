@@ -10,6 +10,7 @@ import com.listocalixto.android.rembrandt.data.source.remote.implementation.resp
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.model.Manifest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import java.util.UUID
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
                 parameters.append(LIMIT_NAME, LIMIT_VALUE)
                 parameters.append(FIELDS_NAME, FIELDS_VALUE)
             }
-        }
+        }.body()
         return response.data.map { mapper.map(it) }
     }
 
@@ -48,7 +49,7 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
 
     override suspend fun fetchManifestByArtworkId(id: Long): Manifest {
         val response: GetManifestResponse =
-            client.get("https://api.artic.edu/api/v1/artworks/$id/manifest.json")
+            client.get("https://api.artic.edu/api/v1/artworks/$id/manifest.json").body()
 
         val descriptions = response.description
         val manifestRemote = ManifestRemote(

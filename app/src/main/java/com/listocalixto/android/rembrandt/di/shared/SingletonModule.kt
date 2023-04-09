@@ -11,16 +11,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import io.ktor.client.features.DefaultRequest
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
-import io.ktor.client.features.observer.ResponseObserver
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
 import javax.inject.Singleton
+import kotlinx.serialization.json.Json
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,12 +40,15 @@ object SingletonModule {
     @Provides
     @Singleton
     fun provideHttpClient() = HttpClient(Android) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
-                    prettyPrint = true
-                    isLenient = true
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    encodeDefaults = false
                     ignoreUnknownKeys = true
+                    isLenient = true
+                    allowSpecialFloatingPointValues = true
+                    coerceInputValues = true
+                    prettyPrint = true
                 }
             )
         }
