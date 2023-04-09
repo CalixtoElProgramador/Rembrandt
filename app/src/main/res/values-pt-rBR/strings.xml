@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rembrandt</string>
+    <string name="main_menu_home">Início</string>
+    <string name="main_menu_favorites">Favoritos</string>
+    <string name="main_menu_explore">Explorar</string>
+    <string name="hello_home_fragment">Olá fragmento de casa</string>
+    <string name="hello_explore_fragment">Olá explorar fragmento</string>
+    <string name="hello_favorites_fragment">Olá fragmento favorito</string>
+    <string name="hello_blank_fragment">Olá fragmento em branco</string>
+    <string name="save_to_favorites">Guardar nos favoritos</string>
+    <string name="saved_in_favorites">Salvo em favoritos</string>
+    <string name="download_image">Descarregar imagem</string>
+    <string name="share">Partilhar</string>
+    <string name="zoom_in">Ampliar</string>
+    <string name="add_to_collection">Adicionar à colecção</string>
+    <string name="recommended">Recomendado:</string>
+    <string name="reason_it_was_recommended_same_artist">Do mesmo artista</string>
+    <string name="reason_it_was_recommended_same_artwork_type">O mesmo tipo de obra de arte</string>
+    <string name="reason_it_was_recommended_same_category">Pertence à mesma categoria</string>
+    <string name="reason_it_was_recommended_same_gallery">A partir da mesma galeria</string>
+    <string name="frag_artwork_detail_no_description_available">Não há descrição disponível.</string>
+    <string name="frag_artwork_detail_extended_fab_translate">Traduzir</string>
+    <string name="frag_artwork_detail_extended_fab_show_original">Original</string>
+    <string name="frag_artwork_detail_err_translation_not_available">Tradução não disponível 😔</string>
+    <string name="frag_artwork_detail_snackbar_action_text">OK, obrigado</string>
+    <string name="frag_artwork_detail_wait_until_translation_is_ready">Espere até a sua tradução estar pronta.</string>
+</resources>

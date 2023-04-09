@@ -25,7 +25,6 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

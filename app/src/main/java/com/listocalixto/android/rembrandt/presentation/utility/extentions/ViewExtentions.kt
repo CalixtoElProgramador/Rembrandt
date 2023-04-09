@@ -4,8 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.View
-import androidx.core.view.NestedScrollingChild
-import androidx.core.view.ScrollingView
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
