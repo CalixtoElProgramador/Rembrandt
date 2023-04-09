@@ -1,6 +1,7 @@
 package com.listocalixto.android.rembrandt.domain.entity
 
 import com.listocalixto.android.rembrandt.domain.model.Color
+import com.listocalixto.android.rembrandt.domain.model.Manifest
 import com.listocalixto.android.rembrandt.domain.model.Thumbnail
 
 data class Artwork(
@@ -26,6 +27,7 @@ data class Artwork(
     val imageUrl: String,
     val latitude: Double,
     val longitude: Double,
+    val manifest: Manifest?,
     val mediumDisplay: String,
     val placeOfOrigin: String,
     val score: Double,

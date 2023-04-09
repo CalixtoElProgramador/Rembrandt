@@ -1,6 +1,7 @@
 package com.listocalixto.android.rembrandt.domain.repo
 
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
+import com.listocalixto.android.rembrandt.domain.model.Manifest
 import kotlinx.coroutines.flow.Flow
 
 interface ArtworkRepo {
@@ -21,4 +22,6 @@ interface ArtworkRepo {
     suspend fun getArtworkById(id: Long): Artwork
 
     suspend fun getAllArtworks(): List<Artwork>
+
+    suspend fun fetchManifestByArtworkId(id: Long): Manifest
 }

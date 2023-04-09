@@ -1,16 +1,23 @@
 package com.listocalixto.android.rembrandt.data.source.remote.implementation
 
+import com.listocalixto.android.rembrandt.core.Constants
 import com.listocalixto.android.rembrandt.data.mapper.remote.ArtworkRemoteToEntity
+import com.listocalixto.android.rembrandt.data.mapper.remote.ManifestRemoteToModel
 import com.listocalixto.android.rembrandt.data.source.remote.configuration.HttpRoutes
+import com.listocalixto.android.rembrandt.data.source.remote.implementation.model.ManifestRemote
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main.GetArtworksResponse
+import com.listocalixto.android.rembrandt.data.source.remote.implementation.response.main.GetManifestResponse
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
+import com.listocalixto.android.rembrandt.domain.model.Manifest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import java.util.UUID
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
 class RemoteArtworkDataSourceImpl @Inject constructor(
     private val mapper: ArtworkRemoteToEntity,
+    private val manifestMapper: ManifestRemoteToModel,
     private val client: HttpClient
 ) : RemoteArtworkDataSource {
 
@@ -37,6 +44,20 @@ class RemoteArtworkDataSourceImpl @Inject constructor(
 
     override fun getArtworksByArtistId(id: Long): Flow<List<Artwork>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchManifestByArtworkId(id: Long): Manifest {
+        val response: GetManifestResponse =
+            client.get("https://api.artic.edu/api/v1/artworks/$id/manifest.json")
+
+        val descriptions = response.description
+        val manifestRemote = ManifestRemote(
+            artworkId = id,
+            id = UUID.randomUUID().toString(),
+            description = if (descriptions.isEmpty()) Constants.EMPTY else descriptions.first().value,
+            metadata = response.metadata
+        )
+        return manifestMapper.map(manifestRemote)
     }
 
     companion object {

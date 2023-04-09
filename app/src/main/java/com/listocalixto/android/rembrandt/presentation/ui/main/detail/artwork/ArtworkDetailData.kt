@@ -1,7 +1,7 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork
 
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
-import com.listocalixto.android.rembrandt.domain.entity.Manifest
+import com.listocalixto.android.rembrandt.domain.model.Manifest
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
 
 data class ArtworkDetailData(

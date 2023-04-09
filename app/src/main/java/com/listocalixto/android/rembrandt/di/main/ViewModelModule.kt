@@ -1,7 +1,6 @@
 package com.listocalixto.android.rembrandt.di.main
 
 import com.listocalixto.android.rembrandt.data.repo.ArtworkRepoImpl
-import com.listocalixto.android.rembrandt.data.repo.ManifestRepoImpl
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ArtworkDao
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ManifestDao
 import com.listocalixto.android.rembrandt.data.source.local.configuration.RembrandtDatabase
@@ -11,10 +10,7 @@ import com.listocalixto.android.rembrandt.data.source.local.implementation.Local
 import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalManifestDataSourceImpl
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSource
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSourceImpl
-import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteManifestDataSource
-import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteManifestDataSourceImpl
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
-import com.listocalixto.android.rembrandt.domain.repo.ManifestRepo
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -42,17 +38,7 @@ abstract class ViewModelModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindRemoteManifestDataSource(
-        remoteManifestDataSource: RemoteManifestDataSourceImpl
-    ): RemoteManifestDataSource
-
-    @Binds
-    @ViewModelScoped
     abstract fun bindLocalManifestDataSource(localManifestDataSource: LocalManifestDataSourceImpl): LocalManifestDataSource
-
-    @Binds
-    @ViewModelScoped
-    abstract fun bindManifestRepo(manifestRepoImpl: ManifestRepoImpl): ManifestRepo
 
     companion object {
 

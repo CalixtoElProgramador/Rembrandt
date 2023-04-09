@@ -1,20 +1,21 @@
 package com.listocalixto.android.rembrandt.domain.usecase.main
 
-import com.listocalixto.android.rembrandt.domain.result.GetArtworkWithManifestResult
+import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetArtworkWithManifestUseCase @Inject constructor(
-    private val getManifestByArtworkId: GetManifestByArtworkIdUseCase,
-    private val observeArtworkByIdUseCase: ObserveArtworkByIdUseCase
+    private val observeArtworkByIdUseCase: ObserveArtworkByIdUseCase,
+    private val setManifestByArtwork: SetManifestByArtworkUseCase
 ) {
-    operator fun invoke(id: Long): Flow<GetArtworkWithManifestResult> = flow {
-        observeArtworkByIdUseCase.invoke(id).collect { resultArtwork ->
+    operator fun invoke(id: Long): Flow<Artwork> = flow {
+        observeArtworkByIdUseCase(id).collect { resultArtwork ->
             resultArtwork.onSuccess { artwork ->
-                val manifest = getManifestByArtworkId(artwork.id)
-                val result = GetArtworkWithManifestResult(artwork, manifest)
-                emit(result)
+                emit(artwork)
+                if (artwork.manifest == null) {
+                    setManifestByArtwork(artwork)
+                }
             }.onFailure {
                 throw it
             }

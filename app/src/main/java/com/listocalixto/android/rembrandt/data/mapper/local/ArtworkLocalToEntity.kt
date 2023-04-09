@@ -8,7 +8,8 @@ import javax.inject.Inject
 
 class ArtworkLocalToEntity @Inject constructor(
     private val colorMapper: ColorLocalToDomain,
-    private val thumbnailMapper: ThumbnailLocalToDomain
+    private val thumbnailMapper: ThumbnailLocalToDomain,
+    private val manifestMapper: ManifestLocalToModel
 ) : Mapper<ArtworkTable, Artwork> {
     override fun map(value: ArtworkTable) = Artwork(
         artistDisplay = value.artistDisplay,
@@ -33,6 +34,7 @@ class ArtworkLocalToEntity @Inject constructor(
         imageUrl = EMPTY,
         latitude = value.latitude,
         longitude = value.longitude,
+        manifest = value.manifest?.let { manifestMapper.map(it) },
         mediumDisplay = value.mediumDisplay,
         placeOfOrigin = value.placeOfOrigin,
         score = value.score,
@@ -67,6 +69,7 @@ class ArtworkLocalToEntity @Inject constructor(
         imageId = value.imageId,
         latitude = value.latitude,
         longitude = value.longitude,
+        manifest = value.manifest?.let { manifestMapper.reverseMap(it) },
         mediumDisplay = value.mediumDisplay,
         placeOfOrigin = value.placeOfOrigin,
         score = value.score,

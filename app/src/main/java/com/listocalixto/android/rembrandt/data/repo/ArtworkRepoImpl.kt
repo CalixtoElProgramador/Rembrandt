@@ -4,6 +4,7 @@ import com.listocalixto.android.rembrandt.core.networkBoundResource
 import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalArtworkDataSource
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSource
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
+import com.listocalixto.android.rembrandt.domain.model.Manifest
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -75,5 +76,10 @@ class ArtworkRepoImpl @Inject constructor(
                 remoteArtworks.forEach { localDataSource.insertArtwork(it) }
                 localDataSource.getAllArtworks()
             }
+        }
+
+    override suspend fun fetchManifestByArtworkId(id: Long): Manifest =
+        withContext(Dispatchers.IO) {
+            return@withContext remoteDataSource.fetchManifestByArtworkId(id)
         }
 }

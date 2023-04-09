@@ -35,6 +35,8 @@ data class ArtworkTable(
     val imageId: String,
     val latitude: Double,
     val longitude: Double,
+    @Embedded
+    val manifest: ManifestTable?,
     val mediumDisplay: String,
     val placeOfOrigin: String,
     val score: Double,

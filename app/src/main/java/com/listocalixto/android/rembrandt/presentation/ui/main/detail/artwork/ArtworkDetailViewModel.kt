@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.Constants.EMPTY
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
-import com.listocalixto.android.rembrandt.domain.entity.Manifest
 import com.listocalixto.android.rembrandt.domain.usecase.main.ArtworkDetailUseCases
 import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworkDescriptionUseCase.Companion.NO_DESCRIPTION
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
@@ -22,10 +21,8 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,7 +61,7 @@ class ArtworkDetailViewModel @Inject constructor(
                     if (artwork != null && artworksRecommended != null && recommendedTypes != null && manifest != null) {
                         // Data is kept in memory
                         setupArtworkDetailScreen(artwork)
-                        setupArtworkDescription(manifest)
+                        setupArtworkDescription(artwork)
                         setupRecommendedArtworks(artworksRecommended, recommendedTypes)
                     } else {
                         setupContentByArtworkId(args.artworkId)
@@ -91,28 +88,20 @@ class ArtworkDetailViewModel @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.setupContentByArtworkId(id: Long) = this.launch {
-        launch {
-            useCases.observeArtworkById(id).collect { resultArtwork ->
-                resultArtwork.onSuccess { artwork ->
-                    setupArtworkDetailScreen(artwork)
-                    if (recommendationsHaveNotBeenInitialized()) {
-                        fetchAndSetupRecommendedArtworks(artwork)
-                    }
-                }.onFailure {
-                }
+    private suspend fun setupContentByArtworkId(id: Long) {
+        useCases.getArtworkWithManifest(id).collect { artwork ->
+            setupArtworkDetailScreen(artwork)
+            setupArtworkDescription(artwork)
+            if (recommendationsHaveNotBeenInitialized()) {
+                fetchAndSetupRecommendedArtworks(artwork)
             }
-        }
-        launch {
-            val manifest = async { useCases.getManifestByArtworkId(id) }
-            setupArtworkDescription(manifest.await())
         }
     }
 
-    private fun setupArtworkDescription(manifest: Manifest) {
-        data.update { it.copy(manifest = manifest) }
+    private fun setupArtworkDescription(artwork: Artwork) {
+        data.update { it.copy(manifest = artwork.manifest) }
         val altText = _uiState.value.altText
-        val manifestDescription = manifest.description
+        val manifestDescription = artwork.manifest?.description ?: EMPTY
         val description = useCases.getArtworkDescription(manifestDescription, altText)
         val descriptionUiText = getDescriptionUiText(description)
         _uiState.update { it.copy(descriptionUiText = descriptionUiText) }
@@ -174,7 +163,7 @@ class ArtworkDetailViewModel @Inject constructor(
     }
 
     private fun setupArtworkDetailScreen(artwork: Artwork) {
-        data.update { it.copy(artwork = artwork) }
+        data.update { it.copy(artwork = artwork, manifest = artwork.manifest) }
         _uiState.update {
             it.copy(
                 imageUrl = artwork.imageUrl,

@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkViewHolder
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.ArtworkUiState
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.HomeUiEvent
+import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkViewHolder
 
 class ArtworkAdapter(
     private val onEvent: (event: HomeUiEvent) -> Unit,

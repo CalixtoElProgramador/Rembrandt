@@ -15,8 +15,8 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.transition.Hold
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
-import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkAdapter
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementExitTransition
+import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

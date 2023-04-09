@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkRecommendedViewHolder
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkRecommendedUiState
+import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkRecommendedViewHolder
 
 class ArtworkRecommendedAdapter(
     private val onArtwork: (artworkId: Long, memoryCacheKey: String?) -> Unit

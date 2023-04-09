@@ -11,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentArtworkDetailBinding as Binding
-import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.applySharedElementEnterTransition
+import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

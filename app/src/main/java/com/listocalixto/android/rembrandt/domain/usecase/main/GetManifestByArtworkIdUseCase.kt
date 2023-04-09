@@ -1,12 +1,12 @@
 package com.listocalixto.android.rembrandt.domain.usecase.main
 
-import com.listocalixto.android.rembrandt.domain.entity.Manifest
-import com.listocalixto.android.rembrandt.domain.repo.ManifestRepo
+import com.listocalixto.android.rembrandt.domain.model.Manifest
+import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import javax.inject.Inject
 
-class GetManifestByArtworkIdUseCase @Inject constructor(private val repo: ManifestRepo) {
+class GetManifestByArtworkIdUseCase @Inject constructor(private val repo: ArtworkRepo) {
 
-    suspend operator fun invoke(artworkId: Long, forceUpdate: Boolean = false): Manifest {
-        return repo.getManifestByArtworkId(artworkId, forceUpdate)
+    suspend operator fun invoke(artworkId: Long): Manifest {
+        return repo.fetchManifestByArtworkId(artworkId)
     }
 }
