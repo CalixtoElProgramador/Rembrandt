@@ -4,7 +4,7 @@ data class Thumbnail(
     val altText: String,
     val height: Int,
     val lqip: String,
-    val width: Int,
+    val width: Int
 ) {
 
     companion object {

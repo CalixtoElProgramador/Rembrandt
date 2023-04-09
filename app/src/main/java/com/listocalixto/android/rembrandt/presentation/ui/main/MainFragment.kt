@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.presentation.ui.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnPreDraw
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -33,14 +33,44 @@ class MainFragment :
                 childFragmentManager.findFragmentById(navHostMainFragment.id) as NavHostFragment
             val navController = navHostFragment.navController
             bottomNav.setupWithNavController(navController)
+            navController.addOnDestinationChangedListener(this@MainFragment)
         }
     }
 
     override fun onDestinationChanged(
         controller: NavController,
         destination: NavDestination,
-        arguments: Bundle?,
+        arguments: Bundle?
     ) {
+        (binding ?: return).run {
+            when (destination.id) {
+                R.id.exploreFragment -> {
+                    extendedFab.show()
+                }
+                R.id.homeFragment -> {
+                    extendedFab.extend()
+                    extendedFab.hide()
+                }
+                R.id.artworkDetailFragment -> {
+                    extendedFab.apply {
+                        show()
+                        text =
+                            context.resources.getText(
+                                R.string.frag_artwork_detail_extended_fab_text
+                            )
+                        icon = ResourcesCompat.getDrawable(
+                            context.resources,
+                            R.drawable.ic_translate,
+                            activity?.theme
+                        )
+                    }
+                }
+                R.id.favoritesFragment -> {
+                    extendedFab.hide()
+                }
+                else -> {}
+            }
+        }
     }
 
     companion object {

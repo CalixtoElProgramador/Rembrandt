@@ -9,7 +9,7 @@ data class ArtworkUiState(
     val caption: String = "",
     val title: String = "",
     val artistName: String = "",
-    val isFavorite: Boolean,
+    val isFavorite: Boolean
 ) {
 
     companion object {
@@ -20,7 +20,7 @@ data class ArtworkUiState(
             caption = if (artwork.categoryTitles.isEmpty()) "IS EMPTY" else artwork.categoryTitles.first(),
             title = artwork.title,
             artistName = artwork.artistTitle,
-            isFavorite = artwork.isFavorite,
+            isFavorite = artwork.isFavorite
         )
     }
 }

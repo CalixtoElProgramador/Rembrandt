@@ -5,7 +5,7 @@ import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import javax.inject.Inject
 
 class UpdateArtworkUseCase @Inject constructor(
-    private val repo: ArtworkRepo,
+    private val repo: ArtworkRepo
 ) {
 
     suspend operator fun invoke(artwork: Artwork) = repo.updateArtwork(artwork)

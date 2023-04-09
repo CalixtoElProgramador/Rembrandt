@@ -31,5 +31,5 @@ data class Artwork(
     val score: Double,
     val termTitles: List<String>,
     val thumbnail: Thumbnail,
-    val title: String,
+    val title: String
 )

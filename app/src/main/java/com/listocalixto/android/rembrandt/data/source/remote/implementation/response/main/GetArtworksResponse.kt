@@ -16,5 +16,5 @@ data class GetArtworksResponse(
     @SerialName("info")
     val info: InfoRemote,
     @SerialName("pagination")
-    val pagination: PaginationRemote,
+    val pagination: PaginationRemote
 )

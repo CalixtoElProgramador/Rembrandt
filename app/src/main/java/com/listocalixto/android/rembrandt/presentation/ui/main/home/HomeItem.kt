@@ -6,6 +6,6 @@ sealed class HomeItem() {
     data class LargeCarousel(
         val title: String,
         val description: String,
-        val items: List<Artwork>,
+        val items: List<Artwork>
     ) : HomeItem()
 }

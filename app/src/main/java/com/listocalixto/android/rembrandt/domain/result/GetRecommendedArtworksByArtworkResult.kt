@@ -5,5 +5,5 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
 
 data class GetRecommendedArtworksByArtworkResult(
     val artworksRecommended: List<Artwork>,
-    val recommendationTypes: List<RecommendationType>,
+    val recommendationTypes: List<RecommendationType>
 )

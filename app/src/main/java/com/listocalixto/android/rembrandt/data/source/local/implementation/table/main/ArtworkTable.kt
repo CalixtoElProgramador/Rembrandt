@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.listocalixto.android.rembrandt.core.ListConverter
+import com.listocalixto.android.rembrandt.data.source.local.configuration.ListConverter
 import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ColorLocal
 import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ThumbnailLocal
 
@@ -42,5 +42,5 @@ data class ArtworkTable(
     val termTitles: List<String>,
     @Embedded
     val thumbnail: ThumbnailLocal,
-    val title: String,
+    val title: String
 )

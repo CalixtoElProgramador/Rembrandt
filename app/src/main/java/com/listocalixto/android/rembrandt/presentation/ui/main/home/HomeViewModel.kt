@@ -5,17 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.domain.usecase.main.HomeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCases: HomeUseCases,
+    private val useCases: HomeUseCases
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -29,8 +29,7 @@ class HomeViewModel @Inject constructor(
             useCases.getArtworksByPage(1).collect { result ->
                 result.onSuccess { data ->
                     val artworks = data.artworks.map { ArtworkUiState.domainToUiState(it) }
-                    _uiState.update { it.copy(artworks = artworks) }
-                    _uiState.update { it.copy(isLoading = false) }
+                    _uiState.update { it.copy(artworks = artworks, isLoading = false) }
                 }.onFailure {
                     _uiState.update { it.copy(isLoading = false) }
                 }

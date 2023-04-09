@@ -1,17 +1,17 @@
-package com.listocalixto.android.rembrandt.presentation.adapter
+package com.listocalixto.android.rembrandt.presentation.view.adapter
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.listocalixto.android.rembrandt.presentation.holder.ArtworkViewHolder
+import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkViewHolder
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.ArtworkUiState
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.HomeUiEvent
 
 class ArtworkAdapter(
     private val onEvent: (event: HomeUiEvent) -> Unit,
-    private val onArtwork: (artworkId: Long, container: View) -> Unit,
+    private val onArtwork: (artworkId: Long, container: View, memoryCacheKey: String?) -> Unit
 ) : ListAdapter<ArtworkUiState, RecyclerView.ViewHolder>(ArtworkDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

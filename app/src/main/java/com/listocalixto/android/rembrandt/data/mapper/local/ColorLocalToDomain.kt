@@ -3,15 +3,16 @@ package com.listocalixto.android.rembrandt.data.mapper.local
 import com.listocalixto.android.rembrandt.core.Mapper
 import com.listocalixto.android.rembrandt.data.source.local.implementation.model.ColorLocal
 import com.listocalixto.android.rembrandt.domain.model.Color
+import javax.inject.Inject
 
-class ColorLocalToDomain : Mapper<ColorLocal, Color> {
+class ColorLocalToDomain @Inject constructor() : Mapper<ColorLocal, Color> {
 
     override fun map(value: ColorLocal) = Color(
         h = value.h,
         l = value.l,
         percentage = value.percentage,
         population = value.population,
-        s = value.s,
+        s = value.s
     )
 
     override fun map(values: List<ColorLocal>): List<Color> {
@@ -23,7 +24,7 @@ class ColorLocalToDomain : Mapper<ColorLocal, Color> {
         l = value.l,
         percentage = value.percentage,
         population = value.population,
-        s = value.s,
+        s = value.s
     )
 
     override fun reverseMap(values: List<Color>): List<ColorLocal> {

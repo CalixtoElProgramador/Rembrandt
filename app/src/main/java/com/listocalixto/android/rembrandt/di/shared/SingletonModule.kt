@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.di.main
+package com.listocalixto.android.rembrandt.di.shared
 
 import android.content.Context
 import android.util.Log
@@ -32,7 +32,7 @@ object SingletonModule {
         return Room.databaseBuilder(
             content,
             RembrandtDatabase::class.java,
-            RembrandtDatabase.NAME,
+            RembrandtDatabase.NAME
         ).build()
     }
 
@@ -45,7 +45,7 @@ object SingletonModule {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
-                },
+                }
             )
         }
         install(Logging) {

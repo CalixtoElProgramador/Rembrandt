@@ -15,7 +15,7 @@ class GetArtworksAccordingSearchUseCaseTest {
     @FileParameters("$BASE_ASSET_URI/get_artworks_according_search_test_01_parameters.csv")
     fun validateQuery_correct_returnTrue(
         query: String,
-        expected: Boolean,
+        expected: Boolean
     ) {
         Assert.assertTrue(validateQuery(query))
     }
@@ -24,7 +24,7 @@ class GetArtworksAccordingSearchUseCaseTest {
     @FileParameters("$BASE_ASSET_URI/get_artworks_according_search_test_02_parameters.csv")
     fun validateQuery_incorrect_returnError(
         query: String,
-        expected: Boolean,
+        expected: Boolean
     ) {
         Assert.assertThrows(Exception::class.java) {
             validateQuery(query)
@@ -35,7 +35,7 @@ class GetArtworksAccordingSearchUseCaseTest {
     @FileParameters("$BASE_ASSET_URI/get_artworks_according_search_test_03_parameters.csv")
     fun validateQueryIsFormatted_success_returnQueryFormatted(
         query: String,
-        expected: String,
+        expected: String
     ) {
         Assert.assertEquals(expected, applyCorrectFormatInTheQuery(query))
     }

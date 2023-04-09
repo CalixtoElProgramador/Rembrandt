@@ -6,5 +6,5 @@ data class ArtworkRecommendedUiState(
     val id: Long = -1,
     val imageUrl: String = "",
     val title: String = "",
-    @StringRes val reasonItWasRecommended: Int = -1,
+    @StringRes val reasonItWasRecommended: Int = -1
 )

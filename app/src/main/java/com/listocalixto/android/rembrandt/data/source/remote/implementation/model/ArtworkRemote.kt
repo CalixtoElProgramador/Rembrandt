@@ -58,5 +58,5 @@ data class ArtworkRemote(
     @SerialName("thumbnail")
     val thumbnail: ThumbnailRemote?,
     @SerialName("title")
-    val title: String?,
+    val title: String?
 )

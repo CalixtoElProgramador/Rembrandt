@@ -5,5 +5,5 @@ data class ColorLocal(
     val l: Int,
     val percentage: Double,
     val population: Int,
-    val s: Int,
+    val s: Int
 )

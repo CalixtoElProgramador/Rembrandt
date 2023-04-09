@@ -5,15 +5,17 @@ import com.listocalixto.android.rembrandt.data.source.local.implementation.Local
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSource
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 class ArtworkRepoImpl @Inject constructor(
     private val localDataSource: LocalArtworkDataSource,
-    private val remoteDataSource: RemoteArtworkDataSource,
+    private val remoteDataSource: RemoteArtworkDataSource
 ) : ArtworkRepo {
 
     override fun observeArtworksByPage(page: String): Flow<Result<Set<Artwork>>> =
@@ -28,9 +30,9 @@ class ArtworkRepoImpl @Inject constructor(
                 localDataSource.deleteAllArtworks()
                 artworks.forEach { localDataSource.insertArtwork(it) }
             },
-            shouldFetch = {
-                localDataSource.getAllArtworks().isEmpty()
-            },
+            shouldFetch = { artworks ->
+                artworks.isEmpty()
+            }
         ).flowOn(Dispatchers.IO)
 
     override fun observeArtworkById(id: Long): Flow<Result<Artwork>> = flow {

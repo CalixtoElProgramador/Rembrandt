@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class ArtworkLocalToEntity @Inject constructor(
     private val colorMapper: ColorLocalToDomain,
-    private val thumbnailMapper: ThumbnailLocalToDomain,
+    private val thumbnailMapper: ThumbnailLocalToDomain
 ) : Mapper<ArtworkTable, Artwork> {
     override fun map(value: ArtworkTable) = Artwork(
         artistDisplay = value.artistDisplay,
@@ -38,7 +38,7 @@ class ArtworkLocalToEntity @Inject constructor(
         score = value.score,
         termTitles = value.termTitles,
         thumbnail = thumbnailMapper.map(value.thumbnail),
-        title = value.title,
+        title = value.title
     )
 
     override fun map(values: List<ArtworkTable>): List<Artwork> {
@@ -48,7 +48,7 @@ class ArtworkLocalToEntity @Inject constructor(
     override fun reverseMap(value: Artwork) = ArtworkTable(
         artistDisplay = value.artistDisplay,
         artistId = value.artistId,
-        artistTitle = value.artistTitle,
+        artistTitle = value.artistTitle.ifEmpty { "Unknown" },
         artworkTypeId = value.artworkTypeId,
         artworkTypeTitle = value.artworkTypeTitle,
         categoryIds = value.categoryIds,
@@ -72,7 +72,7 @@ class ArtworkLocalToEntity @Inject constructor(
         score = value.score,
         termTitles = value.termTitles,
         thumbnail = thumbnailMapper.reverseMap(value.thumbnail),
-        title = value.title,
+        title = value.title
     )
 
     override fun reverseMap(values: List<Artwork>): List<ArtworkTable> {

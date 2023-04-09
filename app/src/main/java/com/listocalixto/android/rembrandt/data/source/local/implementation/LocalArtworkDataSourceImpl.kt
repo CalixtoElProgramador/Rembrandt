@@ -3,13 +3,13 @@ package com.listocalixto.android.rembrandt.data.source.local.implementation
 import com.listocalixto.android.rembrandt.data.mapper.local.ArtworkLocalToEntity
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ArtworkDao
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class LocalArtworkDataSourceImpl @Inject constructor(
     private val dao: ArtworkDao,
-    private val mapper: ArtworkLocalToEntity,
+    private val mapper: ArtworkLocalToEntity
 ) : LocalArtworkDataSource {
 
     override fun observeAllArtworks(): Flow<Set<Artwork>> {

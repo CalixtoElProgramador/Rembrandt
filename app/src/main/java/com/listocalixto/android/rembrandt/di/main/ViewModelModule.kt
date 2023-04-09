@@ -1,20 +1,20 @@
 package com.listocalixto.android.rembrandt.di.main
 
-import com.listocalixto.android.rembrandt.data.mapper.local.ArtworkLocalToEntity
-import com.listocalixto.android.rembrandt.data.mapper.local.ColorLocalToDomain
-import com.listocalixto.android.rembrandt.data.mapper.local.ThumbnailLocalToDomain
-import com.listocalixto.android.rembrandt.data.mapper.remote.ArtworkRemoteToEntity
-import com.listocalixto.android.rembrandt.data.mapper.remote.ColorRemoteToDomain
-import com.listocalixto.android.rembrandt.data.mapper.remote.ThumbnailRemoteToDomain
 import com.listocalixto.android.rembrandt.data.repo.ArtworkRepoImpl
+import com.listocalixto.android.rembrandt.data.repo.ManifestRepoImpl
 import com.listocalixto.android.rembrandt.data.source.local.configuration.ArtworkDao
+import com.listocalixto.android.rembrandt.data.source.local.configuration.ManifestDao
 import com.listocalixto.android.rembrandt.data.source.local.configuration.RembrandtDatabase
 import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalArtworkDataSource
 import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalArtworkDataSourceImpl
+import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalManifestDataSource
+import com.listocalixto.android.rembrandt.data.source.local.implementation.LocalManifestDataSourceImpl
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSource
 import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteArtworkDataSourceImpl
+import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteManifestDataSource
+import com.listocalixto.android.rembrandt.data.source.remote.implementation.RemoteManifestDataSourceImpl
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
-import com.listocalixto.android.rembrandt.domain.usecase.main.*
+import com.listocalixto.android.rembrandt.domain.repo.ManifestRepo
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,7 +28,9 @@ abstract class ViewModelModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindRemoteArtworkDatasource(remoteArtworkDataSourceImpl: RemoteArtworkDataSourceImpl): RemoteArtworkDataSource
+    abstract fun bindRemoteArtworkDatasource(
+        remoteArtworkDataSourceImpl: RemoteArtworkDataSourceImpl
+    ): RemoteArtworkDataSource
 
     @Binds
     @ViewModelScoped
@@ -38,6 +40,20 @@ abstract class ViewModelModule {
     @ViewModelScoped
     abstract fun bindLocalArtworkDataSource(localArtworkDataSource: LocalArtworkDataSourceImpl): LocalArtworkDataSource
 
+    @Binds
+    @ViewModelScoped
+    abstract fun bindRemoteManifestDataSource(
+        remoteManifestDataSource: RemoteManifestDataSourceImpl
+    ): RemoteManifestDataSource
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindLocalManifestDataSource(localManifestDataSource: LocalManifestDataSourceImpl): LocalManifestDataSource
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindManifestRepo(manifestRepoImpl: ManifestRepoImpl): ManifestRepo
+
     companion object {
 
         @Provides
@@ -46,94 +62,6 @@ abstract class ViewModelModule {
 
         @Provides
         @ViewModelScoped
-        fun provideGetImageUrlUseCase() = GetImageUrlUseCase()
-
-        @Provides
-        @ViewModelScoped
-        fun provideColorLocalToDomain() = ColorLocalToDomain()
-
-        @Provides
-        @ViewModelScoped
-        fun provideThumbnailToDomain() = ThumbnailLocalToDomain()
-
-        @Provides
-        @ViewModelScoped
-        fun provideArtworkLocalToEntity(
-            colorMapper: ColorLocalToDomain,
-            thumbnailMapper: ThumbnailLocalToDomain,
-        ) = ArtworkLocalToEntity(
-            colorMapper = colorMapper,
-            thumbnailMapper = thumbnailMapper,
-        )
-
-        @Provides
-        @ViewModelScoped
-        fun provideColorRemoteToDomain() = ColorRemoteToDomain()
-
-        @Provides
-        @ViewModelScoped
-        fun provideThumbnailRemoteToDomain() = ThumbnailRemoteToDomain()
-
-        @Provides
-        @ViewModelScoped
-        fun provideObserveArtworkById(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) =
-            ObserveArtworkByIdUseCase(repo, getImageUrl)
-
-        @Provides
-        @ViewModelScoped
-        fun provideGetRecommendedArtworkByRecommendationTypeUseCase() =
-            GetRecommendedArtworkByRecommendationTypeUseCase()
-
-        @Provides
-        @ViewModelScoped
-        fun provideBuildRecommendationTypesByArtworkUseCase() =
-            GenerateRecommendationTypesByArtworkUseCase()
-
-        @Provides
-        @ViewModelScoped
-        fun provideGetAllWorksUseCase(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) =
-            GetAllArtworksUseCase(repo, getImageUrl)
-
-        @Provides
-        @ViewModelScoped
-        fun provideGetRecommendedArtworksByArtworkUseCase(
-            getAllArtworks: GetAllArtworksUseCase,
-            getRecommendedArtworkByRecommendationType: GetRecommendedArtworkByRecommendationTypeUseCase,
-            generateRecommendationTypesByArtwork: GenerateRecommendationTypesByArtworkUseCase,
-        ) = GetRecommendedArtworksByArtworkUseCase(
-            getAllArtworks = getAllArtworks,
-            getRecommendedArtworkByRecommendationType = getRecommendedArtworkByRecommendationType,
-            generateRecommendationTypesByArtwork = generateRecommendationTypesByArtwork,
-        )
-
-        @Provides
-        @ViewModelScoped
-        fun provideArtworkRemoteToEntity(
-            colorMapper: ColorRemoteToDomain,
-            thumbnailMapper: ThumbnailRemoteToDomain,
-        ) = ArtworkRemoteToEntity(
-            colorMapper = colorMapper,
-            thumbnailMapper = thumbnailMapper,
-        )
-
-        @Provides
-        @ViewModelScoped
-        fun provideHomeUseCases(repo: ArtworkRepo, getImageUrl: GetImageUrlUseCase) = HomeUseCases(
-            getArtworksByPage = GetArtworksByPageUseCase(repo, getImageUrl),
-            updateArtwork = UpdateArtworkUseCase(repo),
-            getArtworkById = GetArtworkByIdUseCase(repo),
-        )
-
-        @Provides
-        @ViewModelScoped
-        fun provideArtworkDetailUseCases(
-            observeArtworkById: ObserveArtworkByIdUseCase,
-            getRecommendedArtworksByArtwork: GetRecommendedArtworksByArtworkUseCase,
-            updateArtwork: UpdateArtworkUseCase,
-        ) = ArtworkDetailUseCases(
-            observeArtworkById = observeArtworkById,
-            getRecommendedArtworksByArtwork = getRecommendedArtworksByArtwork,
-            updateArtwork = updateArtwork,
-        )
+        fun provideManifestDao(database: RembrandtDatabase): ManifestDao = database.manifestDao()
     }
 }

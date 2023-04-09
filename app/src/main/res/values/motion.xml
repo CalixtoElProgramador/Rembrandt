@@ -3,8 +3,8 @@
 
     <!--Motion-->
 
-    <integer name="motion_duration_large">300</integer>
-    <integer name="motion_duration_medium">225</integer>
-    <integer name="motion_duration_small">175</integer>
+    <integer name="motion_duration_large">650</integer>
+    <integer name="motion_duration_medium">350</integer>
+    <integer name="motion_duration_small">200</integer>
 
 </resources>
