@@ -13,7 +13,8 @@ data class ArtworkDetailUiState(
     val memoryCacheKey: String? = null,
     val translate: Boolean = true,
     val triggerRefreshAnimation: Unit? = null,
-    val errorMessage: UiText? = null
+    val errorMessage: UiText? = null,
+    val loadingTranslation: Boolean = false
 ) {
     val isTranslationDisplayed: Boolean = translate && artwork?.translation != null
     val imageUrl: String = artwork?.imageUrl ?: EMPTY

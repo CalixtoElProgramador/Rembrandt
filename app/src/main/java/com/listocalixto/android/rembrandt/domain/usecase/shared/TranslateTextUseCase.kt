@@ -2,6 +2,7 @@ package com.listocalixto.android.rembrandt.domain.usecase.shared
 
 import com.listocalixto.android.rembrandt.domain.model.Translation.Exception.TargetLanguageNotAvailable
 import com.listocalixto.android.rembrandt.domain.repo.SharedRepo
+import java.util.Locale
 import javax.inject.Inject
 
 class TranslateTextUseCase @Inject constructor(
@@ -9,8 +10,10 @@ class TranslateTextUseCase @Inject constructor(
 ) {
 
     @Throws(TargetLanguageNotAvailable::class)
-    suspend operator fun invoke(text: String, targetLang: String): String {
-        val targetLangUpperCase = targetLang.uppercase()
+    suspend operator fun invoke(text: String): String {
+        val currentLanguage = Locale.getDefault().language.uppercase()
+        val currentCountry = Locale.getDefault().country.uppercase()
+        val targetLang = "$currentLanguage-$currentCountry"
         val translationsAvailable = setOf(
             "BG",
             "CS",
@@ -46,12 +49,11 @@ class TranslateTextUseCase @Inject constructor(
             "UK",
             "ZH"
         )
-        translationsAvailable.find { it == targetLangUpperCase }?.let {
-            return repo.translateText(text, targetLangUpperCase)
+        translationsAvailable.find { it == targetLang }?.let {
+            return repo.translateText(text, targetLang)
         } ?: run {
-            val language = targetLangUpperCase.split("-")[0]
-            translationsAvailable.find { it == language }?.let {
-                return repo.translateText(text, language)
+            translationsAvailable.find { it == currentLanguage }?.let {
+                return repo.translateText(text, currentLanguage)
             } ?: run {
                 throw TargetLanguageNotAvailable
             }

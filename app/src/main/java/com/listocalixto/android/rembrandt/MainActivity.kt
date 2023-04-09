@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.listocalixto.android.rembrandt.databinding.ActivityMainBinding
-import com.listocalixto.android.rembrandt.presentation.ui.shared.utility.contentView
+import com.listocalixto.android.rembrandt.presentation.utility.contentView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

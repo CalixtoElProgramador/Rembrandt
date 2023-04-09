@@ -25,6 +25,7 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,15 +84,15 @@ class ArtworkDetailViewModel @Inject constructor(
                 updateArtworkJob = null
             }
         }
-        is TranslateContent -> Unit.apply {
+        TranslateContent -> Unit.apply {
             if (translateArtworkJob != null) return@apply
             val artwork = _uiState.value.artwork ?: return@apply
             val translation = artwork.translation
             if (translation == null) {
                 translateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
+                    _uiState.update { it.copy(loadingTranslation = true) }
                     try {
-                        val targetLang = event.targetLang
-                        val newTranslation = useCases.getTranslationByArtwork(artwork, targetLang)
+                        val newTranslation = useCases.getTranslationByArtwork(artwork)
                         _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
                         delay(ANIMATION_REFRESH_DURATION)
                         useCases.setTranslationByArtwork(artwork, newTranslation)
@@ -109,6 +110,7 @@ class ArtworkDetailViewModel @Inject constructor(
                         }
                     } finally {
                         translateArtworkJob = null
+                        _uiState.update { it.copy(loadingTranslation = false) }
                     }
                 }
             } else {

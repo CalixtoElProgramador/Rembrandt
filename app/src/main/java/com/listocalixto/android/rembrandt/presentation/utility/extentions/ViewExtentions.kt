@@ -4,6 +4,10 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.View
+import androidx.core.view.NestedScrollingChild
+import androidx.core.view.ScrollingView
+import androidx.core.widget.NestedScrollView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
 
 fun View.fader(viewTrigger: View? = null) {
@@ -28,4 +32,15 @@ private fun disableClickDuringAnimation(view: View, animator: ObjectAnimator) {
             view.isClickable = true
         }
     })
+}
+
+fun ExtendedFloatingActionButton.adjustSizeAccordingScroll(scrollView: NestedScrollView) {
+    scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+        if (scrollY - oldScrollY < 0) {
+            extend()
+        }
+        if (scrollY - oldScrollY > 0) {
+            shrink()
+        }
+    }
 }

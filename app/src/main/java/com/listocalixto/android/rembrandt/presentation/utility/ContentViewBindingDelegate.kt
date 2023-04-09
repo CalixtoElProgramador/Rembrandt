@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.presentation.ui.shared.utility
+package com.listocalixto.android.rembrandt.presentation.utility
 
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity

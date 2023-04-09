@@ -9,10 +9,8 @@ import javax.inject.Inject
 class GetTranslationByArtworkUseCase @Inject constructor(
     private val translateText: TranslateTextUseCase
 ) {
-
     suspend operator fun invoke(
-        artwork: Artwork,
-        targetLang: String
+        artwork: Artwork
     ): Translation {
         val translation = Translation(
             category = artwork.categoryTitles.first(),
@@ -20,9 +18,9 @@ class GetTranslationByArtworkUseCase @Inject constructor(
             content = artwork.manifest?.description ?: EMPTY
         )
         return translation.copy(
-            category = translateText(translation.category, targetLang),
-            title = translateText(translation.title, targetLang),
-            content = translateText(translation.content, targetLang)
+            category = translateText(translation.category),
+            title = translateText(translation.title),
+            content = translateText(translation.content)
         )
     }
 }

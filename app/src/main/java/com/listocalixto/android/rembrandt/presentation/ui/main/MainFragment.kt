@@ -53,11 +53,6 @@ class MainFragment :
                 }
                 R.id.artworkDetailFragment -> {
                     extendedFab.apply {
-                        show()
-                        text =
-                            context.resources.getText(
-                                R.string.frag_artwork_detail_extended_fab_translate
-                            )
                         icon = ResourcesCompat.getDrawable(
                             context.resources,
                             R.drawable.ic_translate,
@@ -71,9 +66,5 @@ class MainFragment :
                 else -> {}
             }
         }
-    }
-
-    companion object {
-        const val TAG = "MainFragment"
     }
 }
