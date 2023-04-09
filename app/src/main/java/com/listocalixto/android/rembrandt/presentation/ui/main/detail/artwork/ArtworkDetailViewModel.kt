@@ -27,6 +27,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -37,12 +38,12 @@ class ArtworkDetailViewModel @Inject constructor(
     private val useCases: ArtworkDetailUseCases
 ) : ViewModel() {
 
-    private val data = MutableStateFlow(ArtworkDetailData())
     private val _uiState = MutableStateFlow(ArtworkDetailUiState())
     val uiState = _uiState.asStateFlow()
     private val viewModelDispatcher = viewModelScope.coroutineContext + Dispatchers.Main
 
     private var updateArtworkJob: Job? = null
+    private var translateArtworkJob: Job? = null
 
     init {
         viewModelScope.launch(viewModelDispatcher) {
@@ -55,18 +56,7 @@ class ArtworkDetailViewModel @Inject constructor(
                     ArtworkDetailFragmentArgs(artworkId, memoryCacheKey)
                 }.collect { args ->
                     _uiState.update { it.copy(memoryCacheKey = args.memoryCacheKey) }
-                    val artwork = data.value.artwork
-                    val manifest = data.value.manifest
-                    val artworksRecommended = data.value.artworksRecommended
-                    val recommendedTypes = data.value.recommendationTypes
-                    if (artwork != null && artworksRecommended != null && recommendedTypes != null && manifest != null) {
-                        // Data is kept in memory
-                        setupArtworkDetailScreen(artwork)
-                        setupArtworkDescription(artwork)
-                        setupRecommendedArtworks(artworksRecommended, recommendedTypes)
-                    } else {
-                        setupContentByArtworkId(args.artworkId)
-                    }
+                    setupContentByArtworkId(args.artworkId)
                 }
             }
         }
@@ -74,12 +64,13 @@ class ArtworkDetailViewModel @Inject constructor(
 
     fun onEvent(event: ArtworkDetailUiEvent): Unit = when (event) {
         SaveCurrentArtworkId -> {
-            savedStateHandle[ARTWORK_ID_KEY] = data.value.artwork?.id ?: ARTWORK_ID_DEFAULT_VALUE
+            savedStateHandle[ARTWORK_ID_KEY] =
+                _uiState.value.artwork?.id ?: ARTWORK_ID_DEFAULT_VALUE
         }
         OnChipFavorite -> Unit.apply {
             if (updateArtworkJob != null) return@apply
             updateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
-                val currentArtwork = data.value.artwork ?: run {
+                val currentArtwork = _uiState.value.artwork ?: run {
                     updateArtworkJob = null
                     return@launch
                 }
@@ -88,25 +79,34 @@ class ArtworkDetailViewModel @Inject constructor(
             }
         }
         TranslateContent -> Unit.apply {
-            viewModelScope.launch {
-                val artwork = data.value.artwork ?: return@launch
-                useCases.setTranslationByArtwork(artwork)
+            if (translateArtworkJob != null) return@apply
+            translateArtworkJob = viewModelScope.launch {
+                val artwork = _uiState.value.artwork ?: return@launch
+                val translation = artwork.translation
+                if (translation == null) {
+                    val newTranslation = useCases.getTranslationByArtwork(artwork)
+                    useCases.setTranslationByArtwork(artwork, newTranslation)
+                } else {
+                    // Show original language scenario
+                }
             }
+            translateArtworkJob = null
         }
     }
 
     private suspend fun setupContentByArtworkId(id: Long) {
-        useCases.getArtworkWithManifest(id).collect { artwork ->
+        useCases.observeArtworkWithManifest(id).catch {
+        }.collect { artwork ->
             setupArtworkDetailScreen(artwork)
-            setupArtworkDescription(artwork)
+            setupArtworkDescription()
             if (recommendationsHaveNotBeenInitialized()) {
                 fetchAndSetupRecommendedArtworks(artwork)
             }
         }
     }
 
-    private fun setupArtworkDescription(artwork: Artwork) {
-        data.update { it.copy(manifest = artwork.manifest) }
+    private fun setupArtworkDescription() {
+        val artwork = _uiState.value.artwork ?: return
         val altText = _uiState.value.altText
         val manifestDescription = artwork.manifest?.description ?: EMPTY
         val description = useCases.getArtworkDescription(manifestDescription, altText)
@@ -139,7 +139,7 @@ class ArtworkDetailViewModel @Inject constructor(
     }
 
     private fun recommendationsHaveNotBeenInitialized(): Boolean {
-        return data.value.artworksRecommended == null || data.value.recommendationTypes == null
+        return _uiState.value.artworksRecommended == null
     }
 
     private fun setupRecommendedArtworks(
@@ -168,26 +168,12 @@ class ArtworkDetailViewModel @Inject constructor(
                 }
             )
         }
-        data.update {
-            it.copy(
-                artworksRecommended = artworksRecommended,
-                recommendationTypes = recommendationTypes
-            )
-        }
         _uiState.update { it.copy(artworksRecommended = recommendationsUiState) }
     }
 
     private fun setupArtworkDetailScreen(artwork: Artwork) {
-        data.update { it.copy(artwork = artwork, manifest = artwork.manifest) }
         _uiState.update {
-            it.copy(
-                imageUrl = artwork.imageUrl,
-                isFavorite = artwork.isFavorite,
-                category = artwork.translation?.category ?: artwork.categoryTitles.first(),
-                title = artwork.translation?.title ?: artwork.title,
-                artistName = artwork.artistTitle,
-                altText = artwork.thumbnail.altText
-            )
+            it.copy(artwork = artwork)
         }
     }
 }

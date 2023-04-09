@@ -5,8 +5,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetArtworkWithManifestUseCase @Inject constructor(
+class ObserveArtworkWithManifestUseCase @Inject constructor(
     private val observeArtworkByIdUseCase: ObserveArtworkByIdUseCase,
+    private val getManifestByArtworkId: GetManifestByArtworkIdUseCase,
     private val setManifestByArtwork: SetManifestByArtworkUseCase
 ) {
     operator fun invoke(id: Long): Flow<Artwork> = flow {
@@ -14,7 +15,8 @@ class GetArtworkWithManifestUseCase @Inject constructor(
             resultArtwork.onSuccess { artwork ->
                 emit(artwork)
                 if (artwork.manifest == null) {
-                    setManifestByArtwork(artwork)
+                    val manifest = getManifestByArtworkId(id)
+                    setManifestByArtwork(artwork, manifest)
                 }
             }.onFailure {
                 throw it
