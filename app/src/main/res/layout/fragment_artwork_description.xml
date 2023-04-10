@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="fragment"
+            type="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.content.page.ArtworkDescriptionFragment" />
+
         <variable
             name="artworkDetailViewModel"
             type="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailViewModel" />
@@ -18,7 +23,7 @@
         android:text="@string/hello_blank_fragment"
         android:textAppearance="?attr/textAppearanceBodySmall"
         app:uiText="@{artworkDetailViewModel.uiState.descriptionUiText}"
-        tools:context=".presentation.ui.main.detail.artwork.content.ArtworkDescriptionFragment"
+        tools:context=".presentation.ui.main.detail.artwork.content.page.ArtworkDescriptionFragment"
         tools:text="@tools:sample/lorem/random" />
 
 </layout>

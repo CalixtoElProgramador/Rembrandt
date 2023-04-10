@@ -62,6 +62,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_2"
+                    android:clipToPadding="false"
                     android:scrollbarSize="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -75,48 +76,72 @@
                         app:singleLine="true">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/chipZoomIn"
                             style="@style/Widget.Material3.Chip.Assist.Elevated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0"
                             android:text="@string/zoom_in"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@drawable/ic_zoom_in"
-                            app:ensureMinTouchTargetSize="true" />
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipFavorite"
                             style="@style/Widget.Material3.Chip.Assist.Elevated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0"
                             android:onClick="@{_ -> artworkDetailViewModel.onEvent(onChipFavorite)}"
                             android:text="@{artworkDetailViewModel.uiState.favorite ? @string/saved_in_favorites : @string/save_to_favorites}"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@{artworkDetailViewModel.uiState.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
                             app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
                             tools:chipIcon="@drawable/ic_favorite"
-                            tools:text="Saved in favorites" />
+                            tools:text="Saved in favorites"
+                            tools:translationY="0dp" />
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDownloadImage"
                             style="@style/Widget.Material3.Chip.Assist.Elevated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0"
                             android:text="@string/download_image"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@drawable/ic_download"
-                            app:ensureMinTouchTargetSize="true" />
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAddCollection"
                             style="@style/Widget.Material3.Chip.Assist.Elevated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0"
                             android:text="@string/add_to_collection"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@drawable/ic_collections"
-                            app:ensureMinTouchTargetSize="true" />
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/chipShare"
                             style="@style/Widget.Material3.Chip.Assist.Elevated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0"
                             android:text="@string/share"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@drawable/ic_share"
-                            app:ensureMinTouchTargetSize="true" />
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
 
                     </com.google.android.material.chip.ChipGroup>
 

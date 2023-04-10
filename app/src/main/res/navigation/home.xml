@@ -31,5 +31,9 @@
             android:defaultValue="null"
             app:nullable="true"
             app:argType="string" />
+        <argument
+            android:name="displayInitialAnimations"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

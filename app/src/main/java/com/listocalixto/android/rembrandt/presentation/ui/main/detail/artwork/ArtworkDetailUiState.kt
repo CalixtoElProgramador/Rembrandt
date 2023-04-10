@@ -14,7 +14,9 @@ data class ArtworkDetailUiState(
     val translate: Boolean = true,
     val triggerRefreshAnimation: Unit? = null,
     val errorMessage: UiText? = null,
-    val loadingTranslation: Boolean = false
+    val loadingTranslation: Boolean = false,
+    val displayInitialAnimations: Unit? = null,
+    val initialAnimationsDisplayed: Boolean = false
 ) {
     val isTranslationDisplayed: Boolean = translate && artwork?.translation != null
     val imageUrl: String = artwork?.imageUrl ?: EMPTY

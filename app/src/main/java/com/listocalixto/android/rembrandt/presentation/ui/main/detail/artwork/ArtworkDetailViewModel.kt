@@ -17,8 +17,10 @@ import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.Same
 import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameGallery
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_DEFAULT_VALUE
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.DISPLAY_INITIAL_ANIMATIONS_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.ErrorMessageTriggered
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.InitialAnimationsDisplayed
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.RefreshAnimationTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
@@ -59,13 +61,25 @@ class ArtworkDetailViewModel @Inject constructor(
         viewModelScope.launch(viewModelDispatcher) {
             val artworkIdFlow: Flow<Long>
             val memoryCacheKeyFlow: Flow<String>
+            val displayInitialAnimations: Flow<Boolean>
             with(savedStateHandle) {
                 artworkIdFlow = getStateFlow(ARTWORK_ID_KEY, ARTWORK_ID_DEFAULT_VALUE)
                 memoryCacheKeyFlow = getStateFlow(MEMORY_CACHE_KEY_ID_KEY, EMPTY)
+                displayInitialAnimations = getStateFlow(DISPLAY_INITIAL_ANIMATIONS_KEY, true)
                 artworkIdFlow.zip(memoryCacheKeyFlow) { artworkId, memoryCacheKey ->
                     ArtworkDetailFragmentArgs(artworkId, memoryCacheKey)
+                }.zip(displayInitialAnimations) { args, displayInitialAnimations ->
+                    args.copy(displayInitialAnimations = displayInitialAnimations)
                 }.collect { args ->
-                    _uiState.update { it.copy(memoryCacheKey = args.memoryCacheKey) }
+                    _uiState.update {
+                        it.copy(
+                            memoryCacheKey = args.memoryCacheKey,
+                            initialAnimationsDisplayed = !args.displayInitialAnimations
+                        )
+                    }
+                    if (_uiState.value.initialAnimationsDisplayed.not()) {
+                        displayInitialAnimations()
+                    }
                     setupContentByArtworkId(args.artworkId)
                 }
             }
@@ -131,6 +145,21 @@ class ArtworkDetailViewModel @Inject constructor(
         }
         ErrorMessageTriggered -> {
             _uiState.update { it.copy(errorMessage = null) }
+        }
+        InitialAnimationsDisplayed -> {
+            _uiState.update {
+                it.copy(
+                    initialAnimationsDisplayed = true,
+                    displayInitialAnimations = null
+                )
+            }
+        }
+    }
+
+    private fun displayInitialAnimations() {
+        viewModelScope.launch(viewModelDispatcher) {
+            delay(325)
+            _uiState.update { it.copy(displayInitialAnimations = Unit) }
         }
     }
 

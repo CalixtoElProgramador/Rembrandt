@@ -1,5 +1,6 @@
 package com.listocalixto.android.rembrandt.presentation.utility
 
+import android.animation.TimeInterpolator
 import android.graphics.Color
 import android.view.View
 import androidx.annotation.AttrRes
@@ -15,6 +16,7 @@ import com.google.android.material.R.attr.colorOnErrorContainer
 import com.google.android.material.R.attr.colorOnSurfaceInverse
 import com.google.android.material.R.attr.colorPrimaryInverse
 import com.google.android.material.R.attr.colorSurfaceInverse
+import com.google.android.material.R.attr.motionEasingEmphasizedInterpolator
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.motion.MotionUtils
 import com.google.android.material.snackbar.Snackbar
@@ -87,11 +89,7 @@ fun Fragment.applySharedElementEnterTransition(
         drawingViewId = drawingViewIdRes
         duration = resources.getInteger(durationRes).toLong()
         scrimColor = scrimColorInt
-        interpolator = MotionUtils.resolveThemeInterpolator(
-            context,
-            com.google.android.material.R.attr.motionEasingEmphasizedInterpolator,
-            FastOutSlowInInterpolator()
-        )
+        interpolator = getInterpolator(motionEasingEmphasizedInterpolator)
         fadeMode = MaterialContainerTransform.FADE_MODE_IN
         when (colorContainerType) {
             is AllContainerColors -> {
@@ -118,20 +116,24 @@ fun Fragment.applySharedElementExitTransition(
     val context = context ?: return@run
     exitTransition = MaterialElevationScale(false).apply {
         duration = resources.getInteger(durationRes).toLong()
-        interpolator = MotionUtils.resolveThemeInterpolator(
-            context,
-            com.google.android.material.R.attr.motionEasingEmphasizedInterpolator,
-            FastOutSlowInInterpolator()
-        )
+        interpolator = getInterpolator(motionEasingEmphasizedInterpolator)
     }
     reenterTransition = MaterialElevationScale(true).apply {
         duration = resources.getInteger(durationRes).toLong()
-        interpolator = MotionUtils.resolveThemeInterpolator(
-            context,
-            com.google.android.material.R.attr.motionEasingEmphasizedInterpolator,
-            FastOutSlowInInterpolator()
-        )
+        interpolator = getInterpolator(motionEasingEmphasizedInterpolator)
     }
+}
+
+fun Fragment.getInterpolator(
+    @AttrRes interpolatorRes: Int,
+    defaultInterpolator: TimeInterpolator = FastOutSlowInInterpolator()
+): TimeInterpolator {
+    val context = context ?: return defaultInterpolator
+    return MotionUtils.resolveThemeInterpolator(
+        context,
+        interpolatorRes,
+        defaultInterpolator
+    )
 }
 
 fun Fragment.getColor(@AttrRes colorAttr: Int): Int {

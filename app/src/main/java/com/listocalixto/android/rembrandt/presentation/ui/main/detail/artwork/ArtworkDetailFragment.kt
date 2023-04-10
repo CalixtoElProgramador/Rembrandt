@@ -1,5 +1,9 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.R.attr.motionEasingEmphasizedDecelerateInterpolator
+import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentArtworkDetailBinding as Binding
+import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.InitialAnimationsDisplayed
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
 import com.listocalixto.android.rembrandt.presentation.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.presentation.utility.SnackbarDuration.SHORT
@@ -22,6 +29,7 @@ import com.listocalixto.android.rembrandt.presentation.utility.applyFadeThroughE
 import com.listocalixto.android.rembrandt.presentation.utility.applySharedElementEnterTransition
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.adjustSizeAccordingScroll
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
+import com.listocalixto.android.rembrandt.presentation.utility.getInterpolator
 import com.listocalixto.android.rembrandt.presentation.utility.showSnackbar
 import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +42,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
     private val artworkRecommendedAdapter = ArtworkRecommendedAdapter { artworkId, memoryCacheKey ->
         navigateToSelf(artworkId, memoryCacheKey)
     }
+    private val chips = mutableListOf<Chip>()
 
     private var binding: Binding? = null
     private var extendedFab: ExtendedFloatingActionButton? = null
@@ -57,8 +66,22 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
             setupInternalViews()
             initExternalViews()
             setupExtendedFab()
+            groupTheChips()
             collectUiState()
         }
+    }
+
+    private fun Binding.groupTheChips() {
+        chips.addAll(
+            listOf(
+                chipZoomIn,
+                chipFavorite,
+                chipDownloadImage,
+                chipAddCollection,
+                chipShare
+            )
+        )
+        chips.toList()
     }
 
     private fun Binding.setupExtendedFab() {
@@ -93,7 +116,8 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         applyFadeThroughExitTransition()
         val directions = ArtworkDetailFragmentDirections.actionArtworkDetailFragmentSelf(
             artworkId,
-            memoryCacheKey
+            memoryCacheKey,
+            displayInitialAnimations = false
         )
         findNavController().navigate(directions)
     }
@@ -105,7 +129,40 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
             if (state.artwork != null) {
                 (view?.parent as? ViewGroup)?.doOnPreDraw {
                     startPostponedEnterTransition()
-                    extendedFab?.show()
+                }
+            }
+            if (state.initialAnimationsDisplayed) {
+                extendedFab?.show()
+                chips.forEach { chip ->
+                    chip.alpha = 1f
+                    chip.y = 0f
+                }
+            }
+            if (state.displayInitialAnimations != null) {
+                extendedFab?.show()
+                var startDelay = 0L
+                val duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+                val interpolator = getInterpolator(motionEasingEmphasizedDecelerateInterpolator)
+                chips.forEachIndexed { index, chip ->
+                    startDelay += 150
+                    val translation = ObjectAnimator.ofFloat(chip, View.TRANSLATION_Y, 0f)
+                    val alpha = ObjectAnimator.ofFloat(chip, View.ALPHA, 1f)
+                    AnimatorSet().apply {
+                        playTogether(translation, alpha)
+                        this.duration = duration
+                        this.startDelay = startDelay
+                        this.interpolator = interpolator
+                        if (index == chips.lastIndex) {
+                            addListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator) {
+                                    super.onAnimationEnd(animation)
+                                    viewModel.onEvent(InitialAnimationsDisplayed)
+                                    removeAllListeners()
+                                }
+                            })
+                        }
+                        start()
+                    }
                 }
             }
             artworkRecommendedAdapter.submitList(state.artworksRecommended)
@@ -143,6 +200,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         // The name for this key needs to be exactly the same as was defined in safe args.
         const val ARTWORK_ID_KEY = "artworkId"
         const val MEMORY_CACHE_KEY_ID_KEY = "memoryCacheKey"
+        const val DISPLAY_INITIAL_ANIMATIONS_KEY = "displayInitialAnimations"
         const val ARTWORK_ID_DEFAULT_VALUE = -1L
     }
 }

@@ -22,7 +22,7 @@
     <string name="frag_artwork_detail_no_description_available">Descripción no disponible.</string>
     <string name="frag_artwork_detail_extended_fab_translate">Traducir</string>
     <string name="frag_artwork_detail_extended_fab_show_original">Original</string>
-    <string name="frag_artwork_detail_err_translation_not_available">Traducción no disponible 😔</string>
+    <string name="frag_artwork_detail_err_translation_not_available">Traducción no disponible</string>
     <string name="frag_artwork_detail_snackbar_action_text">OK, gracias</string>
     <string name="frag_artwork_detail_wait_until_translation_is_ready">Espere a que su traducción esté lista.</string>
 </resources>

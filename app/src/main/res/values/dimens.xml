@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="frag_artwork_detail_chip_translation_y">32dp</dimen>
+</resources>

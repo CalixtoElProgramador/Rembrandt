@@ -73,7 +73,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val extras = FragmentNavigatorExtras(card to detailTransitionName)
         val direction = HomeFragmentDirections.toArtworkDetailFragment(
             artworkId,
-            memoryCacheKey
+            memoryCacheKey,
+            displayInitialAnimations = true
         )
         findNavController().navigate(direction, extras)
     }

@@ -6,4 +6,5 @@ sealed interface ArtworkDetailUiEvent {
     object TranslateContent : ArtworkDetailUiEvent
     object RefreshAnimationTriggered : ArtworkDetailUiEvent
     object ErrorMessageTriggered : ArtworkDetailUiEvent
+    object InitialAnimationsDisplayed : ArtworkDetailUiEvent
 }
