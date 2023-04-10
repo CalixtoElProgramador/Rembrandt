@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.presentation.utility
+package com.listocalixto.android.rembrandt.presentation.utility.extentions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

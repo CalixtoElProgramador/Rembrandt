@@ -32,7 +32,6 @@
             style="@style/Widget.Material3.CardView.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             android:transitionName="@string/item_card_detail_transition_name"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
@@ -41,6 +40,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:paddingBottom="@dimen/_56sdp"
                 tools:context=".presentation.ui.main.detail.artwork.ArtworkDetailFragment">
 
@@ -175,43 +175,42 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_2"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textNameArtist" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textDescription"
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentContent"
+                    android:name="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.content.ArtworkContentFragment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_2"
-                    android:alpha="?attr/emphasisMediumAlpha"
-                    app:uiText="@{artworkDetailViewModel.uiState.descriptionUiText}"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    app:layout_constraintEnd_toEndOf="@id/textNameArtist"
-                    app:layout_constraintStart_toStartOf="@id/textNameArtist"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider"
-                    tools:maxLines="3"
-                    tools:text="@tools:sample/lorem/random" />
+                    tools:layout="@layout/fragment_artwork_content"
+                    tools:visibility="visible" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_2"
+                    app:dividerColor="?attr/colorSurfaceVariant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/fragmentContent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelRecommended"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
                     android:layout_marginTop="@dimen/grid_2"
                     android:alpha="?attr/emphasisHighAlpha"
                     android:text="@string/recommended"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
-                    app:layout_constraintEnd_toEndOf="@id/textDescription"
-                    app:layout_constraintStart_toStartOf="@id/textDescription"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
 
                 <androidx.recyclerview.widget.RecyclerView

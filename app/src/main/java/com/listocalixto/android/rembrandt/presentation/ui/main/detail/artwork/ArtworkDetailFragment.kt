@@ -17,11 +17,11 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.presentation.utility.SnackbarDuration.SHORT
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
-import com.listocalixto.android.rembrandt.presentation.utility.adjustSizeAccordingScroll
 import com.listocalixto.android.rembrandt.presentation.utility.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.presentation.utility.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.presentation.utility.applySharedElementEnterTransition
-import com.listocalixto.android.rembrandt.presentation.utility.fader
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.adjustSizeAccordingScroll
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
 import com.listocalixto.android.rembrandt.presentation.utility.showSnackbar
 import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkRecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -117,7 +117,6 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
             if (state.triggerRefreshAnimation != null) {
                 textCategory.fader(viewTrigger = extendedFab)
                 textTitle.fader(viewTrigger = extendedFab)
-                textDescription.fader(viewTrigger = extendedFab)
                 viewModel.onEvent(ArtworkDetailUiEvent.RefreshAnimationTriggered)
             }
             val errorMessage = state.errorMessage

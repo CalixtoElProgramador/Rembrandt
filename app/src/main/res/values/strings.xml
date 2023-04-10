@@ -28,4 +28,11 @@
     <string name="frag_artwork_detail_err_translation_not_available">Translation not available 😔</string>
     <string name="frag_artwork_detail_snackbar_action_text">OK, thanks</string>
     <string name="frag_artwork_detail_wait_until_translation_is_ready">Wait until your translation is ready.</string>
+    <string name="frag_artwork_content_tab_description_text">Description</string>
+    <string name="frag_artwork_content_tab_characteristics_text">Characteristics</string>
+    <string name="frag_artwork_content_tab_analysis_text">Analysis</string>
+    <string name="frag_artwork_content_tab_curiosities_text">Curiosities</string>
+    <string name="frag_artwork_content_tab_critique_text">Critique</string>
+    <string name="frag_artwork_content_tab_artist_text">Artist</string>
+    <string name="frag_artwork_content_tab_gallery_text">Gallery</string>
 </resources>
