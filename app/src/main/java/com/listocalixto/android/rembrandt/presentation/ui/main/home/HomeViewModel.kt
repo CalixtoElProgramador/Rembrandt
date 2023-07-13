@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +29,9 @@ class HomeViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             useCases.getArtworksByPage(1).collect { result ->
                 result.onSuccess { data ->
-                    val artworks = data.artworks.map { ArtworkUiState.domainToUiState(it) }
+                    val artworks = withContext(Dispatchers.Default) {
+                        data.artworks.map { ArtworkUiState.domainToUiState(it) }
+                    }
                     _uiState.update { it.copy(artworks = artworks, isLoading = false) }
                 }.onFailure {
                     _uiState.update { it.copy(isLoading = false) }

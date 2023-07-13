@@ -22,7 +22,7 @@ abstract class ViewModelModule {
     @Binds
     @ViewModelScoped
     abstract fun bindRemoteArtworkDatasource(
-        remoteArtworkDataSourceImpl: RemoteArtworkDataSourceImpl
+        remoteArtworkDataSourceImpl: RemoteArtworkDataSourceImpl,
     ): RemoteArtworkDataSource
 
     @Binds
