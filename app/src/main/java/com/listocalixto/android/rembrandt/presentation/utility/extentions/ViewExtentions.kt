@@ -4,8 +4,10 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.View
+import androidx.annotation.IntegerRes
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
 
 fun View.fader(viewTrigger: View? = null) {
@@ -13,13 +15,29 @@ fun View.fader(viewTrigger: View? = null) {
         duration = ANIMATION_REFRESH_DURATION
         repeatCount = 1
         repeatMode = ObjectAnimator.REVERSE
-        viewTrigger?.let { disableClickDuringAnimation(it, this) }
+        viewTrigger?.let { disableClickDuringAnimation(it) }
         start()
     }
 }
 
-private fun disableClickDuringAnimation(view: View, animator: ObjectAnimator) {
-    animator.addListener(object : AnimatorListenerAdapter() {
+fun View.colorize(
+    currentColor: Int,
+    newColor: Int,
+    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+) {
+    ObjectAnimator.ofArgb(
+        this,
+        "backgroundColor",
+        currentColor,
+        newColor,
+    ).run {
+        duration = resources.getInteger(durationRes).toLong()
+        start()
+    }
+}
+
+private fun ObjectAnimator.disableClickDuringAnimation(view: View) {
+    addListener(object : AnimatorListenerAdapter() {
         override fun onAnimationStart(animation: Animator) {
             super.onAnimationStart(animation)
             view.isClickable = false
@@ -42,3 +60,9 @@ fun ExtendedFloatingActionButton.adjustSizeAccordingScroll(scrollView: NestedScr
         }
     }
 }
+
+fun View.visible() = apply { this.visibility = View.VISIBLE }
+
+fun View.invisible() = apply { this.visibility = View.INVISIBLE }
+
+fun View.gone() = apply { this.visibility = View.GONE }

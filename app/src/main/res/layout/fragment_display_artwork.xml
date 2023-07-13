@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="displayArtworkViewModel"
+            type="com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkViewModel" />
+    </data>
+
+    <com.ortiz.touchview.TouchImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:contentDescription="@{displayArtworkViewModel.uiState.altText}"
+        android:transitionGroup="true"
+        android:transitionName="@string/display_artwork_transition_name"
+        app:zoom_enabled="true"
+        tools:context=".presentation.ui.display.DisplayArtworkFragment"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+</layout>

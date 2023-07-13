@@ -4,21 +4,22 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.transition.Hold
 import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
-import com.listocalixto.android.rembrandt.presentation.utility.applySharedElementExitTransition
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.applyFadeThroughEnterTransition
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.applyHoldExitTransition
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.collectFlowWithLifeCycle
 import com.listocalixto.android.rembrandt.presentation.view.adapter.ArtworkAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import com.listocalixto.android.rembrandt.databinding.FragmentHomeBinding as Binding
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -28,16 +29,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var adapter: ArtworkAdapter? = null
     private var binding: Binding? = null
     private var linearProgress: LinearProgressIndicator? = null
+    private var appBar: AppBarLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Fragment A’s exitTransition can be set any time before Fragment A is
-        // replaced with Fragment B. Ensure Hold's duration is set to the same
-        // duration as your MaterialContainerTransform.
-        exitTransition = Hold().apply {
-            duration =
-                requireContext().resources.getInteger(R.integer.motion_duration_large).toLong()
-        }
+        applyFadeThroughEnterTransition()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,33 +56,50 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun Binding.setupRecyclerView() {
         adapter =
-            ArtworkAdapter(viewModel::onEvent, onArtwork = { artworkId, card, memoryCacheKey ->
-                navigateToArtworkDetail(artworkId, card, memoryCacheKey)
-            }).also {
+            ArtworkAdapter(
+                viewModel::onEvent,
+                onArtwork = { artworkId, card, memoryCacheKey, gradientColor ->
+                    navigateToArtworkDetail(artworkId, card, memoryCacheKey, gradientColor)
+                },
+            ).also {
                 listArtworks.adapter = it
             }
     }
 
-    private fun navigateToArtworkDetail(artworkId: Long, card: View, memoryCacheKey: String?) {
-        applySharedElementExitTransition()
+    private fun navigateToArtworkDetail(
+        artworkId: Long,
+        card: View,
+        memoryCacheKey: String?,
+        gradientColor: Int,
+    ) {
+        applyHoldExitTransition()
         val detailTransitionName = getString(R.string.item_card_detail_transition_name)
         val extras = FragmentNavigatorExtras(card to detailTransitionName)
         val direction = HomeFragmentDirections.toArtworkDetailFragment(
-            artworkId,
-            memoryCacheKey,
-            displayInitialAnimations = true
+            gradientColor = gradientColor,
+            artworkId = artworkId,
+            memoryCacheKey = memoryCacheKey,
+            displayInitialAnimations = true,
         )
-        findNavController().navigate(direction, extras)
+        try {
+            findNavController().navigate(direction, extras)
+        } catch (e: IllegalArgumentException) {
+        }
     }
 
     private fun initExteriorViews() {
         linearProgress = activity?.findViewById(R.id.linearProgress)
+        appBar = activity?.findViewById(R.id.appBar)
     }
 
-    private fun collectUiState() = viewLifecycleOwner.lifecycleScope.launch {
-        viewModel.uiState.flowWithLifecycle(lifecycle).collect { state ->
+    private fun collectUiState() {
+        collectFlowWithLifeCycle(viewModel.uiState) { state ->
             adapter?.submitList(state.artworks)
             linearProgress?.visibility = if (state.isLoading) VISIBLE else INVISIBLE
         }
+    }
+
+    fun here() {
+        Toast.makeText(requireContext(), "Here", Toast.LENGTH_SHORT).show()
     }
 }

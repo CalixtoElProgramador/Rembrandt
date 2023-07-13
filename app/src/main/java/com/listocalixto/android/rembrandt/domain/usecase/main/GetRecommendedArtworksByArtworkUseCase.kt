@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetRecommendedArtworksByArtworkUseCase @Inject constructor(
     private val getAllArtworks: GetAllArtworksUseCase,
     private val getRecommendedArtworkByRecommendationType: GetRecommendedArtworkByRecommendationTypeUseCase,
-    private val generateRecommendationTypesByArtwork: GenerateRecommendationTypesByArtworkUseCase
+    private val generateRecommendationTypesByArtwork: GetRecommendationTypesByArtworkUseCase
 ) {
 
     suspend operator fun invoke(currentArtwork: Artwork): GetRecommendedArtworksByArtworkResult {

@@ -20,8 +20,8 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,7 +33,7 @@ object SingletonModule {
         return Room.databaseBuilder(
             content,
             RembrandtDatabase::class.java,
-            RembrandtDatabase.NAME
+            RembrandtDatabase.NAME,
         ).build()
     }
 
@@ -49,7 +49,7 @@ object SingletonModule {
                     allowSpecialFloatingPointValues = true
                     coerceInputValues = true
                     prettyPrint = true
-                }
+                },
             )
         }
         install(Logging) {

@@ -5,7 +5,6 @@ import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import javax.inject.Inject
 
 class GetManifestByArtworkIdUseCase @Inject constructor(private val repo: ArtworkRepo) {
-
     suspend operator fun invoke(artworkId: Long): Manifest {
         return repo.fetchManifestByArtworkId(artworkId)
     }

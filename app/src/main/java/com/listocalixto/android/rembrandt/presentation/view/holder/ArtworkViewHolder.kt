@@ -1,22 +1,25 @@
 package com.listocalixto.android.rembrandt.presentation.view.holder
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import coil.result
 import com.listocalixto.android.rembrandt.databinding.ListItemArtworkBinding
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.ArtworkUiState
 import com.listocalixto.android.rembrandt.presentation.ui.main.home.HomeUiEvent
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.palette
 
 class ArtworkViewHolder private constructor(
-    val binding: ListItemArtworkBinding
+    val binding: ListItemArtworkBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     inline fun bind(
         item: ArtworkUiState,
         crossinline onEvent: (event: HomeUiEvent) -> Unit,
-        crossinline onArtwork: (artworkId: Long, container: View, memoryCacheKey: String?) -> Unit
+        crossinline onArtwork: (artworkId: Long, container: View, memoryCacheKey: String?, gradientColor: Int) -> Unit,
     ) = binding.apply {
         artwork = item
         iconButtonFavorite.setOnClickListener { onEvent(HomeUiEvent.ObFavorite(item.id)) }
@@ -25,7 +28,8 @@ class ArtworkViewHolder private constructor(
             onArtwork(
                 item.id,
                 card,
-                image.result?.request?.memoryCacheKey?.key
+                image.result?.request?.memoryCacheKey?.key,
+                image?.drawable?.toBitmap()?.palette()?.darkMutedSwatch?.rgb ?: Color.TRANSPARENT,
             )
         }
         executePendingBindings()

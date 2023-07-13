@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.domain.usecase.main
 
 import com.listocalixto.android.rembrandt.domain.repo.ArtworkRepo
 import com.listocalixto.android.rembrandt.domain.result.GetArtworksByPageResult
-import com.listocalixto.android.rembrandt.domain.utility.QualityImageType.MEDIUM
+import com.listocalixto.android.rembrandt.domain.utility.QualityImageType.High
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,7 +16,7 @@ class GetArtworksByPageUseCase @Inject constructor(
         repo.observeArtworksByPage(pageString).collect { result ->
             result.onSuccess { artworks ->
                 val artworksWithImages = artworks.map { artwork ->
-                    artwork.copy(imageUrl = getImageUrl(artwork.imageId, qualityType = MEDIUM))
+                    artwork.copy(imageUrl = getImageUrl(artwork.imageId, qualityType = High))
                 }.toSet()
                 emit(Result.success(GetArtworksByPageResult(artworksWithImages)))
             }.onFailure {

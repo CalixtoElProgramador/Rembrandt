@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.run {
-        }
+        binding.run {}
     }
 }

@@ -35,4 +35,8 @@
     <string name="frag_artwork_content_tab_critique_text">Critique</string>
     <string name="frag_artwork_content_tab_artist_text">Artist</string>
     <string name="frag_artwork_content_tab_gallery_text">Gallery</string>
+    <string name="err_image_not_found">There was an error to try to fetch the image. Sorry :c</string>
+    <string name="display_artwork_transition_name">display_artwork_transition_name</string>
+    <string name="chip_zoom_in_transition_name">chip_zoom_in_transition_name</string>
+    <string name="image_artwork_transition_name">image_artwork_transition_name</string>
 </resources>

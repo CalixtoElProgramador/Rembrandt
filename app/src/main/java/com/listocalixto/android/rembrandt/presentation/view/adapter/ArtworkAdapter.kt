@@ -11,7 +11,7 @@ import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkViewHo
 
 class ArtworkAdapter(
     private val onEvent: (event: HomeUiEvent) -> Unit,
-    private val onArtwork: (artworkId: Long, container: View, memoryCacheKey: String?) -> Unit
+    private val onArtwork: (artworkId: Long, container: View, memoryCacheKey: String?, gradientColor: Int) -> Unit,
 ) : ListAdapter<ArtworkUiState, RecyclerView.ViewHolder>(ArtworkDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

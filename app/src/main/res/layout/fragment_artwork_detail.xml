@@ -17,6 +17,10 @@
             name="onChipFavorite"
             type="ArtworkDetailUiEvent" />
 
+        <variable
+            name="artworkDetailFragment"
+            type="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment" />
+
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -25,7 +29,6 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:fitsSystemWindows="true"
         android:transitionGroup="true">
 
         <com.google.android.material.card.MaterialCardView
@@ -35,6 +38,7 @@
             android:transitionName="@string/item_card_detail_transition_name"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
+            app:cardCornerRadius="0dp"
             app:strokeWidth="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,17 +48,27 @@
                 android:paddingBottom="@dimen/_56sdp"
                 tools:context=".presentation.ui.main.detail.artwork.ArtworkDetailFragment">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <View
+                    android:id="@+id/gradientView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@{artworkDetailViewModel.uiState.gradientDrawable}"
+                    app:layout_constraintBottom_toTopOf="@id/fragmentContent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.ortiz.touchview.TouchImageView
                     android:id="@+id/image"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_320sdp"
                     android:layout_marginHorizontal="@dimen/grid_2"
                     android:scaleType="fitCenter"
+                    android:transitionName="@string/image_artwork_transition_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:loadFromCache="@{artworkDetailViewModel.uiState.imageUrl}"
-                    app:memoryCacheKey="@{artworkDetailViewModel.uiState.memoryCacheKey}"
+                    app:zoom_enabled="false"
                     tools:src="@tools:sample/backgrounds/scenic" />
 
                 <HorizontalScrollView
@@ -81,7 +95,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0"
+                            android:onClick="@{() -> artworkDetailFragment.navigateToDisplayArtwork(0.5f, 0.5f, 1.0f)}"
                             android:text="@string/zoom_in"
+                            android:transitionName="@string/chip_zoom_in_transition_name"
                             android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
                             app:chipIcon="@drawable/ic_zoom_in"
                             app:ensureMinTouchTargetSize="true"

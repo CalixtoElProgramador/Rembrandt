@@ -9,5 +9,36 @@
         android:id="@+id/mainFragment"
         android:name="com.listocalixto.android.rembrandt.presentation.ui.main.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_displayArtworkFragment"
+            app:destination="@id/displayArtworkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayArtworkFragment"
+        android:name="com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkFragment"
+        android:label="DisplayArtworkFragment"
+        tools:layout="@layout/fragment_display_artwork">
+        <argument
+            android:name="hightResolutionImageUrl"
+            app:argType="string" />
+        <argument
+            android:name="altText"
+            app:argType="string" />
+        <argument
+            android:name="previousImageMemoryCacheKey"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="touchPositionX"
+            app:argType="float" />
+        <argument
+            android:name="touchPositionY"
+            app:argType="float" />
+        <argument
+            android:name="zoom"
+            app:argType="float"
+            android:defaultValue="1.0" />
+    </fragment>
+
 </navigation>

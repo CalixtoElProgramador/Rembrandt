@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.databinding.BindingAdapter
 import coil.load
+import coil.request.ErrorResult
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.google.android.material.color.MaterialColors
 import com.listocalixto.android.rembrandt.presentation.utility.UiText
 
@@ -17,6 +20,7 @@ fun TextView.bindUiText(uiText: UiText?) = uiText?.let {
         is UiText.StringResource -> {
             context.resources.getText(uiText.value)
         }
+
         is UiText.StringValue -> {
             uiText.value
         }
@@ -27,7 +31,8 @@ fun TextView.bindUiText(uiText: UiText?) = uiText?.let {
 fun ImageView.bindLoadImage(imageUrl: String?) {
     imageUrl?.let { url ->
         load(url) {
-            memoryCacheKey(imageUrl)
+            allowHardware(false)
+            memoryCacheKey(url)
             crossfade(true)
         }
     }
@@ -38,6 +43,7 @@ fun ImageView.bindLoadFromCache(imageUrl: String?, memoryCacheKey: String?) {
     memoryCacheKey?.let { key ->
         imageUrl?.let { url ->
             load(url) {
+                allowHardware(false)
                 placeholderMemoryCacheKey(key)
                 crossfade(true)
             }

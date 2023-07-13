@@ -1,5 +1,7 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.Constants.EMPTY
 import com.listocalixto.android.rembrandt.domain.entity.Artwork
@@ -16,7 +18,8 @@ data class ArtworkDetailUiState(
     val errorMessage: UiText? = null,
     val loadingTranslation: Boolean = false,
     val displayInitialAnimations: Unit? = null,
-    val initialAnimationsDisplayed: Boolean = false
+    val initialAnimationsDisplayed: Boolean = false,
+    val gradientColor: Int = Color.TRANSPARENT,
 ) {
     val isTranslationDisplayed: Boolean = translate && artwork?.translation != null
     val imageUrl: String = artwork?.imageUrl ?: EMPTY
@@ -43,4 +46,8 @@ data class ArtworkDetailUiState(
     }
     val artistName: String = artwork?.artistTitle ?: EMPTY
     val altText: String = artwork?.thumbnail?.altText ?: EMPTY
+    val gradientDrawable = GradientDrawable(
+        GradientDrawable.Orientation.TOP_BOTTOM,
+        intArrayOf(gradientColor, 0x00FFFFF),
+    ).also { it.cornerRadius = 0f }
 }

@@ -29,11 +29,14 @@
         <argument
             android:name="memoryCacheKey"
             android:defaultValue="null"
-            app:nullable="true"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="displayInitialAnimations"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <argument
+            android:name="gradientColor"
+            app:argType="integer" />
     </fragment>
 </navigation>

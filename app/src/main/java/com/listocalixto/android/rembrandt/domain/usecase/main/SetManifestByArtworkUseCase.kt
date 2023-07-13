@@ -5,9 +5,8 @@ import com.listocalixto.android.rembrandt.domain.model.Manifest
 import javax.inject.Inject
 
 class SetManifestByArtworkUseCase @Inject constructor(
-    private val updateArtworkUseCase: UpdateArtworkUseCase
+    private val updateArtworkUseCase: UpdateArtworkUseCase,
 ) {
-
     suspend operator fun invoke(artwork: Artwork, manifest: Manifest) {
         updateArtworkUseCase(artwork.copy(manifest = manifest))
     }

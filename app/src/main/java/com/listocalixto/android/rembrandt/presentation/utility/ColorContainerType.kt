@@ -7,6 +7,6 @@ sealed interface ColorContainerType {
     data class DifferentContainerColors(
         @AttrRes val containerColor: Int,
         @AttrRes val startContainerColor: Int,
-        @AttrRes val endContainerColor: Int
+        @AttrRes val endContainerColor: Int,
     ) : ColorContainerType
 }

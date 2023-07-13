@@ -1,9 +1,9 @@
 package com.listocalixto.android.rembrandt.domain.utility
 
 enum class QualityImageType(val value: String) {
-    LOW("400"),
-
-    MEDIUM("843"),
-
-    HIGH("1686")
+    ExtraLow("200"),
+    Low("400"),
+    Medium("600"),
+    High("843"),
+    ExtraHigh("1686"),
 }

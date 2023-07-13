@@ -8,7 +8,7 @@ import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.Ar
 import com.listocalixto.android.rembrandt.presentation.view.holder.ArtworkRecommendedViewHolder
 
 class ArtworkRecommendedAdapter(
-    private val onArtwork: (artworkId: Long, memoryCacheKey: String?) -> Unit
+    private val onArtwork: (artworkId: Long, memoryCacheKey: String?, gradientColor: Int) -> Unit,
 ) : ListAdapter<ArtworkRecommendedUiState, RecyclerView.ViewHolder>(ArtworkRecommendedDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -24,14 +24,14 @@ class ArtworkRecommendedAdapter(
     object ArtworkRecommendedDiffUtil : DiffUtil.ItemCallback<ArtworkRecommendedUiState>() {
         override fun areItemsTheSame(
             oldItem: ArtworkRecommendedUiState,
-            newItem: ArtworkRecommendedUiState
+            newItem: ArtworkRecommendedUiState,
         ): Boolean {
             return oldItem.imageUrl == newItem.imageUrl
         }
 
         override fun areContentsTheSame(
             oldItem: ArtworkRecommendedUiState,
-            newItem: ArtworkRecommendedUiState
+            newItem: ArtworkRecommendedUiState,
         ): Boolean {
             return oldItem == newItem
         }
