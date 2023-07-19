@@ -3,19 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_module_graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/home_graph">
+
+    <include app:graph="@navigation/home_graph" />
 
     <fragment
-        android:id="@+id/exploreFragment"
-        android:name="com.listocalixto.android.rembrandt.presentation.ui.main.explore.ExploreFragment"
+        android:id="@+id/explore_graph"
+        android:name="com.listocalixto.android.rembrandt.feature.explore.ExploreFragment"
         android:label="main_menu_explore"
         tools:layout="@layout/fragment_explore" />
-    <fragment
-        android:id="@+id/favoritesFragment"
-        android:name="com.listocalixto.android.rembrandt.presentation.ui.main.favorites.FavoritesFragment"
-        android:label="main_menu_favorites"
-        tools:layout="@layout/fragment_favorites" />
 
-    <include app:graph="@navigation/home"/>
+    <include app:graph="@navigation/favorites_graph" />
 
+    <!--<fragment
+        android:id="@+id/artworkDetailFragment"
+        android:name="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment"
+        android:label="ArtworkDetailFragment"
+        tools:layout="@layout/fragment_artwork_detail">
+        <action
+            android:id="@+id/action_artworkDetailFragment_self"
+            app:destination="@id/artworkDetailFragment" />
+        <argument
+            android:name="artworkId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="memoryCacheKey"
+            android:defaultValue="null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="displayInitialAnimations"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <argument
+            android:name="gradientColor"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_artworkDetailFragment_self2"
+            app:destination="@id/artworkDetailFragment" />
+    </fragment>-->
+
+
+
+    <!--<action
+        android:id="@+id/action_global_artworkDetailFragment"
+        app:destination="@+id/artworkDetailFragment" />-->
 </navigation>

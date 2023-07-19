@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.listocalixto.android.rembrandt.presentation.ui.main.MainFragment"
+        android:name="com.listocalixto.android.rembrandt.navigation.principal.PrincipalFragmentImpl"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_principal">
         <action
             android:id="@+id/action_mainFragment_to_displayArtworkFragment"
             app:destination="@id/displayArtworkFragment" />

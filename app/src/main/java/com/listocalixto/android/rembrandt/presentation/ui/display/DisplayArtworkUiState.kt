@@ -1,6 +1,6 @@
 package com.listocalixto.android.rembrandt.presentation.ui.display
 
-import com.listocalixto.android.rembrandt.presentation.utility.UiText
+import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
 data class DisplayArtworkUiState(
     val imageUrl: String = "",

@@ -8,19 +8,20 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.databinding.FragmentArtworkDescriptionBinding as Binding
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.content.ArtworkContentPage
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.listocalixto.android.rembrandt.core.ui.R as Rui
+import com.listocalixto.android.rembrandt.databinding.FragmentArtworkDescriptionBinding as Binding
 
 @AndroidEntryPoint
 class ArtworkDescriptionFragment :
     Fragment(R.layout.fragment_artwork_description),
     ArtworkContentPage {
 
-    override val tabTitleRes: Int = R.string.frag_artwork_content_tab_description_text
+    override val tabTitleRes: Int = Rui.string.frag_artwork_content_tab_description_text
     override val instance: Fragment = this
     private val viewModel: ArtworkDetailViewModel by viewModels({ requireParentFragment() })
 
@@ -38,7 +39,7 @@ class ArtworkDescriptionFragment :
     }
 
     private fun initExternalViews() {
-        extendedFab = activity?.findViewById(R.id.extendedFab)
+        // extendedFab = activity?.findViewById(R.id.extendedFab)
     }
 
     private fun Binding.setupBinding() {

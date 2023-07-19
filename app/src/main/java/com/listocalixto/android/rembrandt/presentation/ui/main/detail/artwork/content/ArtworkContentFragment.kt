@@ -4,13 +4,10 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.google.android.material.tabs.TabLayoutMediator
 import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.databinding.FragmentArtworkContentBinding as Binding
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.content.page.ArtworkCharacteristicsFragment
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.content.page.ArtworkDescriptionFragment
-import com.listocalixto.android.rembrandt.presentation.view.adapter.FragmentAdapter
+import com.listocalixto.android.rembrandt.core.ui.adapter.FragmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import com.listocalixto.android.rembrandt.databinding.FragmentArtworkContentBinding as Binding
 
 @AndroidEntryPoint
 class ArtworkContentFragment : Fragment(R.layout.fragment_artwork_content) {
@@ -30,7 +27,7 @@ class ArtworkContentFragment : Fragment(R.layout.fragment_artwork_content) {
     }
 
     private fun Binding.setupViewPagerWithTabLayout(resources: Resources) {
-        val descriptionFragment = ArtworkDescriptionFragment()
+        /*val descriptionFragment = ArtworkDescriptionFragment()
         val characteristicsFragment = ArtworkCharacteristicsFragment()
         val fragments = listOf<ArtworkContentPage>(descriptionFragment, characteristicsFragment)
         adapter = FragmentAdapter(fragments, requireParentFragment()).also {
@@ -38,6 +35,6 @@ class ArtworkContentFragment : Fragment(R.layout.fragment_artwork_content) {
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = resources.getText(fragments[position].tabTitleRes)
-        }.attach()
+        }.attach()*/
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="artwork"
+            type="com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_1"
+        android:layout_marginVertical="@dimen/grid_1"
+        app:cardCornerRadius="@dimen/_24sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/grid_2">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/_140sdp"
+                android:layout_height="@dimen/_140sdp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImage="@{artwork.imageUrl}"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Rembrandt.SmallComponent.ArtworkDetailRecommended"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_1"
+                android:alpha="?attr/emphasisHighAlpha"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{artwork.title}"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_0_25"
+                android:alpha="?attr/emphasisMediumAlpha"
+                android:text="@{context.getString(artwork.reasonItWasRecommended)}"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                app:layout_constraintEnd_toEndOf="@id/textTitle"
+                app:layout_constraintStart_toStartOf="@id/textTitle"
+                app:layout_constraintTop_toBottomOf="@id/textTitle"
+                tools:maxLines="2"
+                tools:text="@tools:sample/lorem/random" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

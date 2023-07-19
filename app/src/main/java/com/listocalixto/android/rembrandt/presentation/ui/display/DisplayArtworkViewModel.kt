@@ -9,12 +9,13 @@ import com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtwork
 import com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkFragment.Companion.TOUCH_POSITION_X_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkFragment.Companion.TOUCH_POSITION_Y_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkFragment.Companion.ZOOM_KEY
-import com.listocalixto.android.rembrandt.presentation.utility.UiText
+import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import com.listocalixto.android.rembrandt.core.ui.R as Rui
 
 class DisplayArtworkViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -45,7 +46,7 @@ class DisplayArtworkViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     errorMessage = UiText.StringResource(
-                        value = R.string.err_image_not_found,
+                        value = Rui.string.err_image_not_found,
                     ),
                 )
             }

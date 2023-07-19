@@ -7,9 +7,9 @@ import androidx.fragment.app.viewModels
 import coil.load
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.databinding.FragmentDisplayArtworkBinding
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.applySharedElementTransition
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.collectFlowWithLifeCycle
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.startTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.applySharedElementTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
+import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
 
 class DisplayArtworkFragment : Fragment(R.layout.fragment_display_artwork) {
 

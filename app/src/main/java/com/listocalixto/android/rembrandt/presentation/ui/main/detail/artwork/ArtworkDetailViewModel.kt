@@ -1,34 +1,23 @@
 package com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork
 
-import android.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.core.Constants.ANIMATION_REFRESH_DURATION
-import com.listocalixto.android.rembrandt.core.Constants.EMPTY
-import com.listocalixto.android.rembrandt.domain.entity.Artwork
-import com.listocalixto.android.rembrandt.domain.model.Translation
-import com.listocalixto.android.rembrandt.domain.model.Translation.Exception.TargetLanguageNotAvailable
-import com.listocalixto.android.rembrandt.domain.usecase.main.wrapper.ArtworkDetailUseCases
-import com.listocalixto.android.rembrandt.domain.utility.QualityImageType
-import com.listocalixto.android.rembrandt.domain.utility.RecommendationType
-import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtist
-import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameArtworkType
-import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameCategory
-import com.listocalixto.android.rembrandt.domain.utility.RecommendationType.SameGallery
+import com.listocalixto.android.rembrandt.common.entities.Artwork
+import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType
+import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameArtist
+import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameArtworkType
+import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameCategory
+import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameGallery
+import com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_DEFAULT_VALUE
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.DISPLAY_INITIAL_ANIMATIONS_KEY
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.GRADIENT_COLOR_KEY
-import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY_ID_KEY
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.ErrorMessageTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.InitialAnimationsDisplayed
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.OnChipFavorite
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.RefreshAnimationTriggered
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.SaveCurrentArtworkId
 import com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailUiEvent.TranslateContent
-import com.listocalixto.android.rembrandt.presentation.utility.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,17 +25,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.listocalixto.android.rembrandt.core.ui.R as Rui
 
 @HiltViewModel
 class ArtworkDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val useCases: ArtworkDetailUseCases,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ArtworkDetailUiState())
@@ -67,7 +54,7 @@ class ArtworkDetailViewModel @Inject constructor(
             val displayInitialAnimations: Flow<Boolean>
             val gradientColor: Flow<Int>
             with(savedStateHandle) {
-                artworkIdFlow = getStateFlow(ARTWORK_ID_KEY, ARTWORK_ID_DEFAULT_VALUE)
+                /*artworkIdFlow = getStateFlow(ARTWORK_ID_KEY, ARTWORK_ID_DEFAULT_VALUE)
                 memoryCacheKeyFlow = getStateFlow(MEMORY_CACHE_KEY_ID_KEY, EMPTY)
                 displayInitialAnimations = getStateFlow(DISPLAY_INITIAL_ANIMATIONS_KEY, true)
                 gradientColor = getStateFlow(GRADIENT_COLOR_KEY, Color.TRANSPARENT)
@@ -93,7 +80,7 @@ class ArtworkDetailViewModel @Inject constructor(
                         displayInitialAnimations()
                     }
                     setupContentByArtworkId(args.artworkId)
-                }
+                }*/
             }
         }
     }
@@ -111,7 +98,7 @@ class ArtworkDetailViewModel @Inject constructor(
                     updateArtworkJob = null
                     return@launch
                 }
-                useCases.updateArtwork(currentArtwork.copy(isFavorite = !currentArtwork.isFavorite))
+                // useCases.updateArtwork(currentArtwork.copy(isFavorite = !currentArtwork.isFavorite))
                 updateArtworkJob = null
             }
         }
@@ -119,15 +106,15 @@ class ArtworkDetailViewModel @Inject constructor(
         TranslateContent -> Unit.apply {
             if (translateArtworkJob != null) return@apply
             val artwork = _uiState.value.artwork ?: return@apply
-            val translation = artwork.translation
-            if (translation == null) {
+//            val translation = artwork.translation
+            /*if (translation == null) {
                 translateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
                     _uiState.update { it.copy(loadingTranslation = true) }
                     try {
-                        val newTranslation = useCases.getTranslationByArtwork(artwork)
+                        // val newTranslation = useCases.getTranslationByArtwork(artwork)
                         _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
                         delay(ANIMATION_REFRESH_DURATION)
-                        useCases.setTranslationByArtwork(artwork, newTranslation)
+                        // useCases.setTranslationByArtwork(artwork, newTranslation)
                     } catch (e: Translation.Exception) {
                         when (e) {
                             TargetLanguageNotAvailable -> {
@@ -152,7 +139,7 @@ class ArtworkDetailViewModel @Inject constructor(
                     delay(ANIMATION_REFRESH_DURATION)
                     _uiState.update { it.copy(translate = !it.translate) }
                 }
-            }
+            }*/
         }
 
         RefreshAnimationTriggered -> {
@@ -181,20 +168,20 @@ class ArtworkDetailViewModel @Inject constructor(
     }
 
     private suspend fun setupContentByArtworkId(id: Long) {
-        useCases.observeArtworkWithManifest(id).catch {
+        /*useCases.observeArtworkWithManifest(id).catch {
         }.collect { artwork ->
             setupArtworkDetailScreen(artwork)
             if (recommendationsHaveNotBeenInitialized()) {
                 fetchAndSetupRecommendedArtworks(artwork)
             }
-        }
+        }*/
     }
 
     private fun fetchAndSetupRecommendedArtworks(artwork: Artwork) {
         viewModelScope.launch(Dispatchers.Default) {
-            useCases.getRecommendedArtworksByArtwork(artwork).run {
+            /*useCases.getRecommendedArtworksByArtwork(artwork).run {
                 setupRecommendedArtworks(artworksRecommended, recommendationTypes)
-            }
+            }*/
         }
     }
 
@@ -214,19 +201,19 @@ class ArtworkDetailViewModel @Inject constructor(
                 title = artworkRecommended.title,
                 reasonItWasRecommended = when (recommendationTypes[index]) {
                     is SameArtist -> {
-                        R.string.reason_it_was_recommended_same_artist
+                        Rui.string.reason_it_was_recommended_same_artist
                     }
 
                     is SameArtworkType -> {
-                        R.string.reason_it_was_recommended_same_artwork_type
+                        Rui.string.reason_it_was_recommended_same_artwork_type
                     }
 
                     is SameCategory -> {
-                        R.string.reason_it_was_recommended_same_category
+                        Rui.string.reason_it_was_recommended_same_category
                     }
 
                     is SameGallery -> {
-                        R.string.reason_it_was_recommended_same_gallery
+                        Rui.string.reason_it_was_recommended_same_gallery
                     }
                 },
             )
@@ -234,13 +221,13 @@ class ArtworkDetailViewModel @Inject constructor(
         _uiState.update { it.copy(artworksRecommended = recommendationsUiState) }
     }
 
-    fun getHighQualityImageUrl(): String = useCases.getImageUrlUseCase(
+    /*fun getHighQualityImageUrl(): String = useCases.getImageUrlUseCase(
         imageId = _uiState.value.artwork?.imageId.orEmpty(),
         qualityType = QualityImageType.ExtraHigh,
-    )
+    )*/
 
     private fun setupArtworkDetailScreen(artwork: Artwork) {
-        _uiState.update {
+        /*_uiState.update {
             it.copy(
                 artwork = artwork.copy(
                     imageUrl = useCases.getImageUrlUseCase(
@@ -249,6 +236,6 @@ class ArtworkDetailViewModel @Inject constructor(
                     ),
                 ),
             )
-        }
+        }*/
     }
 }

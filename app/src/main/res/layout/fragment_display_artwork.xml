@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="displayArtworkViewModel"
             type="com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkViewModel" />

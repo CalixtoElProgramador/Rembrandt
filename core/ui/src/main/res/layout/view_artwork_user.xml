@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.google.android.material.R" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="artwork"
+            type="com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        style="@style/Widget.Material3.CardView.Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_4"
+        android:layout_marginVertical="@dimen/grid_1"
+        android:transitionName="@{@string/item_card_transition_name(artwork.id)}"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/_40sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/grid_1">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_200sdp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImage="@{artwork.imageUrl}"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.MediumComponent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Rembrandt.MediumComponent"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/chipBackground"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/colorTertiaryContainer"
+                app:layout_constraintBottom_toBottomOf="@id/textArtworkType"
+                app:layout_constraintEnd_toEndOf="@id/textArtworkType"
+                app:layout_constraintStart_toStartOf="@id/textArtworkType"
+                app:layout_constraintTop_toTopOf="@id/textArtworkType"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Rembrandt.SmallComponent.ChipArtworkType" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textArtworkType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/grid_1"
+                android:alpha="?attr/emphasisHighAlpha"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:text="@{artwork.type}"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnTertiaryContainer"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="@id/image"
+                app:layout_constraintStart_toStartOf="@id/image"
+                tools:text="Painting" />
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textCategoriesTitles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:layout_marginTop="@dimen/grid_2"
+                android:alpha="?attr/emphasisMediumAlpha"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                app:uiText="@{artwork.caption}"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_0_25"
+                android:alpha="?attr/emphasisHighAlpha"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{artwork.title}"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:layout_constraintEnd_toEndOf="@id/textCategoriesTitles"
+                app:layout_constraintStart_toStartOf="@id/textCategoriesTitles"
+                app:layout_constraintTop_toBottomOf="@id/textCategoriesTitles"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textNameArtist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:alpha="?attr/emphasisMediumAlpha"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintEnd_toEndOf="@id/textTitle"
+                app:layout_constraintStart_toStartOf="@id/textTitle"
+                app:layout_constraintTop_toBottomOf="@id/textTitle"
+                app:uiText="@{artwork.artistName}"
+                tools:text="Rembrandt" />
+
+            <ImageButton
+                android:id="@+id/iconButtonFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:alpha="?attr/emphasisHighAlpha"
+                android:background="?attr/actionBarItemBackground"
+                android:padding="@dimen/grid_1"
+                app:layout_constraintEnd_toStartOf="@id/iconButtonShare"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@id/textNameArtist"
+                app:layout_constraintTop_toBottomOf="@id/textNameArtist"
+                app:srcCompat="@{artwork.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
+                app:tint="@{artwork.favorite ? R.attr.colorTertiary : R.attr.colorOutline}"
+                tools:src="@drawable/ic_favorite_border" />
+
+            <ImageButton
+                android:id="@+id/iconButtonShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="?attr/emphasisHighAlpha"
+                android:background="?attr/actionBarItemBackground"
+                android:padding="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="@id/iconButtonFavorite"
+                app:layout_constraintEnd_toEndOf="@id/textNameArtist"
+                app:layout_constraintStart_toEndOf="@id/iconButtonFavorite"
+                app:layout_constraintTop_toTopOf="@id/iconButtonFavorite"
+                app:srcCompat="@drawable/ic_share" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

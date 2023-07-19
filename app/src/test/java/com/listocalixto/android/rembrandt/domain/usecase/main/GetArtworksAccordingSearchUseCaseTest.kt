@@ -1,7 +1,7 @@
 package com.listocalixto.android.rembrandt.domain.usecase.main
 
-import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworksAccordingSearchUseCase.Companion.applyCorrectFormatInTheQuery
-import com.listocalixto.android.rembrandt.domain.usecase.main.GetArtworksAccordingSearchUseCase.Companion.validateQuery
+import com.listocalixto.android.rembrandt.core.domain.GetArtworksAccordingSearchUseCase.Companion.applyCorrectFormatInTheQuery
+import com.listocalixto.android.rembrandt.core.domain.GetArtworksAccordingSearchUseCase.Companion.validateQuery
 import junitparams.FileParameters
 import junitparams.JUnitParamsRunner
 import org.junit.Assert
