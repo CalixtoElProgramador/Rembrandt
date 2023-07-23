@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveAllArtworksUserUseCase
-import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkIdUseCase
+import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.utility.ArtworkQuery
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val observeAllArtworksUser: ObserveAllArtworksUserUseCase,
-    private val toggleFavoriteArtworkId: ToggleFavoriteArtworkIdUseCase,
+    private val toggleFavoriteArtworkId: ToggleFavoriteArtworkByIdUseCase,
     @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 

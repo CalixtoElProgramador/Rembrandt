@@ -1,26 +1,35 @@
 package com.listocalixto.android.rembrandt.navigation.principal
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.listocalixto.android.rembrandt.DisplayImageFragmentGraphDirections
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.listocalixto.android.rembrandt.ArtworkDetailGraphDirections
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.getNavHost
+import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.databinding.FragmentPrincipalBinding
+import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragmentArgs
 import com.listocalixto.android.rembrandt.feature.home.HomeFragment
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.colorize
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.gone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.listocalixto.android.rembrandt.core.ui.R as Rui
 
 @AndroidEntryPoint
 internal class PrincipalFragmentImpl :
@@ -54,6 +63,7 @@ internal class PrincipalFragmentImpl :
             if (appBarDefaultBackground == null) {
                 appBarDefaultBackground = appBar.background
             }
+            linearProgress.gone()
             val navHostFragment = getNavHost(navHostMainFragment.id)
             val navController = navHostFragment.navController
             bottomNav.setupWithNavController(navController)
@@ -61,15 +71,26 @@ internal class PrincipalFragmentImpl :
             collectNavigateState()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.uiState.flowWithLifecycle(lifecycle).collect { state ->
-                    linearProgress.isVisible = state.isLoading
+                    // linearProgress.isVisible = state.isLoading
                 }
             }
         }
     }
 
-    override fun navigateToArtworkDetail() {
-        val direction = DisplayImageFragmentGraphDirections.showArtworkDetail(1)
-        currentNavigationFragment?.findNavController()?.navigate(direction)
+    override fun navigateToArtworkDetail(
+        artworkId: Long,
+        imageMemoryCacheKey: String?,
+        shouldShowEnterAnimations: Boolean,
+        imageAmbientColor: Int,
+        extras: FragmentNavigator.Extras,
+    ) {
+        val direction = ArtworkDetailGraphDirections.showArtworkDetail(
+            previousImageMemoryKey = imageMemoryCacheKey,
+            previousImageAmbientColor = imageAmbientColor,
+            id = artworkId,
+            showEnterAnimations = shouldShowEnterAnimations,
+        )
+        currentNavigationFragment?.findNavController()?.navigate(direction, extras)
     }
 
     private fun collectNavigateState() {
@@ -110,16 +131,16 @@ internal class PrincipalFragmentImpl :
                     }
                 }
 
-                R.id.home_graph -> {
+                R.id.homeFragment -> {
                     appBar.background = appBarDefaultBackground
                     extendedFab.hide()
                 }
 
-                /*R.id.artworkDetailFragment -> {
+                R.id.artworkDetailFragment -> {
                     extendedFab.apply {
                         icon = ResourcesCompat.getDrawable(
                             context.resources,
-                            R.drawable.ic_translate,
+                            Rui.drawable.ic_translate,
                             activity?.theme,
                         )
                     }
@@ -141,16 +162,16 @@ internal class PrincipalFragmentImpl :
                                         Color.MAGENTA
                                     }
                                 }
-                            lastGradientColor = args.gradientColor
+                            lastGradientColor = args.previousImageAmbientColor
                             appBar.colorize(
                                 currentColor = currentColorBackground,
-                                newColor = args.gradientColor,
+                                newColor = args.previousImageAmbientColor,
                             )
                         }
                     }
-                }*/
+                }
 
-                R.id.favorites_graph -> {
+                R.id.favoritesFragment -> {
                     extendedFab.hide()
                     appBar.background = appBarDefaultBackground
                     homeFragment?.apply {
@@ -159,6 +180,7 @@ internal class PrincipalFragmentImpl :
                 }
 
                 else -> {
+                    appBar.background = appBarDefaultBackground
                 }
             }
         }

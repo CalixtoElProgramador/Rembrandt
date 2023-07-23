@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.listocalixto.android.rembrandt.feature.artworkdetail.content.page.ArtworkDescriptionFragment" />
+
+        <variable
+            name="artworkDetailViewModel"
+            type="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel" />
+    </data>
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="?attr/emphasisMediumAlpha"
+        android:padding="@dimen/grid_2"
+        android:text="@string/hello_blank_fragment"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        app:uiText="@{artworkDetailViewModel.uiState.description}"
+        tools:context=".feature.artworkdetail.content.page.ArtworkDescriptionFragment"
+        tools:text="@tools:sample/lorem/random" />
+
+</layout>

@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
 import com.listocalixto.android.rembrandt.R
-import com.listocalixto.android.rembrandt.databinding.FragmentDisplayArtworkBinding
 import com.listocalixto.android.rembrandt.core.ui.extensions.applySharedElementTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
 import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
+import com.listocalixto.android.rembrandt.databinding.FragmentDisplayArtworkBinding
 
 class DisplayArtworkFragment : Fragment(R.layout.fragment_display_artwork) {
 

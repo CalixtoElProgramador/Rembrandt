@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.presentation.utility.extentions
+package com.listocalixto.android.rembrandt.core.ui.extensions
 
 import android.content.Context
 import android.content.res.Configuration

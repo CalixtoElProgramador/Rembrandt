@@ -1,15 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ArtworkDetailFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/artwork"
+    <data>
+
+        <import type="com.listocalixto.android.rembrandt.core.ui.R" />
+
+        <variable
+            name="artworkDetailViewModel"
+            type="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel" />
+
+        <variable
+            name="artworkDetailFragment"
+            type="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:transitionGroup="true">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:transitionName="@string/item_card_detail_transition_name"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:paddingBottom="@dimen/_56sdp"
+                tools:context=".feature.artworkdetail.ArtworkDetailFragment">
+
+                <View
+                    android:id="@+id/gradientView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@{artworkDetailViewModel.uiState.imageAmbientGradient}"
+                    app:layout_constraintBottom_toTopOf="@id/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.ortiz.touchview.TouchImageView
+                    android:id="@+id/image"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_320sdp"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:contentDescription="@{artworkDetailViewModel.uiState.alternativeText}"
+                    android:scaleType="fitCenter"
+                    android:transitionName="@string/image_artwork_transition_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:zoom_enabled="false"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScroll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:clipToPadding="false"
+                    android:scrollbarSize="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="@dimen/grid_3"
+                        app:singleLine="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipZoomIn"
+                            style="@style/Widget.Material3.Chip.Assist.Elevated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:onClick="@{() -> artworkDetailFragment.navigateToDisplayArtwork(0.5f, 0.5f, 1.0f)}"
+                            android:text="@string/zoom_in"
+                            android:transitionName="@string/chip_zoom_in_transition_name"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
+                            app:chipIcon="@drawable/ic_zoom_in"
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipFavorite"
+                            style="@style/Widget.Material3.Chip.Assist.Elevated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:onClick="@{_ -> artworkDetailViewModel.onChipFavoriteClick()}"
+                            android:text="@{artworkDetailViewModel.uiState.favorite ? @string/saved_in_favorites : @string/save_to_favorites}"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
+                            app:chipIcon="@{artworkDetailViewModel.uiState.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:chipIcon="@drawable/ic_favorite"
+                            tools:text="Saved in favorites"
+                            tools:translationY="0dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDownloadImage"
+                            style="@style/Widget.Material3.Chip.Assist.Elevated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:text="@string/download_image"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
+                            app:chipIcon="@drawable/ic_download"
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAddCollection"
+                            style="@style/Widget.Material3.Chip.Assist.Elevated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:text="@string/add_to_collection"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
+                            app:chipIcon="@drawable/ic_collections"
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipShare"
+                            style="@style/Widget.Material3.Chip.Assist.Elevated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:text="@string/share"
+                            android:translationY="@dimen/frag_artwork_detail_chip_translation_y"
+                            app:chipIcon="@drawable/ic_share"
+                            app:ensureMinTouchTargetSize="true"
+                            tools:alpha="1"
+                            tools:translationY="0dp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:alpha="?attr/emphasisMediumAlpha"
+                    android:ellipsize="end"
+                    android:text="@{artworkDetailViewModel.uiState.category}"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorSecondary"
+                    app:layout_constraintEnd_toEndOf="@id/image"
+                    app:layout_constraintStart_toStartOf="@id/image"
+                    app:layout_constraintTop_toBottomOf="@id/horizontalScroll"
+                    tools:maxLines="1"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:alpha="?attr/emphasisHighAlpha"
+                    android:text="@{artworkDetailViewModel.uiState.title}"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                    app:layout_constraintEnd_toEndOf="@id/textCategory"
+                    app:layout_constraintStart_toStartOf="@id/textCategory"
+                    app:layout_constraintTop_toBottomOf="@id/textCategory"
+                    tools:maxLines="3"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textNameArtist"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_1"
+                    android:alpha="?attr/emphasisMediumAlpha"
+                    android:text="@{artworkDetailViewModel.uiState.artistName}"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="@id/textTitle"
+                    app:layout_constraintStart_toStartOf="@id/textTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textTitle"
+                    tools:text="Rembrandt" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textNameArtist" />
+
+                <!--<androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentContent"
+                    android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.content.ArtworkContentFragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    tools:layout="@layout/fragment_artwork_content"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="?attr/colorSurfaceVariant"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fragmentContent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/labelRecommended"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:alpha="?attr/emphasisHighAlpha"
+                    android:text="@string/recommended"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listRecommended"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/grid_1"
+                    android:paddingVertical="@dimen/grid_1"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/labelRecommended"
+                    app:spanCount="1"
+                    tools:listitem="@layout/view_artwork_recommended" />-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

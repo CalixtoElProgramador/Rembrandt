@@ -5,13 +5,16 @@ import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import com.listocalixto.android.rembrandt.core.ui.adapter.ArtworkUserAdapter
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughEnterTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.applyHoldExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.home.databinding.FragmentHomeBinding as Binding
 
 @AndroidEntryPoint
@@ -65,20 +68,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         memoryCacheKey: String?,
         gradientColor: Int,
     ) {
-        /*applyHoldExitTransition()
+        applyHoldExitTransition()
         val detailTransitionName = getString(Rui.string.item_card_detail_transition_name)
         val extras = FragmentNavigatorExtras(card to detailTransitionName)
-        val direction = MainModuleGraphDirections.actionGlobalArtworkDetailFragment(
-            gradientColor = gradientColor,
+        principalFragment?.navigateToArtworkDetail(
             artworkId = artworkId,
-            memoryCacheKey = memoryCacheKey,
-            displayInitialAnimations = true,
+            imageMemoryCacheKey = memoryCacheKey,
+            shouldShowEnterAnimations = true,
+            imageAmbientColor = gradientColor,
+            extras = extras,
         )
-        try {
-            findNavController().navigate(direction, extras)
-        } catch (_: IllegalArgumentException) {
-        }*/
-        principalFragment?.navigateToArtworkDetail()
     }
 
     /*private fun initExteriorViews() {

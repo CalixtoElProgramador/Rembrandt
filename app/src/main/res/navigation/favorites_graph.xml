@@ -11,10 +11,10 @@
         android:label="FavoritesFragment"
         tools:layout="@layout/fragment_favorites" />
 
-    <include app:graph="@navigation/display_image_fragment_graph" />
-
     <action
         android:id="@+id/show_artworkDetail"
-        app:destination="@id/display_image_fragment_graph" />
+        app:destination="@id/artwork_detail_graph" />
+
+    <include app:graph="@navigation/artwork_detail_graph" />
 
 </navigation>

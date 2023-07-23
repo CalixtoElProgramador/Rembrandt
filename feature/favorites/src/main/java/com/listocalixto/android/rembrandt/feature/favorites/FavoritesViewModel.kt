@@ -6,7 +6,7 @@ import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Main
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveAllFavoriteArtworksUseCase
-import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkIdUseCase
+import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FavoritesViewModel @Inject constructor(
-    private val toggleFavoriteArtworkId: ToggleFavoriteArtworkIdUseCase,
+    private val toggleFavoriteArtworkId: ToggleFavoriteArtworkByIdUseCase,
     observeAllFavoriteArtwork: ObserveAllFavoriteArtworksUseCase,
     @Dispatcher(Default) defaultDispatcher: CoroutineDispatcher,
     @Dispatcher(Main) mainDispatcher: CoroutineDispatcher,

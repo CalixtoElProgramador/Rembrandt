@@ -108,6 +108,7 @@ dependencies {
     implementation(project(":feature:explore"))
     implementation(project(":feature:favorites"))
     implementation(project(":feature:displayimage"))
+    implementation(project(":feature:artworkdetail"))
 
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

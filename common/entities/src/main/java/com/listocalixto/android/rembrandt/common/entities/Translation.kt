@@ -1,14 +1,13 @@
 package com.listocalixto.android.rembrandt.common.entities
 
-data class Translation(
-    val category: String,
-    val title: String,
-    val content: String,
-) {
+typealias key = String
+typealias translation = String
 
-    sealed class Exception(override val message: String?) : kotlin.Exception(message) {
-        object TargetLanguageNotAvailable : Exception(
-            "The language requested is not available to translate.",
-        )
-    }
+data class Translation(
+    val id: String,
+    val keysAndTranslations: Map<key, translation>,
+) {
+    object TargetLanguageNotAvailableException : Exception(
+        "The language requested is not available to translate.",
+    )
 }

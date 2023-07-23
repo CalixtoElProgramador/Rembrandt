@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt.core.domain.usecase
 import javax.inject.Inject
 
 class GetTranslationByArtworkUseCase @Inject constructor(
-    private val translateText: TranslateTextUseCase,
+    private val translateText: GetTranslationById,
 ) {
     /*suspend operator fun invoke(
         artwork: Artwork,

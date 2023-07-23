@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:name="com.listocalixto.android.rembrandt.feature.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home" />
 
-    <include app:graph="@navigation/display_image_fragment_graph" />
-
     <action
         android:id="@+id/show_artworkDetail"
-        app:destination="@id/display_image_fragment_graph" />
+        app:destination="@id/artwork_detail_graph" />
+
+    <include app:graph="@navigation/artwork_detail_graph" />
 
 </navigation>

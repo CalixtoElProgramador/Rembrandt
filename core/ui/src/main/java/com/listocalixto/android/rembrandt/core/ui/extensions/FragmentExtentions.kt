@@ -36,7 +36,6 @@ import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.All
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.DifferentContainerColors
 import com.listocalixto.android.rembrandt.core.ui.utility.SnackbarDuration
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.isDarkMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

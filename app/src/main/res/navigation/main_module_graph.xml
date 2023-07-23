@@ -17,7 +17,7 @@
 
     <!--<fragment
         android:id="@+id/artworkDetailFragment"
-        android:name="com.listocalixto.android.rembrandt.presentation.ui.main.detail.artwork.ArtworkDetailFragment"
+        android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment"
         android:label="ArtworkDetailFragment"
         tools:layout="@layout/fragment_artwork_detail">
         <action

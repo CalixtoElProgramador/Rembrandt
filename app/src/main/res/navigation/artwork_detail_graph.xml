@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/artwork_detail_graph"
+    app:startDestination="@id/artworkDetailFragment">
+
+    <action
+        android:id="@+id/show_artworkDetail"
+        app:destination="@id/artworkDetailFragment" />
+
+    <fragment
+        android:id="@+id/artworkDetailFragment"
+        android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment"
+        android:label="ArtworkDetailFragment"
+        tools:layout="@layout/fragment_artwork_detail" >
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="previousImageMemoryKey"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="showEnterAnimations"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="previousImageAmbientColor"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_artworkDetailFragment_self"
+            app:destination="@id/artworkDetailFragment" />
+    </fragment>
+
+</navigation>

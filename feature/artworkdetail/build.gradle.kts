@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":data:artwork"))
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.fragment)
+    implementation(libs.touch.image.view)
 }
