@@ -1,8 +1,11 @@
 package com.listocalixto.android.rembrandt.feature.artworkdetail
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import com.listocalixto.android.rembrandt.common.entities.Manifest
 import com.listocalixto.android.rembrandt.common.entities.composite.ArtworkUser
+import com.listocalixto.android.rembrandt.core.ui.R.string.frag_artwork_detail_no_description_available
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
 data class ArtworkDetailUiState(
@@ -23,19 +26,31 @@ data class ArtworkDetailUiState(
     val artworkId: Long = -1,
     val imageAmbientColor: Int = Color.TRANSPARENT,
     private val artworkUser: ArtworkUser? = null,
+    private val manifest: Manifest? = null,
 ) {
     val imageUrl: String = artworkUser?.imageUrl.orEmpty()
-    val isFavorite: Boolean = artworkUser?.isFavorite ?: false
+    val isFavorite: Boolean = artworkUser?.isFavorite.orFalse()
     val category: String = artworkUser?.categoryTitleDisplay.orEmpty()
     val title: String = artworkUser?.title.orEmpty()
     val artistName: String = artworkUser?.artistDisplay.orEmpty()
     val alternativeText: String = artworkUser?.thumbnail?.altText.orEmpty()
-    val imageAmbientGradient = GradientDrawable(
+    val imageAmbientGradient: Drawable = getImageAmbientGradient()
+    val shouldStartFragmentTransition: Boolean = artworkUser != null
+    val description: UiText = getDescriptionFromManifest(manifest)
+
+    private fun Boolean?.orFalse(): Boolean = this ?: false
+
+    private fun getImageAmbientGradient() = GradientDrawable(
         GradientDrawable.Orientation.TOP_BOTTOM,
         intArrayOf(imageAmbientColor, 0x00FFFFF),
     ).also { it.cornerRadius = 0f }
-    val shouldStartFragmentTransition: Boolean = artworkUser != null
-    val description: UiText? = null
+
+    private fun getDescriptionFromManifest(manifest: Manifest?) =
+        if (manifest != null) {
+            UiText.StringValue(manifest.description)
+        } else {
+            UiText.StringResource(frag_artwork_detail_no_description_available)
+        }
 
     /*val isTranslationDisplayed: Boolean = *//*translate && artwork?.translation != null*//* false
     val imageUrl: String = artwork?.imageUrl ?: EMPTY

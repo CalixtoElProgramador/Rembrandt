@@ -10,6 +10,7 @@ import com.listocalixto.android.rembrandt.common.entities.utility.Recommendation
 import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameArtworkType
 import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameCategory
 import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameGallery
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetManifestByArtworkIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveArtworkUserByIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState
@@ -24,6 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -36,6 +38,7 @@ import com.listocalixto.android.rembrandt.core.ui.R as Rui
 class ArtworkDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeArtworkUserById: ObserveArtworkUserByIdUseCase,
+    getManifestByArtworkId: GetManifestByArtworkIdUseCase,
     private val toggleFavoriteArtworkById: ToggleFavoriteArtworkByIdUseCase,
 ) : ViewModel() {
 
@@ -60,13 +63,7 @@ class ArtworkDetailViewModel @Inject constructor(
     init {
         getNavigationArguments(savedStateHandle).run {
             setArgumentsInTheUiState(this)
-            observeArtworkUserById(artworkId).catch { throwable ->
-                _uiState.update {
-                    it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
-                }
-            }.onEach { artworkUser ->
-                _uiState.update { it.copy(artworkUser = artworkUser) }
-            }.launchIn(viewModelScope)
+            getArtworkDetailData(artworkId, observeArtworkUserById, getManifestByArtworkId)
         }
 
         /*viewModelScope.launch(viewModelDispatcher) {
@@ -100,6 +97,34 @@ class ArtworkDetailViewModel @Inject constructor(
                 }*//*
             }
         }*/
+    }
+
+    private fun getArtworkDetailData(
+        artworkId: Long,
+        observeArtworkUserById: ObserveArtworkUserByIdUseCase,
+        getManifestByArtworkId: GetManifestByArtworkIdUseCase,
+    ) {
+        viewModelScope.launch(viewModelDispatcher) {
+            launch {
+                observeArtworkUserById(artworkId).catch { throwable ->
+                    _uiState.update {
+                        it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+                    }
+                }.onEach { artworkUser ->
+                    _uiState.update { it.copy(artworkUser = artworkUser) }
+                }.launchIn(this)
+            }
+
+            launch {
+                flow { emit(getManifestByArtworkId(artworkId)) }.catch { throwable ->
+                    _uiState.update {
+                        it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+                    }
+                }.onEach { manifest ->
+                    _uiState.update { it.copy(manifest = manifest) }
+                }.launchIn(this)
+            }
+        }
     }
 
     private fun setArgumentsInTheUiState(args: ArtworkDetailFragmentArgs) {

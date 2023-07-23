@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
-import com.listocalixto.android.rembrandt.feature.artworkdetail.content.ArtworkContentPage
+import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.core.ui.R as Rui

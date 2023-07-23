@@ -216,7 +216,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textNameArtist" />
 
-                <!--<androidx.fragment.app.FragmentContainerView
+                <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/fragmentContent"
                     android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.content.ArtworkContentFragment"
                     android:layout_width="0dp"
@@ -236,7 +236,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fragmentContent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <!-- <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelRecommended"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

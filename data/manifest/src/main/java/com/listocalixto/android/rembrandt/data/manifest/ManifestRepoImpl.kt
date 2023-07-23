@@ -16,9 +16,9 @@ internal class ManifestRepoImpl @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : ManifestRepo {
 
-    override suspend fun getManifestByArtworkId(id: Long): Manifest {
-        return localSource.getManifestById(id.toString()) ?: withContext(ioDispatcher) {
-            remoteSource.getManifestByArtworkId(id).also {
+    override suspend fun getManifestByArtworkId(artworkId: Long, manifestId: String): Manifest {
+        return localSource.getManifestById(manifestId) ?: withContext(ioDispatcher) {
+            remoteSource.getManifestByArtworkId(artworkId).also {
                 localSource.insertManifest(it)
             }
         }

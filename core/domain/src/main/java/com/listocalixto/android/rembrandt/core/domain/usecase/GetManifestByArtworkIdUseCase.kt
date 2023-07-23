@@ -6,8 +6,10 @@ import javax.inject.Inject
 
 class GetManifestByArtworkIdUseCase @Inject constructor(
     private val manifestRepo: ManifestRepo,
+    private val getManifestIdByArtworkId: GetManifestIdByArtworkIdUseCase,
 ) {
     suspend operator fun invoke(id: Long): Manifest {
-        return manifestRepo.getManifestByArtworkId(id)
+        val manifestId: String = getManifestIdByArtworkId(id)
+        return manifestRepo.getManifestByArtworkId(artworkId = id, manifestId = manifestId)
     }
 }

@@ -8,7 +8,7 @@ import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkCharacteristicsBinding as Binding
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
-import com.listocalixto.android.rembrandt.feature.artworkdetail.content.ArtworkContentPage
+import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
 
 class ArtworkCharacteristicsFragment :
     Fragment(R.layout.fragment_artwork_characteristics),

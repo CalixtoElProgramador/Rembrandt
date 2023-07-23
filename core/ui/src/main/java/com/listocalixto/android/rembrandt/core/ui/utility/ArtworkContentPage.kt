@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.feature.artworkdetail.content
+package com.listocalixto.android.rembrandt.core.ui.utility
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
