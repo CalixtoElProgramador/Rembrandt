@@ -2,6 +2,9 @@ package com.listocalixto.android.rembrandt.common.entities.composite
 
 import com.listocalixto.android.rembrandt.common.entities.Manifest
 import com.listocalixto.android.rembrandt.common.entities.Translation
+import com.listocalixto.android.rembrandt.common.entities.Translation.Companion.CATEGORY_TRANSLATION_KEY
+import com.listocalixto.android.rembrandt.common.entities.Translation.Companion.DESCRIPTION_TRANSLATION_KEY
+import com.listocalixto.android.rembrandt.common.entities.Translation.Companion.TITLE_TRANSLATION_KEY
 import com.listocalixto.android.rembrandt.common.entities.model.Color
 import com.listocalixto.android.rembrandt.common.entities.model.Thumbnail
 import com.listocalixto.android.rembrandt.common.entities.utility.Constants.EMPTY
@@ -57,7 +60,7 @@ data class ArtworkManifestTranslationUser internal constructor(
         categoryIds = artworkUser.categoryIds,
         categoryTitleDisplay = artworkUser.categoryTitleDisplay,
         categoryTitleDisplayTranslated = translation?.keysAndTranslations?.getOrDefault(
-            CATEGORY_TITLE_DISPLAY_TRANSLATION_KEY,
+            CATEGORY_TRANSLATION_KEY,
             EMPTY,
         ),
         categoryTitles = artworkUser.categoryTitles,
@@ -93,10 +96,4 @@ data class ArtworkManifestTranslationUser internal constructor(
             EMPTY,
         ),
     )
-
-    companion object {
-        const val CATEGORY_TITLE_DISPLAY_TRANSLATION_KEY = "CATEGORY_TITLE_DISPLAY_TRANSLATION_KEY"
-        const val DESCRIPTION_TRANSLATION_KEY = "DESCRIPTION_TRANSLATION_KEY"
-        const val TITLE_TRANSLATION_KEY = "TITLE_TRANSLATION_KEY"
-    }
 }

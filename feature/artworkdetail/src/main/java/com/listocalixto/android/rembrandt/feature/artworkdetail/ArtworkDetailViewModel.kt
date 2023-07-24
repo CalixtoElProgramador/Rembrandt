@@ -4,42 +4,53 @@ import android.graphics.Color.TRANSPARENT
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.listocalixto.android.rembrandt.common.entities.Artwork
-import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType
-import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameArtist
-import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameArtworkType
-import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameCategory
-import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameGallery
+import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
+import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
+import com.listocalixto.android.rembrandt.common.entities.Translation
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetKeysAndTranslationRequestsForArtworkUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.GetManifestByArtworkIdUseCase
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetRecommendedArtworksByArtworkIdkUseCase
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetTranslationByArtworkIdUseCase
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetTranslationsUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveArtworkUserByIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
-import com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState
+import com.listocalixto.android.rembrandt.core.domain.utility.TranslationFromType.Artwork
+import com.listocalixto.android.rembrandt.core.ui.R.string.frag_artwork_detail_err_translation_not_available
+import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.AMBIENT_COLOR_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.SHOW_ENTER_ANIMATIONS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.listocalixto.android.rembrandt.core.ui.R as Rui
 
 @HiltViewModel
 class ArtworkDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeArtworkUserById: ObserveArtworkUserByIdUseCase,
     getManifestByArtworkId: GetManifestByArtworkIdUseCase,
+    getRecommendedArtworksByArtworkId: GetRecommendedArtworksByArtworkIdkUseCase,
+    getTranslationByArtworkId: GetTranslationByArtworkIdUseCase,
     private val toggleFavoriteArtworkById: ToggleFavoriteArtworkByIdUseCase,
+    private val getKeysAndTranslationRequestsForArtwork: GetKeysAndTranslationRequestsForArtworkUseCase,
+    private val getTranslations: GetTranslationsUseCase,
+    @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ArtworkDetailUiState())
@@ -50,8 +61,7 @@ class ArtworkDetailViewModel @Inject constructor(
     )
     private val viewModelDispatcher = viewModelScope.coroutineContext + Dispatchers.Main
 
-    private var updateArtworkJob: Job? = null
-    private var translateArtworkJob: Job? = null
+    private var translateJob: Job? = null
 
     private data class ArtworkDetailFragmentArgs(
         val artworkId: Long,
@@ -63,46 +73,22 @@ class ArtworkDetailViewModel @Inject constructor(
     init {
         getNavigationArguments(savedStateHandle).run {
             setArgumentsInTheUiState(this)
-            getArtworkDetailData(artworkId, observeArtworkUserById, getManifestByArtworkId)
+            getArtworkDetailData(
+                artworkId,
+                observeArtworkUserById,
+                getManifestByArtworkId,
+                getRecommendedArtworksByArtworkId,
+                getTranslationByArtworkId,
+            )
         }
-
-        /*viewModelScope.launch(viewModelDispatcher) {
-            with(savedStateHandle) {
-                *//*artworkIdFlow = getStateFlow(ARTWORK_ID_KEY, ARTWORK_ID_DEFAULT_VALUE)
-                memoryCacheKeyFlow = getStateFlow(MEMORY_CACHE_KEY_ID_KEY, EMPTY)
-                displayInitialAnimations = getStateFlow(DISPLAY_INITIAL_ANIMATIONS_KEY, true)
-                gradientColor = getStateFlow(GRADIENT_COLOR_KEY, Color.TRANSPARENT)
-                artworkIdFlow.zip(memoryCacheKeyFlow) { artworkId, memoryCacheKey ->
-                    ArtworkDetailFragmentArgs(
-                        gradientColor = Color.TRANSPARENT,
-                        artworkId = artworkId,
-                        memoryCacheKey = memoryCacheKey,
-                    )
-                }.zip(displayInitialAnimations) { args, displayInitialAnimations ->
-                    args.copy(displayInitialAnimations = displayInitialAnimations)
-                }.zip(gradientColor) { args, gradientColor ->
-                    args.copy(gradientColor = gradientColor)
-                }.collect { args ->
-                    _uiState.update {
-                        it.copy(
-                            memoryCacheKey = args.memoryCacheKey,
-                            initialAnimationsDisplayed = !args.displayInitialAnimations,
-                            gradientColor = args.gradientColor,
-                        )
-                    }
-                    if (_uiState.value.initialAnimationsDisplayed.not()) {
-                        displayInitialAnimations()
-                    }
-                    setupContentByArtworkId(args.artworkId)
-                }*//*
-            }
-        }*/
     }
 
     private fun getArtworkDetailData(
         artworkId: Long,
         observeArtworkUserById: ObserveArtworkUserByIdUseCase,
         getManifestByArtworkId: GetManifestByArtworkIdUseCase,
+        getRecommendedArtworksByArtworkId: GetRecommendedArtworksByArtworkIdkUseCase,
+        getTranslationByArtworkId: GetTranslationByArtworkIdUseCase,
     ) {
         viewModelScope.launch(viewModelDispatcher) {
             launch {
@@ -116,7 +102,9 @@ class ArtworkDetailViewModel @Inject constructor(
             }
 
             launch {
-                flow { emit(getManifestByArtworkId(artworkId)) }.catch { throwable ->
+                flow {
+                    emit(getManifestByArtworkId(artworkId))
+                }.catch { throwable ->
                     _uiState.update {
                         it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
                     }
@@ -124,6 +112,104 @@ class ArtworkDetailViewModel @Inject constructor(
                     _uiState.update { it.copy(manifest = manifest) }
                 }.launchIn(this)
             }
+
+            launch {
+                flow {
+                    emit(getRecommendedArtworksByArtworkId(artworkId))
+                }.flowOn(defaultDispatcher).catch { throwable ->
+                    _uiState.update {
+                        it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+                    }
+                }.map {
+                    it.map { (artwork, recommendationType) ->
+                        RecommendedArtworksUiState(artwork, recommendationType)
+                    }
+                }.onEach { artworkRecommendedUiStates ->
+                    _uiState.update { it.copy(recommendedArtworks = artworkRecommendedUiStates) }
+                }.launchIn(this)
+            }
+
+            launch {
+                flow {
+                    emit(getTranslationByArtworkId(artworkId))
+                }.catch { throwable ->
+                    catchTranslationException(throwable)
+                }.onEach { translation ->
+                    _uiState.update {
+                        it.copy(
+                            translation = translation,
+                            shouldShowOriginalLanguage = translation == null,
+                        )
+                    }
+                }.launchIn(this)
+            }
+        }
+    }
+
+    private fun catchTranslationException(throwable: Throwable) {
+        if (throwable is Translation.TargetLanguageNotAvailableException) {
+            val errorMessageRes = frag_artwork_detail_err_translation_not_available
+            val errorMessageUiText = UiText.StringResource(errorMessageRes)
+            _uiState.update { it.copy(errorMessage = errorMessageUiText) }
+        } else {
+            _uiState.update {
+                it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+            }
+        }
+    }
+
+    fun onTranslateClick() {
+        val isTranslationAvailable = _uiState.value.isTranslationAvailable
+        if (isTranslationAvailable) {
+            viewModelScope.launch {
+                _uiState.update { it.copy(triggerTranslationAnimation = Unit) }
+                delay(200)
+                _uiState.update {
+                    it.copy(
+                        shouldShowOriginalLanguage = !it.shouldShowOriginalLanguage,
+                        triggerTranslationAnimation = null,
+                    )
+                }
+            }
+        } else {
+            requestTranslations()
+        }
+    }
+
+    private fun requestTranslations() {
+        if (translateJob != null) return
+        val category = _uiState.value.category
+        val title = _uiState.value.title
+        val artistDisplay = _uiState.value.artistDisplay
+        val description = _uiState.value.description
+        val keysAndTranslationRequests = getKeysAndTranslationRequestsForArtwork(
+            category,
+            title,
+            artistDisplay,
+            description,
+        )
+        val artworkId = _uiState.value.artworkId
+        translateJob = viewModelScope.launch(viewModelDispatcher) {
+            _uiState.update { it.copy(isLoadingTranslation = true) }
+            flow {
+                emit(getTranslations(artworkId, Artwork, keysAndTranslationRequests))
+            }.catch { throwable ->
+                _uiState.update {
+                    it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+                }
+            }.onEach { translation ->
+                _uiState.update { it.copy(triggerTranslationAnimation = Unit) }
+                delay(200)
+                _uiState.update {
+                    it.copy(
+                        translation = translation,
+                        shouldShowOriginalLanguage = false,
+                        isLoadingTranslation = false,
+                        triggerTranslationAnimation = null,
+                    )
+                }
+                translateJob = null
+            }.launchIn(this)
         }
     }
 
@@ -131,9 +217,10 @@ class ArtworkDetailViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 imageMemoryCacheKey = args.imageMemoryCacheKey,
-                shouldShowEnterAnimations = args.shouldShowEnterAnimations,
                 imageAmbientColor = args.imageAmbientColor,
                 artworkId = args.artworkId,
+                triggerEnterAnimations = if (args.shouldShowEnterAnimations) Unit else null,
+                wereEnterAnimationsShown = !args.shouldShowEnterAnimations,
             )
         }
     }
@@ -149,14 +236,11 @@ class ArtworkDetailViewModel @Inject constructor(
         }
     }
 
-    fun enterAnimationsShowed() {
-        _uiState.update { it.copy(shouldShowEnterAnimations = false) }
-    }
-
     private fun getNavigationArguments(savedStateHandle: SavedStateHandle): ArtworkDetailFragmentArgs {
         val artworkId: Long = savedStateHandle[ARTWORK_ID_KEY] ?: -1
         val imageMemoryCacheKey: String? = savedStateHandle[MEMORY_CACHE_KEY]
-        val shouldShowEnterAnimations: Boolean = savedStateHandle[SHOW_ENTER_ANIMATIONS] ?: false
+        val shouldShowEnterAnimations: Boolean =
+            savedStateHandle[SHOW_ENTER_ANIMATIONS] ?: false
         val imageAmbientColor: Int = savedStateHandle[AMBIENT_COLOR_KEY] ?: TRANSPARENT
         return ArtworkDetailFragmentArgs(
             artworkId = artworkId,
@@ -166,157 +250,12 @@ class ArtworkDetailViewModel @Inject constructor(
         )
     }
 
-    /*fun onEvent(event: ArtworkDetailUiEvent): Unit = when (event) {
-        SaveCurrentArtworkId -> {
-            savedStateHandle[ARTWORK_ID_KEY] =
-                _uiState.value.artwork?.id ?: ARTWORK_ID_DEFAULT_VALUE
-        }
-
-        OnChipFavorite -> Unit.apply {
-            if (updateArtworkJob != null) return@apply
-            updateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
-                val currentArtwork = _uiState.value.artwork ?: run {
-                    updateArtworkJob = null
-                    return@launch
-                }
-                // useCases.updateArtwork(currentArtwork.copy(isFavorite = !currentArtwork.isFavorite))
-                updateArtworkJob = null
-            }
-        }
-
-        TranslateContent -> Unit.apply {
-            if (translateArtworkJob != null) return@apply
-            val artwork = _uiState.value.artwork ?: return@apply
-//            val translation = artwork.translation
-            *//*if (translation == null) {
-                translateArtworkJob = viewModelScope.launch(viewModelDispatcher) {
-                    _uiState.update { it.copy(loadingTranslation = true) }
-                    try {
-                        // val newTranslation = useCases.getTranslationByArtwork(artwork)
-                        _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
-                        delay(ANIMATION_REFRESH_DURATION)
-                        // useCases.setTranslationByArtwork(artwork, newTranslation)
-                    } catch (e: Translation.Exception) {
-                        when (e) {
-                            TargetLanguageNotAvailable -> {
-                                _uiState.update {
-                                    it.copy(
-                                        errorMessage = UiText.StringResource(
-                                            R.string.frag_artwork_detail_err_translation_not_available,
-                                        ),
-                                    )
-                                }
-                            }
-                        }
-                    } finally {
-                        translateArtworkJob = null
-                        _uiState.update { it.copy(loadingTranslation = false) }
-                    }
-                }
-            } else {
-                // Toggle translation.
-                viewModelScope.launch {
-                    _uiState.update { it.copy(triggerRefreshAnimation = Unit) }
-                    delay(ANIMATION_REFRESH_DURATION)
-                    _uiState.update { it.copy(translate = !it.translate) }
-                }
-            }*//*
-        }
-
-        *//*RefreshAnimationTriggered -> {
-            _uiState.update { it.copy(triggerRefreshAnimation = null) }
-        }
-
-        ErrorMessageTriggered -> {
-            _uiState.update { it.copy(errorMessage = null) }
-        }
-
-        InitialAnimationsDisplayed -> {
-            _uiState.update {
-                it.copy(
-                    initialAnimationsDisplayed = true,
-                    displayInitialAnimations = null,
-                )
-            }
-        }*//*
-    }*/
-
-    /*private fun displayInitialAnimations() {
-        viewModelScope.launch(Dispatchers.Default) {
-            delay(300)
-            _uiState.update { it.copy(displayInitialAnimations = Unit) }
-        }
-    }*/
-
-    private suspend fun setupContentByArtworkId(id: Long) {
-        /*useCases.observeArtworkWithManifest(id).catch {
-        }.collect { artwork ->
-            setupArtworkDetailScreen(artwork)
-            if (recommendationsHaveNotBeenInitialized()) {
-                fetchAndSetupRecommendedArtworks(artwork)
-            }
-        }*/
-    }
-
-    private fun fetchAndSetupRecommendedArtworks(artwork: Artwork) {
-        viewModelScope.launch(Dispatchers.Default) {
-            /*useCases.getRecommendedArtworksByArtwork(artwork).run {
-                setupRecommendedArtworks(artworksRecommended, recommendationTypes)
-            }*/
-        }
-    }
-
-    /*private fun recommendationsHaveNotBeenInitialized(): Boolean {
-        return _uiState.value.artworksRecommended == null
-    }*/
-
-    private fun setupRecommendedArtworks(
-        artworksRecommended: List<Artwork>,
-        recommendationTypes: List<RecommendationType>,
-    ) {
-        if (artworksRecommended.size != recommendationTypes.size) return
-        val recommendationsUiState = artworksRecommended.mapIndexed { index, artworkRecommended ->
-            ArtworkRecommendedUiState(
-                id = artworkRecommended.id,
-                imageUrl = artworkRecommended.imageUrl,
-                title = artworkRecommended.title,
-                reasonItWasRecommended = when (recommendationTypes[index]) {
-                    is SameArtist -> {
-                        Rui.string.reason_it_was_recommended_same_artist
-                    }
-
-                    is SameArtworkType -> {
-                        Rui.string.reason_it_was_recommended_same_artwork_type
-                    }
-
-                    is SameCategory -> {
-                        Rui.string.reason_it_was_recommended_same_category
-                    }
-
-                    is SameGallery -> {
-                        Rui.string.reason_it_was_recommended_same_gallery
-                    }
-                },
-            )
-        }
-        // _uiState.update { it.copy(artworksRecommended = recommendationsUiState) }
-    }
-
-    /*fun getHighQualityImageUrl(): String = useCases.getImageUrlUseCase(
-        imageId = _uiState.value.artwork?.imageId.orEmpty(),
-        qualityType = QualityImageType.ExtraHigh,
-    )*/
-
-    private fun setupArtworkDetailScreen(artwork: Artwork) {
-        /*_uiState.update {
+    fun enterAnimationsTriggered() {
+        _uiState.update {
             it.copy(
-                artwork = artwork.copy(
-                    imageUrl = useCases.getImageUrlUseCase(
-                        imageId = artwork.imageId,
-                        qualityType = QualityImageType.ExtraHigh,
-                    ),
-                ),
+                triggerEnterAnimations = null,
+                wereEnterAnimationsShown = true,
             )
-        }*/
+        }
     }
 }

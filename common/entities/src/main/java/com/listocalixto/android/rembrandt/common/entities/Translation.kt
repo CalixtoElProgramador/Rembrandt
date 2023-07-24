@@ -10,4 +10,10 @@ data class Translation(
     object TargetLanguageNotAvailableException : Exception(
         "The language requested is not available to translate.",
     )
+
+    companion object {
+        const val CATEGORY_TRANSLATION_KEY = "category"
+        const val DESCRIPTION_TRANSLATION_KEY = "description"
+        const val TITLE_TRANSLATION_KEY = "title"
+    }
 }

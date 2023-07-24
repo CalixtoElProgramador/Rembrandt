@@ -8,7 +8,16 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 
 abstract class PrincipalFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId) {
     @get:IdRes
-    abstract val navHostFragmentId: Int
+    abstract val navHostFragmentIdRes: Int
+
+    @get:IdRes
+    abstract val extendedFabIdRes: Int
+
+    @get:IdRes
+    abstract val linearProgressIdRes: Int
+
+    @get:IdRes
+    abstract val appBarIdRes: Int
     abstract fun navigateToArtworkDetail(
         artworkId: Long,
         imageMemoryCacheKey: String?,

@@ -2,7 +2,6 @@ package com.listocalixto.android.rembrandt.feature.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -11,8 +10,8 @@ import com.listocalixto.android.rembrandt.core.ui.adapter.ArtworkUserAdapter
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyHoldExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
+import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
-import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.home.databinding.FragmentHomeBinding as Binding
@@ -20,7 +19,7 @@ import com.listocalixto.android.rembrandt.feature.home.databinding.FragmentHomeB
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels()
-    private var navViewModel: PrincipalViewModel? = null
+
     private var adapter: ArtworkUserAdapter? = null
     private var binding: Binding? = null
 
@@ -30,20 +29,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyFadeThroughEnterTransition()
-        navViewModel?.setLoading(isLoading = false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
         binding = Binding.bind(view)
         binding?.run {
             setupBinding()
             setupRecyclerView()
             // initExteriorViews()
             collectUiState()
-            navViewModel?.uiState?.value?.isLoading
+            startTransition()
         }
     }
 

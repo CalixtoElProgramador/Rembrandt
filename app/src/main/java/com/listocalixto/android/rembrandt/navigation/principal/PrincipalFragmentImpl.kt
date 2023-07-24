@@ -24,6 +24,8 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.databinding.FragmentPrincipalBinding
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragmentArgs
+import com.listocalixto.android.rembrandt.feature.explore.ExploreFragment
+import com.listocalixto.android.rembrandt.feature.favorites.FavoritesFragment
 import com.listocalixto.android.rembrandt.feature.home.HomeFragment
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.colorize
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.gone
@@ -44,15 +46,19 @@ internal class PrincipalFragmentImpl :
             ?.fragments
             ?.first()
 
-    private val homeFragment: Fragment?
+    private val topLevelFragment: Fragment?
         get() = currentNavigationFragment as? HomeFragment
+            ?: currentNavigationFragment as? ExploreFragment
+            ?: currentNavigationFragment as? FavoritesFragment
 
     private var binding: FragmentPrincipalBinding? = null
     private var appBarDefaultBackground: Drawable? = null
     private var lastGradientColor: Int? = null
 
-    override val navHostFragmentId: Int
-        get() = binding?.navHostMainFragment?.id ?: -1
+    override val navHostFragmentIdRes: Int = R.id.navHostMainFragment
+    override val extendedFabIdRes: Int = R.id.extendedFab
+    override val linearProgressIdRes: Int = R.id.linearProgress
+    override val appBarIdRes: Int = R.id.appBar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -126,7 +132,7 @@ internal class PrincipalFragmentImpl :
                 R.id.explore_graph -> {
                     extendedFab.show()
                     appBar.background = appBarDefaultBackground
-                    homeFragment?.apply {
+                    topLevelFragment?.apply {
                         applyFadeThroughExitTransition()
                     }
                 }
@@ -134,6 +140,9 @@ internal class PrincipalFragmentImpl :
                 R.id.homeFragment -> {
                     appBar.background = appBarDefaultBackground
                     extendedFab.hide()
+                    topLevelFragment?.apply {
+                        applyFadeThroughExitTransition()
+                    }
                 }
 
                 R.id.artworkDetailFragment -> {
@@ -174,7 +183,7 @@ internal class PrincipalFragmentImpl :
                 R.id.favoritesFragment -> {
                     extendedFab.hide()
                     appBar.background = appBarDefaultBackground
-                    homeFragment?.apply {
+                    topLevelFragment?.apply {
                         applyFadeThroughExitTransition()
                     }
                 }

@@ -8,8 +8,8 @@ import com.listocalixto.android.rembrandt.common.entities.utility.Recommendation
 import com.listocalixto.android.rembrandt.common.entities.utility.RecommendationType.SameGallery
 import javax.inject.Inject
 
-class GetRecommendedArtworkByRecommendationTypeUseCase @Inject constructor() {
-    operator fun invoke(type: RecommendationType, artworks: List<Artwork>): Artwork? {
+class GetArtworkByRecommendationTypeUseCase @Inject constructor() {
+    operator fun invoke(type: RecommendationType, artworks: Set<Artwork>): Artwork? {
         val recommendations = when (type) {
             is SameArtist -> {
                 artworks.filter { type.id == it.artistId.toString() }

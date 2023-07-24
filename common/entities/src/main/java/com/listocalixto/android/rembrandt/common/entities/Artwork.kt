@@ -1,5 +1,6 @@
 package com.listocalixto.android.rembrandt.common.entities
 
+import com.listocalixto.android.rembrandt.common.entities.composite.ArtworkUser
 import com.listocalixto.android.rembrandt.common.entities.model.Color
 import com.listocalixto.android.rembrandt.common.entities.model.Thumbnail
 
@@ -31,4 +32,34 @@ data class Artwork(
     val termTitles: List<String>,
     val thumbnail: Thumbnail,
     val title: String,
-)
+) {
+    constructor(artworkUser: ArtworkUser) : this(
+        artistDisplay = artworkUser.artistDisplay,
+        artistId = artworkUser.artistId,
+        artistTitle = artworkUser.artistTitle,
+        artworkTypeId = artworkUser.artworkTypeId,
+        artworkTypeTitle = artworkUser.artworkTypeTitle,
+        categoryIds = artworkUser.categoryIds,
+        categoryTitles = artworkUser.categoryTitles,
+        color = artworkUser.color,
+        creditLine = artworkUser.creditLine,
+        dateDisplay = artworkUser.dateDisplay,
+        dateEnd = artworkUser.dateEnd,
+        dateStart = artworkUser.dateStart,
+        dimensions = artworkUser.dimensions,
+        galleryId = artworkUser.galleryId,
+        galleryTitle = artworkUser.galleryTitle,
+        hasNotBeenViewedMuch = artworkUser.hasNotBeenViewedMuch,
+        id = artworkUser.id,
+        imageId = artworkUser.imageId,
+        imageUrl = artworkUser.imageUrl,
+        latitude = artworkUser.latitude,
+        longitude = artworkUser.longitude,
+        mediumDisplay = artworkUser.mediumDisplay,
+        placeOfOrigin = artworkUser.placeOfOrigin,
+        score = artworkUser.score,
+        termTitles = artworkUser.termTitles,
+        thumbnail = artworkUser.thumbnail,
+        title = artworkUser.title,
+    )
+}

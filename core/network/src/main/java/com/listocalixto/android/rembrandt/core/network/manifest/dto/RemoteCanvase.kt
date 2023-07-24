@@ -1,13 +1,12 @@
 package com.listocalixto.android.rembrandt.core.network.manifest.dto
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemoteCanvase(
     @SerialName("height")
-    val height: Int,
+    val height: Int = -1,
     @SerialName("@id")
     val id: String,
     @SerialName("images")
@@ -17,5 +16,5 @@ data class RemoteCanvase(
     @SerialName("@type")
     val type: String,
     @SerialName("width")
-    val width: Int
+    val width: Int = -1,
 )

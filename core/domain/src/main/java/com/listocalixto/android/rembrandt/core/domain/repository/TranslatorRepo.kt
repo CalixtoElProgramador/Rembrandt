@@ -7,7 +7,7 @@ interface TranslatorRepo {
     suspend fun getTranslationById(id: String): Translation?
     suspend fun getTranslations(
         id: String,
-        keysAndRequests: Set<Pair<String, String>>,
+        keysAndRequests: Map<String, String?>,
         targetLanguage: String,
     ): Translation
 }

@@ -14,6 +14,7 @@ import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.feature.favorites.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
+import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
 
 @AndroidEntryPoint
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
@@ -33,12 +34,14 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
         binding = FragmentFavoritesBinding.bind(view)
         binding?.run {
             lifecycleOwner = this@FavoritesFragment.viewLifecycleOwner
             favoritesViewModel = viewModel
             setupRecyclerView()
             collectUiState()
+            startTransition()
         }
     }
 

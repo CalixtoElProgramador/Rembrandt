@@ -7,7 +7,7 @@
 
         <variable
             name="artwork"
-            type="com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState" />
+            type="com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState" />
 
     </data>
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_0_25"
                 android:alpha="?attr/emphasisMediumAlpha"
-                android:text="@{context.getString(artwork.reasonItWasRecommended)}"
+                android:text="@{context.getString(artwork.reasonItWasRecommendedRes)}"
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 app:layout_constraintEnd_toEndOf="@id/textTitle"
                 app:layout_constraintStart_toStartOf="@id/textTitle"

@@ -22,7 +22,7 @@
         android:padding="@dimen/grid_2"
         android:text="@string/hello_blank_fragment"
         android:textAppearance="?attr/textAppearanceBodySmall"
-        app:uiText="@{artworkDetailViewModel.uiState.description}"
+        app:uiText="@{artworkDetailViewModel.uiState.descriptionUiText}"
         tools:context=".feature.artworkdetail.content.page.ArtworkDescriptionFragment"
         tools:text="@tools:sample/lorem/random" />
 

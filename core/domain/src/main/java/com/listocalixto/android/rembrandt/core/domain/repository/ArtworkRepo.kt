@@ -11,7 +11,8 @@ interface ArtworkRepo {
             filterFavoriteIds = null,
         ),
     ): Flow<List<Artwork>>
-
+    suspend fun getAllArtworks(): Set<Artwork>
     fun observeArtworkById(id: Long): Flow<Artwork>
+    suspend fun getArtworkById(id: Long): Artwork?
     suspend fun deleteAllArtworks()
 }

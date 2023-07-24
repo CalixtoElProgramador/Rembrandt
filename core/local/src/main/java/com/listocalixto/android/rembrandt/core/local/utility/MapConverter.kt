@@ -8,7 +8,7 @@ class MapConverter {
     @TypeConverter
     fun stringToMap(value: String): Map<String, String> {
         return try {
-            Json.decodeFromString(value)
+            Json.decodeFromString(string = value)
         } catch (e: Exception) {
             emptyMap()
         }

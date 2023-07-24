@@ -31,11 +31,23 @@ internal class ArtworkRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllArtworks(): Set<Artwork> {
+        return withContext(ioDispatcher) {
+            localSource.getAllArtworks()
+        }
+    }
+
     override fun observeArtworkById(id: Long): Flow<Artwork> {
         return localSource.observeArtworkById(id).map { currentArtwork ->
             currentArtwork ?: withContext(ioDispatcher) {
                 remoteSource.getArtworkById(id).also { localSource.insertArtwork(it) }
             }
+        }
+    }
+
+    override suspend fun getArtworkById(id: Long): Artwork? {
+        return withContext(ioDispatcher) {
+            localSource.getArtworkById(id)
         }
     }
 

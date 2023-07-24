@@ -47,10 +47,11 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@{artworkDetailViewModel.uiState.imageAmbientGradient}"
-                    app:layout_constraintBottom_toTopOf="@id/divider"
+                    app:layout_constraintBottom_toTopOf="@id/fragmentContent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone" />
 
                 <com.ortiz.touchview.TouchImageView
                     android:id="@+id/image"
@@ -165,7 +166,6 @@
                     android:layout_marginTop="@dimen/grid_1"
                     android:alpha="?attr/emphasisMediumAlpha"
                     android:ellipsize="end"
-                    android:text="@{artworkDetailViewModel.uiState.category}"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
@@ -173,6 +173,7 @@
                     app:layout_constraintEnd_toEndOf="@id/image"
                     app:layout_constraintStart_toStartOf="@id/image"
                     app:layout_constraintTop_toBottomOf="@id/horizontalScroll"
+                    app:uiText="@{artworkDetailViewModel.uiState.categoryUiText}"
                     tools:maxLines="1"
                     tools:text="@tools:sample/lorem/random" />
 
@@ -182,12 +183,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_1"
                     android:alpha="?attr/emphasisHighAlpha"
-                    android:text="@{artworkDetailViewModel.uiState.title}"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceHeadlineMedium"
                     app:layout_constraintEnd_toEndOf="@id/textCategory"
                     app:layout_constraintStart_toStartOf="@id/textCategory"
                     app:layout_constraintTop_toBottomOf="@id/textCategory"
+                    app:uiText="@{artworkDetailViewModel.uiState.titleUiText}"
                     tools:maxLines="3"
                     tools:text="@tools:sample/lorem/random" />
 
@@ -197,13 +198,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_1"
                     android:alpha="?attr/emphasisMediumAlpha"
-                    android:text="@{artworkDetailViewModel.uiState.artistName}"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textColor="?attr/colorPrimary"
                     app:layout_constraintEnd_toEndOf="@id/textTitle"
                     app:layout_constraintStart_toStartOf="@id/textTitle"
                     app:layout_constraintTop_toBottomOf="@id/textTitle"
+                    app:uiText="@{artworkDetailViewModel.uiState.artistDisplayUiText}"
                     tools:text="Rembrandt" />
 
                 <com.google.android.material.divider.MaterialDivider
@@ -236,7 +237,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fragmentContent" />
 
-                <!-- <com.google.android.material.textview.MaterialTextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/labelRecommended"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -262,7 +263,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/labelRecommended"
                     app:spanCount="1"
-                    tools:listitem="@layout/view_artwork_recommended" />-->
+                    tools:listitem="@layout/view_artwork_recommended" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RemoteResource(
     @SerialName("height")
-    val height: Int,
+    val height: Int = -1,
     @SerialName("@id")
     val id: String,
     @SerialName("service")
@@ -15,5 +15,5 @@ data class RemoteResource(
     @SerialName("@type")
     val type: String,
     @SerialName("width")
-    val width: Int
+    val width: Int = -1
 )

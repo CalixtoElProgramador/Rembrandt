@@ -4,34 +4,34 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState
-import com.listocalixto.android.rembrandt.core.ui.viewholder.ArtworkRecommendedViewHolder
+import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
+import com.listocalixto.android.rembrandt.core.ui.viewholder.RecommendedArtworkViewHolder
 
-class ArtworkRecommendedAdapter(
+class RecommendedArtworkAdapter(
     private val onArtwork: (artworkId: Long, memoryCacheKey: String?, gradientColor: Int) -> Unit,
-) : ListAdapter<ArtworkRecommendedUiState, RecyclerView.ViewHolder>(ArtworkRecommendedDiffUtil) {
+) : ListAdapter<RecommendedArtworksUiState, RecyclerView.ViewHolder>(ArtworkRecommendedDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ArtworkRecommendedViewHolder.from(parent)
+        return RecommendedArtworkViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? ArtworkRecommendedViewHolder)?.apply {
+        (holder as? RecommendedArtworkViewHolder)?.apply {
             bind(getItem(position), onArtwork)
         }
     }
 
-    object ArtworkRecommendedDiffUtil : DiffUtil.ItemCallback<ArtworkRecommendedUiState>() {
+    object ArtworkRecommendedDiffUtil : DiffUtil.ItemCallback<RecommendedArtworksUiState>() {
         override fun areItemsTheSame(
-            oldItem: ArtworkRecommendedUiState,
-            newItem: ArtworkRecommendedUiState,
+            oldItem: RecommendedArtworksUiState,
+            newItem: RecommendedArtworksUiState,
         ): Boolean {
-            return oldItem.imageUrl == newItem.imageUrl
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: ArtworkRecommendedUiState,
-            newItem: ArtworkRecommendedUiState,
+            oldItem: RecommendedArtworksUiState,
+            newItem: RecommendedArtworksUiState,
         ): Boolean {
             return oldItem == newItem
         }

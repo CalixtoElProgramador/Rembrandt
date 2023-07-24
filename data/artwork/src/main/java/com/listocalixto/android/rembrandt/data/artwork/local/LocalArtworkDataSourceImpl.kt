@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 internal class LocalArtworkDataSourceImpl @Inject constructor(
     private val dao: ArtworkDao,
-    private val localArtworkToEntity: LocalArtworkToEntity,
+    private val mapper: LocalArtworkToEntity,
     @Dispatcher(Default) private val defaultDispatcher: CoroutineDispatcher,
 ) : LocalArtworkDataSource {
     override fun observeAllArtworks(query: ArtworkQuery): Flow<List<Artwork>> {
@@ -23,30 +23,46 @@ internal class LocalArtworkDataSourceImpl @Inject constructor(
             userFilterFavoriteArtworkIds = query.filterFavoriteIds != null,
             filterFavoriteArtworkIds = query.filterFavoriteIds ?: emptySet(),
         )
-        return localArtworks.map { localArtworkToEntity.map(it) }.flowOn(defaultDispatcher)
+        return localArtworks.map { mapper.map(it) }.flowOn(defaultDispatcher)
     }
 
     override fun observeArtworkById(id: Long): Flow<Artwork?> {
         val localArtwork = dao.observeArtworkById(id)
         return localArtwork.map {
             if (it.isNotEmpty()) {
-                localArtworkToEntity.map(it.first())
+                mapper.map(it.first())
             } else {
                 null
             }
         }.flowOn(defaultDispatcher)
     }
 
+    override suspend fun getAllArtworks(): Set<Artwork> {
+        val localArtworks = dao.getAllArtworks()
+        return withContext(defaultDispatcher) {
+            localArtworks.map {
+                mapper.map(it)
+            }.toSet()
+        }
+    }
+
+    override suspend fun getArtworkById(id: Long): Artwork? {
+        val localArtwork = dao.getArtworkById(id)
+        return localArtwork.firstOrNull()?.let {
+            withContext(defaultDispatcher) { mapper.map(it) }
+        }
+    }
+
     override suspend fun insertArtwork(artwork: Artwork) {
         val localArtwork = withContext(defaultDispatcher) {
-            localArtworkToEntity.reverseMap(artwork)
+            mapper.reverseMap(artwork)
         }
         dao.insertArtwork(localArtwork)
     }
 
     override suspend fun insertArtworks(artworks: List<Artwork>) {
         val localArtworks = withContext(defaultDispatcher) {
-            localArtworkToEntity.reverseMap(artworks)
+            mapper.reverseMap(artworks)
         }
         localArtworks.forEach { dao.insertArtwork(it) }
     }

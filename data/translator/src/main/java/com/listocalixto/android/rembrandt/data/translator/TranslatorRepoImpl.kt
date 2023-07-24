@@ -7,6 +7,8 @@ import com.listocalixto.android.rembrandt.core.domain.repository.TranslatorRepo
 import com.listocalixto.android.rembrandt.data.translator.local.LocalTranslatorDataSource
 import com.listocalixto.android.rembrandt.data.translator.remote.RemoteTranslatorDataSource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -26,20 +28,24 @@ internal class TranslatorRepoImpl @Inject constructor(
 
     override suspend fun getTranslations(
         id: String,
-        keysAndRequests: Set<Pair<String, String>>,
+        keysAndRequests: Map<String, String?>,
         targetLanguage: String,
     ): Translation {
         return localDataSource.getTranslationById(id = id) ?: run {
             val keysAndTranslations = mutableMapOf<String, String>()
+            val translatedTextsDeferred = mutableListOf<Deferred<String>>()
             withContext(ioDispatcher) {
-                keysAndRequests.forEach { pair ->
-                    val textTranslated = remoteDataSource.translateText(pair.second, targetLanguage)
-                    keysAndTranslations[pair.first] = textTranslated
+                keysAndRequests.values.forEach { text ->
+                    text?.let {
+                        val deferredText =
+                            async { remoteDataSource.translateText(text, targetLanguage) }
+                        translatedTextsDeferred.add(deferredText)
+                    }
                 }
-                Translation(
-                    id = id,
-                    keysAndTranslations = keysAndTranslations.toMap(),
-                ).also {
+                keysAndRequests.keys.forEachIndexed { index, key ->
+                    keysAndTranslations[key] = translatedTextsDeferred[index].await()
+                }
+                Translation(id = id, keysAndTranslations = keysAndTranslations).also {
                     localDataSource.insertTranslation(it)
                 }
             }

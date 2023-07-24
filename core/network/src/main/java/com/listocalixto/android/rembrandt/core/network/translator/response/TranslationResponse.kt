@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TranslationResponse(
     @SerialName("translations")
-    val translations: List<RemoteTranslation>,
+    val translations: List<RemoteTranslation> = emptyList(),
 )

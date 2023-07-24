@@ -19,7 +19,7 @@
     <string name="reason_it_was_recommended_same_artwork_type">El mismo tipo de obra</string>
     <string name="reason_it_was_recommended_same_category">Pertenece a la misma categoría</string>
     <string name="reason_it_was_recommended_same_gallery">De la misma galería</string>
-    <string name="frag_artwork_detail_no_description_available">Descripción no disponible.</string>
+    <string name="no_description_available">Descripción no disponible.</string>
     <string name="frag_artwork_detail_extended_fab_translate">Traducir</string>
     <string name="frag_artwork_detail_extended_fab_show_original">Original</string>
     <string name="frag_artwork_detail_err_translation_not_available">Traducción no disponible</string>

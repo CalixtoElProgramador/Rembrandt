@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.result
 import com.listocalixto.android.rembrandt.core.ui.databinding.ViewArtworkRecommendedBinding
 import com.listocalixto.android.rembrandt.core.ui.extensions.palette
-import com.listocalixto.android.rembrandt.core.ui.states.ArtworkRecommendedUiState
+import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 
-class ArtworkRecommendedViewHolder private constructor(
+class RecommendedArtworkViewHolder private constructor(
     val binding: ViewArtworkRecommendedBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     inline fun bind(
-        item: ArtworkRecommendedUiState,
+        item: RecommendedArtworksUiState,
         crossinline onArtwork: (artworkId: Long, memoryCacheKey: String?, gradientColor: Int) -> Unit,
     ) = binding.run {
         artwork = item
@@ -30,10 +30,10 @@ class ArtworkRecommendedViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): ArtworkRecommendedViewHolder {
+        fun from(parent: ViewGroup): RecommendedArtworkViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ViewArtworkRecommendedBinding.inflate(inflater, parent, false)
-            return ArtworkRecommendedViewHolder(binding)
+            return RecommendedArtworkViewHolder(binding)
         }
     }
 }

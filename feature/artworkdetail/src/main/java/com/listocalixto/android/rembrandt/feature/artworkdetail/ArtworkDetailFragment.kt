@@ -6,11 +6,10 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.res.Resources
 import android.graphics.PointF
-import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -20,7 +19,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.listocalixto.android.rembrandt.core.ui.adapter.ArtworkRecommendedAdapter
+import com.listocalixto.android.rembrandt.core.ui.adapter.RecommendedArtworkAdapter
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyContainerTransformEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughExitTransition
@@ -30,7 +29,11 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
+import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.EmphasisType
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.adjustSizeAccordingScroll
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.emphasizes
+import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.gone
 import com.listocalixto.android.rembrandt.presentation.utility.extentions.visible
 import com.ortiz.touchview.OnTouchCoordinatesListener
@@ -42,8 +45,8 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.Frag
 class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
 
     private val viewModel: ArtworkDetailViewModel by viewModels()
-    private val artworkRecommendedAdapter =
-        ArtworkRecommendedAdapter { artworkId, memoryCacheKey, gradientColor ->
+    private val recommendedArtworkAdapter =
+        RecommendedArtworkAdapter { artworkId, memoryCacheKey, gradientColor ->
             navigateToSelf(artworkId, memoryCacheKey, gradientColor)
         }
     private val chips = mutableListOf<Chip>()
@@ -62,13 +65,12 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         applyFadeThroughEnterTransition()
         principalFragment?.let {
             applyContainerTransformEnterTransition(
-                drawingViewIdRes = it.navHostFragmentId,
+                drawingViewIdRes = it.navHostFragmentIdRes,
                 colorContainerType = ColorContainerType.AllContainerColors(colorSurface),
             )
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
@@ -95,17 +97,16 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         chips.toList()
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun Binding.setupExtendedFab() {
-        extendedFab?.adjustSizeAccordingScroll(scrollContainer)
-        extendedFab?.setOnClickListener { requestTranslation() }
-    }
-
     private fun Binding.setupInternalViews() {
         lifecycleOwner = this@ArtworkDetailFragment.viewLifecycleOwner
         artworkDetailViewModel = viewModel
-        // listRecommended.adapter = artworkRecommendedAdapter
+        listRecommended.adapter = recommendedArtworkAdapter
         artworkDetailFragment = this@ArtworkDetailFragment
+        setupArtworkImageClick()
+        gradientView.isVisible = isDarkMode()
+    }
+
+    private fun FragmentArtworkDetailBinding.setupArtworkImageClick() {
         image.setOnTouchCoordinatesListener(object : OnTouchCoordinatesListener {
             override fun onTouchCoordinate(view: View, event: MotionEvent, bitmapPoint: PointF) {
                 if (event.action == MotionEvent.ACTION_UP) {
@@ -117,39 +118,29 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                 }
             }
         })
-        if (isDarkMode()) {
-            gradientView.visible()
-        } else {
-            gradientView.gone()
-        }
     }
 
     private fun initExternalViews() {
-        /*extendedFab = activity?.findViewById(R.id.extendedFab)
-        linearProgressIndicator = activity?.findViewById(R.id.linearProgress)
-        appBar = activity?.findViewById(R.id.appBar)*/
+        principalFragment?.let {
+            extendedFab = activity?.findViewById(it.extendedFabIdRes)
+            linearProgressIndicator = activity?.findViewById(it.linearProgressIdRes)
+            appBar = activity?.findViewById(it.appBarIdRes)
+        }
     }
 
-    private fun Binding.requestTranslation() {
-        /*val isTranslationLoading = viewModel.uiState.value.loadingTranslation
-        val stringRes = Rui.string.frag_artwork_detail_wait_until_translation_is_ready
-        if (isTranslationLoading) {
-            val snackbarMessage = UiText.StringResource(stringRes)
-            showSnackbar(root, snackbarMessage, duration = SHORT, anchorView = extendedFab)
-        } else {
-            viewModel.onEvent(TranslateContent)
-        }*/
+    private fun Binding.setupExtendedFab() {
+        extendedFab?.adjustSizeAccordingScroll(scrollContainer)
+        extendedFab?.setOnClickListener { viewModel.onTranslateClick() }
     }
 
     private fun navigateToSelf(artworkId: Long, memoryCacheKey: String?, gradientColor: Int) {
         applyFadeThroughExitTransition()
-        /*val directions = ArtworkDetailFragmentDirections.actionArtworkDetailFragmentSelf(
-            gradientColor = gradientColor,
+        principalFragment?.navigateToArtworkDetail(
             artworkId = artworkId,
-            memoryCacheKey = memoryCacheKey,
-            displayInitialAnimations = false,
+            imageMemoryCacheKey = memoryCacheKey,
+            shouldShowEnterAnimations = false,
+            imageAmbientColor = gradientColor,
         )
-        findNavController().navigate(directions)*/
     }
 
     fun navigateToDisplayArtwork(touchPositionX: Float, touchPositionY: Float, zoom: Float) {
@@ -172,48 +163,59 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
 
     private fun Binding.collectUiStateWithBinding() {
         collectFlowWithLifeCycle(viewModel.uiState) { state ->
-            val context = context ?: return@collectFlowWithLifeCycle
-            val resources = context.resources ?: return@collectFlowWithLifeCycle
             displayFragmentWHenArtworkIsAlreadyLoaded(state.shouldStartFragmentTransition)
             loadArtworkImage(state.imageUrl, state.imageMemoryCacheKey)
-            /*if (!state.shouldShowEnterAnimations) {
-                extendedFab?.show()
-                chips.forEach { chip ->
-                    chip.alpha = 1f
-                    chip.y = 0f
-                }
-            }*/
-            if (state.shouldShowEnterAnimations) {
-                extendedFab?.show()
-                showChipsAnimation(resources)
-            } else {
-                extendedFab?.show()
-                chips.forEach { chip ->
-                    chip.alpha = 1f
-                    chip.y = 0f
-                }
+            shouldShowEnterAnimations(state.triggerEnterAnimations, state.wereEnterAnimationsShown)
+            recommendedArtworkAdapter.submitList(state.recommendedArtworks)
+            setExtendedFabViewAccordingTranslationState(state.shouldShowOriginalLanguage)
+            coordinateAnimationsInTranslations(
+                state.isLoadingTranslation,
+                state.triggerTranslationAnimation,
+            )
+        }
+    }
+
+    private fun FragmentArtworkDetailBinding.coordinateAnimationsInTranslations(
+        loadingTranslation: Boolean,
+        triggerTranslationAnimation: Unit?,
+    ) {
+        if (loadingTranslation) {
+            linearProgressIndicator?.visible()
+            textCategory.emphasizes(EmphasisType.Disable)
+            textTitle.emphasizes(EmphasisType.Disable)
+            textNameArtist.emphasizes(EmphasisType.Disable)
+        }
+
+        if (triggerTranslationAnimation != null) {
+            linearProgressIndicator?.gone()
+            textCategory.fader(emphasisType = EmphasisType.Medium)
+            textTitle.fader(emphasisType = EmphasisType.High)
+            textNameArtist.fader(emphasisType = EmphasisType.Medium)
+        }
+    }
+
+    private fun setExtendedFabViewAccordingTranslationState(shouldShowOriginalLanguage: Boolean) {
+        extendedFab?.text = if (shouldShowOriginalLanguage) {
+            resources.getText(Rui.string.frag_artwork_detail_extended_fab_translate)
+        } else {
+            resources.getText(Rui.string.frag_artwork_detail_extended_fab_show_original)
+        }
+    }
+
+    private fun shouldShowEnterAnimations(
+        triggerEnterAnimations: Unit?,
+        wereEnterAnimationsShown: Boolean,
+    ) {
+        extendedFab?.show()
+        if (triggerEnterAnimations != null) {
+            extendedFab?.extend()
+            showChipsAnimation(resources)
+        }
+        if (wereEnterAnimationsShown) {
+            chips.forEach { chip ->
+                chip.alpha = 1f
+                chip.y = 0f
             }
-            /*artworkRecommendedAdapter.submitList(state.artworksRecommended)
-            extendedFab?.text = if (state.isTranslationDisplayed) {
-                resources.getText(Rui.string.frag_artwork_detail_extended_fab_show_original)
-            } else {
-                resources.getText(Rui.string.frag_artwork_detail_extended_fab_translate)
-            }*/
-            /*if (state.triggerRefreshAnimation != null) {
-                textCategory.fader(viewTrigger = extendedFab)
-                textTitle.fader(viewTrigger = extendedFab)
-                viewModel.onEvent(RefreshAnimationTriggered)
-            }
-            val errorMessage = state.errorMessage
-            if (errorMessage != null) {
-                showSnackbar(root, errorMessage, SHORT) { it.dismiss() }
-                viewModel.onEvent(ErrorMessageTriggered)
-            }
-            if (state.loadingTranslation) {
-                linearProgressIndicator?.visible()
-            } else {
-                linearProgressIndicator?.gone()
-            }*/
         }
     }
 
@@ -229,11 +231,11 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
     }
 
     private fun showChipsAnimation(resources: Resources) {
-        var startDelay = 0L
         val duration = resources.getInteger(Rui.integer.motion_duration_large).toLong()
+        var startDelay = duration / 2
         val interpolator = getInterpolator(motionEasingEmphasizedDecelerateInterpolator)
         chips.forEachIndexed { index, chip ->
-            startDelay += 150
+            startDelay += (resources.getInteger(Rui.integer.motion_duration_medium).toLong()) / 2
             val translation = ObjectAnimator.ofFloat(chip, View.TRANSLATION_Y, 0f)
             val alpha = ObjectAnimator.ofFloat(chip, View.ALPHA, 1f)
             AnimatorSet().apply {
@@ -245,7 +247,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                     addListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator) {
                             super.onAnimationEnd(animation)
-                            viewModel.enterAnimationsShowed()
+                            viewModel.enterAnimationsTriggered()
                             removeAllListeners()
                         }
                     })
@@ -269,15 +271,9 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         super.onResume()
     }
 
-    override fun onPause() {
-        super.onPause()
-        // viewModel.onEvent(ArtworkDetailUiEvent.SaveCurrentArtworkId)
-    }
-
     companion object {
         // The name for this key needs to be exactly the same as was defined in safe args.
         const val ARTWORK_ID_KEY = "id"
-        const val ARTWORK_ID_DEFAULT_VALUE = -1L
         const val MEMORY_CACHE_KEY = "previousImageMemoryKey"
         const val SHOW_ENTER_ANIMATIONS = "showEnterAnimations"
         const val AMBIENT_COLOR_KEY = "previousImageAmbientColor"
