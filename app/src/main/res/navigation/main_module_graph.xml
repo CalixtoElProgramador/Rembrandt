@@ -15,38 +15,4 @@
 
     <include app:graph="@navigation/favorites_graph" />
 
-    <!--<fragment
-        android:id="@+id/artworkDetailFragment"
-        android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment"
-        android:label="ArtworkDetailFragment"
-        tools:layout="@layout/fragment_artwork_detail">
-        <action
-            android:id="@+id/action_artworkDetailFragment_self"
-            app:destination="@id/artworkDetailFragment" />
-        <argument
-            android:name="artworkId"
-            android:defaultValue="-1L"
-            app:argType="long" />
-        <argument
-            android:name="memoryCacheKey"
-            android:defaultValue="null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="displayInitialAnimations"
-            android:defaultValue="true"
-            app:argType="boolean" />
-        <argument
-            android:name="gradientColor"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_artworkDetailFragment_self2"
-            app:destination="@id/artworkDetailFragment" />
-    </fragment>-->
-
-
-
-    <!--<action
-        android:id="@+id/action_global_artworkDetailFragment"
-        app:destination="@+id/artworkDetailFragment" />-->
 </navigation>

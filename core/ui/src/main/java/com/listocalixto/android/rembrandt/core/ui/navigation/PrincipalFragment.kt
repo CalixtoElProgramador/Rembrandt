@@ -25,4 +25,14 @@ abstract class PrincipalFragment(@LayoutRes contentLayoutId: Int) : Fragment(con
         imageAmbientColor: Int,
         extras: FragmentNavigator.Extras = FragmentNavigatorExtras(),
     )
+
+    abstract fun navigateToDisplayImage(
+        imageUrl: String,
+        alternativeText: String,
+        previousImageMemoryCacheKey: String,
+        touchPositionX: Float,
+        touchPositionY: Float,
+        zoom: Float,
+        extras: FragmentNavigator.Extras = FragmentNavigatorExtras(),
+    )
 }

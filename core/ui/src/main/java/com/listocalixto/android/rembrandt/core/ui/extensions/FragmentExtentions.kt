@@ -99,9 +99,9 @@ fun Fragment.applyFadeThroughExitTransition(
     exitTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
     }
-    /*reenterTransition = MaterialFadeThrough().apply {
+    reenterTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
-    }*/
+    }
 }
 
 fun Fragment.applyContainerTransformEnterTransition(
@@ -182,11 +182,12 @@ fun Fragment.applySharedElementTransition(
     sharedElementReturnTransition = animation
 }
 
-fun <Element> Fragment.collectFlowWithLifeCycle(flow: Flow<Element>, send: (Element) -> Unit) {
+fun <Element> Fragment.collectFlowWithLifeCycle(
+    flow: Flow<Element>,
+    send: suspend (Element) -> Unit,
+) {
     viewLifecycleOwner.lifecycleScope.launch {
-        flow.flowWithLifecycle(lifecycle).collect {
-            send(it)
-        }
+        flow.flowWithLifecycle(lifecycle).collect { send(it) }
     }
 }
 

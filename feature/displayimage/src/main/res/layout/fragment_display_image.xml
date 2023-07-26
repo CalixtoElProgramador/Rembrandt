@@ -7,7 +7,7 @@
 
         <variable
             name="displayArtworkViewModel"
-            type="com.listocalixto.android.rembrandt.presentation.ui.display.DisplayArtworkViewModel" />
+            type="com.listocalixto.android.rembrandt.feature.displayimage.DisplayImageViewModel" />
     </data>
 
     <com.ortiz.touchview.TouchImageView
@@ -19,7 +19,7 @@
         android:transitionGroup="true"
         android:transitionName="@string/display_artwork_transition_name"
         app:zoom_enabled="true"
-        tools:context=".presentation.ui.display.DisplayArtworkFragment"
+        tools:context=".feature.displayimage.DisplayImageFragment"
         tools:src="@tools:sample/backgrounds/scenic" />
 
 </layout>

@@ -1,8 +1,8 @@
-package com.listocalixto.android.rembrandt.presentation.ui.display
+package com.listocalixto.android.rembrandt.feature.displayimage
 
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
-data class DisplayArtworkUiState(
+data class DisplayImageUiState(
     val imageUrl: String = "",
     val altText: String? = null,
     val memoryCacheKey: String? = null,

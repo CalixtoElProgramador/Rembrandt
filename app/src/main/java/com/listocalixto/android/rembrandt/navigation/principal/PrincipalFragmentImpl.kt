@@ -8,8 +8,6 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.FragmentNavigator
@@ -17,9 +15,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.listocalixto.android.rembrandt.ArtworkDetailGraphDirections
+import com.listocalixto.android.rembrandt.DisplayImageGraphDirections
 import com.listocalixto.android.rembrandt.R
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughExitTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.colorize
 import com.listocalixto.android.rembrandt.core.ui.extensions.getNavHost
+import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.databinding.FragmentPrincipalBinding
@@ -27,10 +28,7 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFra
 import com.listocalixto.android.rembrandt.feature.explore.ExploreFragment
 import com.listocalixto.android.rembrandt.feature.favorites.FavoritesFragment
 import com.listocalixto.android.rembrandt.feature.home.HomeFragment
-import com.listocalixto.android.rembrandt.core.ui.extensions.colorize
-import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 
 @AndroidEntryPoint
@@ -74,12 +72,6 @@ internal class PrincipalFragmentImpl :
             val navController = navHostFragment.navController
             bottomNav.setupWithNavController(navController)
             navController.addOnDestinationChangedListener(this@PrincipalFragmentImpl)
-            collectNavigateState()
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.uiState.flowWithLifecycle(lifecycle).collect { state ->
-                    // linearProgress.isVisible = state.isLoading
-                }
-            }
         }
     }
 
@@ -99,27 +91,25 @@ internal class PrincipalFragmentImpl :
         currentNavigationFragment?.findNavController()?.navigate(direction, extras)
     }
 
-    private fun collectNavigateState() {
-        /*collectFlowWithLifeCycle(viewModel.navigationState) { state ->
-            when (state) {
-                is NavigateToDisplayImageFragment -> {
-                    val image = state.sharedElement
-                    val args = state.args
-                    applyFadeThroughExitTransition()
-                    val transitionName = getString(Rui.string.display_artwork_transition_name)
-                    val extras = FragmentNavigatorExtras(image to transitionName)
-                    val directions = actionMainFragmentToDisplayArtworkFragment(
-                        hightResolutionImageUrl = args.hightResolutionImageUrl,
-                        altText = args.altText,
-                        previousImageMemoryCacheKey = args.previousImageMemoryCacheKey,
-                        touchPositionX = args.touchPositionX,
-                        touchPositionY = args.touchPositionY,
-                        zoom = args.zoom,
-                    )
-                    findNavController().navigate(directions, extras)
-                }
-            }
-        }*/
+    override fun navigateToDisplayImage(
+        imageUrl: String,
+        alternativeText: String,
+        previousImageMemoryCacheKey: String,
+        touchPositionX: Float,
+        touchPositionY: Float,
+        zoom: Float,
+        extras: FragmentNavigator.Extras,
+    ) {
+        val direction = DisplayImageGraphDirections.showDisplayImage(
+            imageUrl,
+            alternativeText,
+            previousImageMemoryCacheKey,
+            touchPositionX,
+            touchPositionY,
+            zoom,
+        )
+        applyFadeThroughExitTransition()
+        findNavController().navigate(direction, extras)
     }
 
     override fun onDestinationChanged(
@@ -129,68 +119,72 @@ internal class PrincipalFragmentImpl :
     ) {
         (binding ?: return).run {
             when (destination.id) {
-                R.id.explore_graph -> {
-                    extendedFab.show()
-                    appBar.background = appBarDefaultBackground
-                    topLevelFragment?.apply {
-                        applyFadeThroughExitTransition()
-                    }
-                }
+                R.id.explore_graph -> onExploreFragment()
+                R.id.homeFragment -> onHomeFragment()
+                R.id.artworkDetailFragment -> onArtworkDetailFragment(arguments)
+                R.id.favoritesFragment -> onFavoritesFragment()
+                else -> appBar.background = appBarDefaultBackground
+            }
+        }
+    }
 
-                R.id.homeFragment -> {
-                    appBar.background = appBarDefaultBackground
-                    extendedFab.hide()
-                    topLevelFragment?.apply {
-                        applyFadeThroughExitTransition()
-                    }
-                }
+    private fun FragmentPrincipalBinding.onExploreFragment() {
+        extendedFab.show()
+        appBar.background = appBarDefaultBackground
+        topLevelFragment?.apply {
+            applyFadeThroughExitTransition()
+        }
+    }
 
-                R.id.artworkDetailFragment -> {
-                    extendedFab.apply {
-                        icon = ResourcesCompat.getDrawable(
-                            context.resources,
-                            Rui.drawable.ic_translate,
-                            activity?.theme,
-                        )
-                    }
-                    bottomNav.setOnItemReselectedListener {}
-                    arguments?.let {
-                        val args = ArtworkDetailFragmentArgs.fromBundle(arguments)
-                        if (isDarkMode()) {
-                            val currentColorBackground: Int =
-                                when (val currentAppBarBackground = appBar.background) {
-                                    is MaterialShapeDrawable -> {
-                                        currentAppBarBackground.resolvedTintColor
-                                    }
+    private fun FragmentPrincipalBinding.onHomeFragment() {
+        appBar.background = appBarDefaultBackground
+        extendedFab.hide()
+        topLevelFragment?.apply {
+            applyFadeThroughExitTransition()
+        }
+    }
 
-                                    is ColorDrawable -> {
-                                        currentAppBarBackground.color
-                                    }
+    private fun FragmentPrincipalBinding.onFavoritesFragment() {
+        extendedFab.hide()
+        appBar.background = appBarDefaultBackground
+        topLevelFragment?.apply {
+            applyFadeThroughExitTransition()
+        }
+    }
 
-                                    else -> {
-                                        Color.MAGENTA
-                                    }
-                                }
-                            lastGradientColor = args.previousImageAmbientColor
-                            appBar.colorize(
-                                currentColor = currentColorBackground,
-                                newColor = args.previousImageAmbientColor,
-                            )
+    private fun FragmentPrincipalBinding.onArtworkDetailFragment(
+        arguments: Bundle?,
+    ) {
+        extendedFab.apply {
+            icon = ResourcesCompat.getDrawable(
+                context.resources,
+                Rui.drawable.ic_translate,
+                activity?.theme,
+            )
+        }
+        bottomNav.setOnItemReselectedListener {}
+        arguments?.let {
+            val args = ArtworkDetailFragmentArgs.fromBundle(arguments)
+            if (isDarkMode()) {
+                val currentColorBackground: Int =
+                    when (val currentAppBarBackground = appBar.background) {
+                        is MaterialShapeDrawable -> {
+                            currentAppBarBackground.resolvedTintColor
+                        }
+
+                        is ColorDrawable -> {
+                            currentAppBarBackground.color
+                        }
+
+                        else -> {
+                            Color.MAGENTA
                         }
                     }
-                }
-
-                R.id.favoritesFragment -> {
-                    extendedFab.hide()
-                    appBar.background = appBarDefaultBackground
-                    topLevelFragment?.apply {
-                        applyFadeThroughExitTransition()
-                    }
-                }
-
-                else -> {
-                    appBar.background = appBarDefaultBackground
-                }
+                lastGradientColor = args.previousImageAmbientColor
+                appBar.colorize(
+                    currentColor = currentColorBackground,
+                    newColor = args.previousImageAmbientColor,
+                )
             }
         }
     }

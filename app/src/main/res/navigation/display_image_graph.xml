@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/display_image_graph"
+    app:startDestination="@id/displayImageFragment">
+
+    <action
+        android:id="@+id/show_displayImage"
+        app:destination="@id/displayImageFragment" />
+
+    <fragment
+        android:id="@+id/displayImageFragment"
+        android:name="com.listocalixto.android.rembrandt.feature.displayimage.DisplayImageFragment"
+        android:label="DisplayImageFragment"
+        tools:layout="@layout/fragment_display_image" >
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+        <argument
+            android:name="alternativeText"
+            app:argType="string" />
+        <argument
+            android:name="previousImageMemoryCacheKey"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="touchPositionX"
+            app:argType="float" />
+        <argument
+            android:name="touchPositionY"
+            app:argType="float" />
+        <argument
+            android:name="zoom"
+            app:argType="float"
+            android:defaultValue="1.0" />
+    </fragment>
+
+</navigation>

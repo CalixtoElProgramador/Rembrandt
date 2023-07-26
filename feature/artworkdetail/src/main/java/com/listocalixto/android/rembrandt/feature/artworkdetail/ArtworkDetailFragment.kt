@@ -12,6 +12,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import coil.load
 import com.google.android.material.R.attr.motionEasingEmphasizedDecelerateInterpolator
@@ -35,7 +36,6 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.visible
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
-import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding
 import com.ortiz.touchview.OnTouchCoordinatesListener
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
@@ -107,7 +107,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         gradientView.isVisible = isDarkMode()
     }
 
-    private fun FragmentArtworkDetailBinding.setupArtworkImageClick() {
+    private fun Binding.setupArtworkImageClick() {
         image.setOnTouchCoordinatesListener(object : OnTouchCoordinatesListener {
             override fun onTouchCoordinate(view: View, event: MotionEvent, bitmapPoint: PointF) {
                 if (event.action == MotionEvent.ACTION_UP) {
@@ -144,21 +144,24 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         )
     }
 
-    fun navigateToDisplayArtwork(touchPositionX: Float, touchPositionY: Float, zoom: Float) {
+    fun navigateToDisplayArtwork(
+        touchPositionX: Float,
+        touchPositionY: Float,
+        zoom: Float,
+    ) {
         cacheKey?.let {
-            /*mainViewModel.sendEvent(
-                com.listocalixto.android.rembrandt.navigation.principal.PrincipalUiEvent.NavigateToDisplayImageFragment(
-                    args = DisplayArtworkFragmentArgs(
-                        hightResolutionImageUrl = viewModel.uiState.value.imageUrl,
-                        previousImageMemoryCacheKey = it,
-                        altText = viewModel.uiState.value.altText,
-                        touchPositionX = touchPositionX,
-                        touchPositionY = touchPositionY,
-                        zoom = zoom,
-                    ),
-                    sharedElement = binding?.image ?: return,
-                ),
-            )*/
+            val image = binding?.image ?: return
+            val transitionName = getString(Rui.string.display_artwork_transition_name)
+            val extras = FragmentNavigatorExtras(image to transitionName)
+            principalFragment?.navigateToDisplayImage(
+                imageUrl = viewModel.uiState.value.imageUrl,
+                alternativeText = viewModel.uiState.value.alternativeText,
+                previousImageMemoryCacheKey = it,
+                touchPositionX = touchPositionX,
+                touchPositionY = touchPositionY,
+                zoom = zoom,
+                extras = extras,
+            )
         }
     }
 
@@ -176,7 +179,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         }
     }
 
-    private fun FragmentArtworkDetailBinding.coordinateAnimationsInTranslations(
+    private fun Binding.coordinateAnimationsInTranslations(
         loadingTranslation: Boolean,
         triggerTranslationAnimation: Unit?,
     ) {

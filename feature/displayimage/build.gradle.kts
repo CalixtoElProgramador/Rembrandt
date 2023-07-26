@@ -15,4 +15,5 @@ android {
 
 dependencies {
     implementation(libs.androidx.navigation.fragment)
+    implementation(libs.touch.image.view)
 }
