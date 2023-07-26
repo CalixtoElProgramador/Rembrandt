@@ -15,6 +15,8 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.transition.PathMotion
+import androidx.transition.PatternPathMotion
 import androidx.transition.TransitionInflater
 import com.google.android.material.R.attr.colorError
 import com.google.android.material.R.attr.colorErrorContainer
@@ -30,19 +32,20 @@ import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialFadeThrough
-import com.listocalixto.android.rembrandt.core.ui.R
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.AllContainerColors
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.DifferentContainerColors
 import com.listocalixto.android.rembrandt.core.ui.utility.SnackbarDuration
+import com.listocalixto.android.rembrandt.core.ui.utility.SnackbarDuration.SHORT
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
 
 fun Fragment.showSnackbar(
     view: View,
     uiText: UiText,
-    duration: SnackbarDuration,
+    duration: SnackbarDuration = SHORT,
     anchorView: View? = null,
     @StringRes actionRes: Int? = null,
     isAnError: Boolean = false,
@@ -75,7 +78,7 @@ fun Fragment.showSnackbar(
 }
 
 fun Fragment.applyFadeThroughEnterTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) = run {
     enterTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -83,7 +86,7 @@ fun Fragment.applyFadeThroughEnterTransition(
 }
 
 fun Fragment.applyHoldExitTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) = run {
     exitTransition = Hold().apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -91,7 +94,7 @@ fun Fragment.applyHoldExitTransition(
 }
 
 fun Fragment.applyFadeThroughExitTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) = run {
     exitTransition = MaterialFadeThrough().apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -103,9 +106,10 @@ fun Fragment.applyFadeThroughExitTransition(
 
 fun Fragment.applyContainerTransformEnterTransition(
     @IdRes drawingViewIdRes: Int,
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
     @ColorInt scrimColorInt: Int = Color.TRANSPARENT,
     colorContainerType: ColorContainerType,
+    pathMotion: PathMotion = PatternPathMotion(),
 ) = run {
     val context = context ?: return@run
     sharedElementEnterTransition = MaterialContainerTransform().apply {
@@ -136,7 +140,7 @@ fun Fragment.applyContainerTransformEnterTransition(
 }
 
 fun Fragment.applyContainerTransformExitTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) = run {
     exitTransition = MaterialElevationScale(false).apply {
         duration = resources.getInteger(durationRes).toLong()
@@ -167,7 +171,7 @@ fun Fragment.getNavHost(
 }
 
 fun Fragment.applySharedElementTransition(
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) {
     val animation = TransitionInflater.from(requireContext())
         .inflateTransition(android.R.transition.move).apply {

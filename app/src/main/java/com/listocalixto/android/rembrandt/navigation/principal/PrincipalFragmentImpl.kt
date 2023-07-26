@@ -27,8 +27,8 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFra
 import com.listocalixto.android.rembrandt.feature.explore.ExploreFragment
 import com.listocalixto.android.rembrandt.feature.favorites.FavoritesFragment
 import com.listocalixto.android.rembrandt.feature.home.HomeFragment
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.colorize
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.gone
+import com.listocalixto.android.rembrandt.core.ui.extensions.colorize
+import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.core.ui.R as Rui

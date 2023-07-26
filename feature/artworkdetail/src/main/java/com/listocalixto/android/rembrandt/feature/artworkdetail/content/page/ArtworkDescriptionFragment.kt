@@ -11,9 +11,9 @@ import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.EmphasisType
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.emphasizes
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
+import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
+import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
+import com.listocalixto.android.rembrandt.core.ui.extensions.fader
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDescriptionBinding as Binding

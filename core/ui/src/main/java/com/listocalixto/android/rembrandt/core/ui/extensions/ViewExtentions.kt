@@ -1,4 +1,4 @@
-package com.listocalixto.android.rembrandt.presentation.utility.extentions
+package com.listocalixto.android.rembrandt.core.ui.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -13,13 +13,13 @@ import androidx.annotation.IntegerRes
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.resources.MaterialAttributes
-import com.listocalixto.android.rembrandt.core.ui.R
+import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
 
 @SuppressLint("RestrictedApi")
 fun View.fader(
     emphasisType: EmphasisType,
     viewTrigger: View? = null,
-    @IntegerRes durationRes: Int = R.integer.motion_duration_small,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
 ) {
     MaterialAttributes.resolve(context, emphasisType.valueAttrRes)?.float?.let { targetAlpha ->
         val duration = resources.getInteger(durationRes).toLong()
@@ -46,7 +46,7 @@ fun View.fader(
 @SuppressLint("RestrictedApi")
 fun View.emphasizes(
     emphasisType: EmphasisType,
-    @IntegerRes durationRes: Int = R.integer.motion_duration_small,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
 ) {
     MaterialAttributes.resolve(context, emphasisType.valueAttrRes)?.float?.let {
         ObjectAnimator.ofFloat(
@@ -62,13 +62,13 @@ fun View.emphasizes(
 }
 
 enum class EmphasisType(@AttrRes val valueAttrRes: Int) {
-    Disable(R.attr.emphasisDisabledAlpha), Medium(R.attr.emphasisMediumAlpha), High(R.attr.emphasisHighAlpha)
+    Disable(RDS.attr.emphasisDisabledAlpha), Medium(RDS.attr.emphasisMediumAlpha), High(RDS.attr.emphasisHighAlpha)
 }
 
 fun View.colorize(
     currentColor: Int,
     newColor: Int,
-    @IntegerRes durationRes: Int = R.integer.motion_duration_large,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
 ) {
     ObjectAnimator.ofArgb(
         this,

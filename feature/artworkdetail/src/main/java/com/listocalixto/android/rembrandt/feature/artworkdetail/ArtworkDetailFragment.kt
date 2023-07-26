@@ -20,24 +20,25 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.listocalixto.android.rembrandt.core.ui.adapter.RecommendedArtworkAdapter
+import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
+import com.listocalixto.android.rembrandt.core.ui.extensions.adjustSizeAccordingScroll
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyContainerTransformEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
+import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
+import com.listocalixto.android.rembrandt.core.ui.extensions.fader
 import com.listocalixto.android.rembrandt.core.ui.extensions.getInterpolator
+import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.visible
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.EmphasisType
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.adjustSizeAccordingScroll
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.emphasizes
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.fader
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.gone
-import com.listocalixto.android.rembrandt.presentation.utility.extentions.visible
 import com.ortiz.touchview.OnTouchCoordinatesListener
 import dagger.hilt.android.AndroidEntryPoint
+import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding as Binding
 
@@ -223,7 +224,7 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         image.load(imageUrl) {
             placeholderMemoryCacheKey(imageMemoryCacheKey)
             listener(
-                onSuccess = { request, result ->
+                onSuccess = { _, result ->
                     cacheKey = result.memoryCacheKey?.key
                 },
             )
@@ -231,11 +232,11 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
     }
 
     private fun showChipsAnimation(resources: Resources) {
-        val duration = resources.getInteger(Rui.integer.motion_duration_large).toLong()
+        val duration = resources.getInteger(RDS.integer.motion_duration_large).toLong()
         var startDelay = duration / 2
         val interpolator = getInterpolator(motionEasingEmphasizedDecelerateInterpolator)
         chips.forEachIndexed { index, chip ->
-            startDelay += (resources.getInteger(Rui.integer.motion_duration_medium).toLong()) / 2
+            startDelay += (resources.getInteger(RDS.integer.motion_duration_medium).toLong()) / 2
             val translation = ObjectAnimator.ofFloat(chip, View.TRANSLATION_Y, 0f)
             val alpha = ObjectAnimator.ofFloat(chip, View.ALPHA, 1f)
             AnimatorSet().apply {

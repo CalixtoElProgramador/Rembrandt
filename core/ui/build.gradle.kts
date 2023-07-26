@@ -13,6 +13,7 @@ android {
     namespace = "com.listocalixto.android.rembrandt.core.ui"
     buildFeatures {
         dataBinding = true
+        compose = true
     }
 }
 

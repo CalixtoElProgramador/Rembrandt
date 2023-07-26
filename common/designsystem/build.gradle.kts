@@ -21,6 +21,7 @@ dependencies {
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.material.iconsExtended)
     api(libs.androidx.compose.material3)
+    api(libs.android.material)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.androidx.compose.ui.util)
@@ -29,6 +30,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.coil.kt.compose)
+    implementation(libs.intuit.sdp)
+    implementation(libs.intuit.ssp)
 
 //    androidTestImplementation(project(":core:testing"))
 }
