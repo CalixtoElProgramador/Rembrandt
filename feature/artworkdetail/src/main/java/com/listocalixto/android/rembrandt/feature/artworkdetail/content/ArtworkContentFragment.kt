@@ -1,6 +1,5 @@
 package com.listocalixto.android.rembrandt.feature.artworkdetail.content
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -16,29 +15,28 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.Frag
 @AndroidEntryPoint
 class ArtworkContentFragment : Fragment(R.layout.fragment_artwork_content) {
 
-    private var adapter: FragmentAdapter? = null
     private var binding: Binding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Binding.bind(view)
         binding?.run {
-            val context = context ?: return@run
-            val resources = context.resources ?: return@run
             lifecycleOwner = this@ArtworkContentFragment.viewLifecycleOwner
-            setupViewPagerWithTabLayout(resources)
+            setupViewPagerWithTabLayout()
         }
     }
 
-    private fun Binding.setupViewPagerWithTabLayout(resources: Resources) {
-        val descriptionFragment = ArtworkDescriptionFragment()
-        val characteristicsFragment = ArtworkCharacteristicsFragment()
-        val fragments = listOf<ArtworkContentPage>(descriptionFragment, characteristicsFragment)
-        adapter = FragmentAdapter(fragments, requireParentFragment()).also {
-            viewPager.adapter = it
-        }
+    private fun Binding.setupViewPagerWithTabLayout() {
+        val fragments = getArtworkContentPages()
+        FragmentAdapter(fragments, requireParentFragment()).also { viewPager.adapter = it }
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = resources.getText(fragments[position].tabTitleRes)
         }.attach()
+    }
+
+    private fun getArtworkContentPages(): List<ArtworkContentPage> {
+        val descriptionFragment = ArtworkDescriptionFragment()
+        val characteristicsFragment = ArtworkCharacteristicsFragment()
+        return listOf(descriptionFragment, characteristicsFragment)
     }
 }

@@ -1,10 +1,11 @@
 package com.listocalixto.android.rembrandt.core.ui.utility
 
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 
-interface ArtworkContentPage {
+abstract class ArtworkContentPage(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId) {
     @get:StringRes
-    val tabTitleRes: Int
-    val instance: Fragment
+    abstract val tabTitleRes: Int
+    abstract val instance: Fragment
 }

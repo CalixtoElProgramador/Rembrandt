@@ -6,22 +6,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
+import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
+import com.listocalixto.android.rembrandt.core.ui.extensions.fader
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
-import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
-import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
-import com.listocalixto.android.rembrandt.core.ui.extensions.fader
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDescriptionBinding as Binding
 
 @AndroidEntryPoint
-class ArtworkDescriptionFragment :
-    Fragment(R.layout.fragment_artwork_description),
-    ArtworkContentPage {
+class ArtworkDescriptionFragment : ArtworkContentPage(R.layout.fragment_artwork_description) {
 
     override val tabTitleRes: Int = Rui.string.frag_artwork_content_tab_description_text
     override val instance: Fragment = this

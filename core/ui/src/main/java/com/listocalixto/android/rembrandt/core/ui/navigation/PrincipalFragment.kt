@@ -14,15 +14,22 @@ abstract class PrincipalFragment(@LayoutRes contentLayoutId: Int) : Fragment(con
     abstract val extendedFabIdRes: Int
 
     @get:IdRes
+    abstract val smallFabIdRes: Int
+
+    @get:IdRes
     abstract val linearProgressIdRes: Int
 
     @get:IdRes
     abstract val appBarIdRes: Int
+
+    @get:IdRes
+    abstract val containerFABs: Int
     abstract fun navigateToArtworkDetail(
         artworkId: Long,
         imageMemoryCacheKey: String?,
         shouldShowEnterAnimations: Boolean,
         imageAmbientColor: Int,
+        comesFrom: BottomNavTabType,
         extras: FragmentNavigator.Extras = FragmentNavigatorExtras(),
     )
 

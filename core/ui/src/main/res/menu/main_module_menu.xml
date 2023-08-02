@@ -8,11 +8,11 @@
     <item
         android:id="@+id/explore_graph"
         android:enabled="true"
-        android:icon="@drawable/ic_explore"
+        android:icon="@drawable/ic_explore_outlined"
         android:title="@string/main_menu_explore" />
     <item
         android:id="@+id/favorites_graph"
         android:enabled="true"
-        android:icon="@drawable/ic_favorite"
+        android:icon="@drawable/ic_favorite_outlined"
         android:title="@string/main_menu_favorites" />
 </menu>

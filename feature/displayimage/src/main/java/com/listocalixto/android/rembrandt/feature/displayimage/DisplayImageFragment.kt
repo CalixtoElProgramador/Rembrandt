@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import coil.load
 import com.listocalixto.android.rembrandt.core.ui.extensions.applySharedElementTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
-import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.startFragmentTransition
 import com.listocalixto.android.rembrandt.feature.displayimage.databinding.FragmentDisplayImageBinding as Binding
 
 class DisplayImageFragment : Fragment(R.layout.fragment_display_image) {
@@ -43,8 +43,8 @@ class DisplayImageFragment : Fragment(R.layout.fragment_display_image) {
                 image.load(state.imageUrl) {
                     placeholderMemoryCacheKey(state.memoryCacheKey)
                     listener(
-                        onSuccess = { _, _ -> startTransition() },
-                        onError = { _, _ -> startTransition() },
+                        onSuccess = { _, _ -> startFragmentTransition() },
+                        onError = { _, _ -> startFragmentTransition() },
                     )
                 }
                 viewModel.onZoomAnimationTriggered()

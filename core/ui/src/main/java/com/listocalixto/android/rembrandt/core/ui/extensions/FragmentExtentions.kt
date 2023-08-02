@@ -43,16 +43,14 @@ import kotlinx.coroutines.launch
 import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
 
 fun Fragment.showSnackbar(
-    view: View,
+    view: View?,
     uiText: UiText,
     duration: SnackbarDuration = SHORT,
     anchorView: View? = null,
     @StringRes actionRes: Int? = null,
     isAnError: Boolean = false,
     onAction: ((snackbar: Snackbar) -> Unit)? = null,
-) {
-    val context = context ?: return
-    val resources = context.resources ?: return
+) = view?.run {
     val message = when (uiText) {
         is UiText.StringResource -> resources.getString(uiText.value)
         is UiText.StringValue -> uiText.value
@@ -63,16 +61,17 @@ fun Fragment.showSnackbar(
         if (isAnError) getColor(colorOnErrorContainer) else getColor(colorOnSurfaceInverse)
     val actionColor = if (isAnError) getColor(colorError) else getColor(colorPrimaryInverse)
 
-    Snackbar.make(view, message, duration.value).apply {
+    Snackbar.make(context, view, message, duration.value).apply {
         setBackgroundTint(containerColor)
         setTextColor(textColor)
         setActionTextColor(actionColor)
-        this.anchorView = anchorView
+        setAnchorView(anchorView)
         actionRes?.let {
             this.setAction(actionRes) {
                 onAction?.invoke(this)
             }
         }
+        this.isAnchorViewLayoutListenerEnabled = true
         show()
     }
 }
@@ -191,14 +190,14 @@ fun <Element> Fragment.collectFlowWithLifeCycle(
     }
 }
 
-fun Fragment.startTransition() {
+fun Fragment.startFragmentTransition() {
     (view?.parent as? ViewGroup)?.doOnPreDraw {
         startPostponedEnterTransition()
     }
 }
 
 fun Fragment.isDarkMode(): Boolean {
-    return context?.isDarkMode() ?: false
+    return context?.isDarkMode() == true
 }
 
 fun Fragment.getColor(@AttrRes colorAttr: Int): Int {

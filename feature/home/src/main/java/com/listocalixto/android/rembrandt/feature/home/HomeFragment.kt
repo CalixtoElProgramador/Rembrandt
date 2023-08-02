@@ -10,11 +10,13 @@ import com.listocalixto.android.rembrandt.core.ui.adapter.ArtworkUserAdapter
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughEnterTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyHoldExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
-import com.listocalixto.android.rembrandt.core.ui.extensions.startTransition
+import com.listocalixto.android.rembrandt.core.ui.extensions.startFragmentTransition
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.home.databinding.FragmentHomeBinding as Binding
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType.Home
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -40,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             setupRecyclerView()
             // initExteriorViews()
             collectUiState()
-            startTransition()
+            startFragmentTransition()
         }
     }
 
@@ -73,6 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             imageMemoryCacheKey = memoryCacheKey,
             shouldShowEnterAnimations = true,
             imageAmbientColor = gradientColor,
+            comesFrom = Home,
             extras = extras,
         )
     }

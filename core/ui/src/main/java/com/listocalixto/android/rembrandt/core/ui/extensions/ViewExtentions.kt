@@ -5,11 +5,16 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Build
 import android.view.View
 import android.view.View.ALPHA
+import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.IntegerRes
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.resources.MaterialAttributes
@@ -127,3 +132,11 @@ fun View.visible() = apply { this.visibility = View.VISIBLE }
 fun View.invisible() = apply { this.visibility = View.INVISIBLE }
 
 fun View.gone() = apply { this.visibility = View.GONE }
+
+fun ImageView.clipboardImage() {
+    drawable?.toBitmap()?.let {
+        val uri = context.getImageUri(it)
+        val clipData = ClipData.newUri(context.contentResolver, "Image", uri)
+        getSystemService(context, ClipboardManager::class.java)?.run { setPrimaryClip(clipData) }
+    }
+}

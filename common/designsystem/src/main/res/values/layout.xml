@@ -13,5 +13,11 @@
     <dimen name="grid_2">@dimen/_16sdp</dimen>
     <dimen name="grid_3">@dimen/_24sdp</dimen>
     <dimen name="grid_4">@dimen/_32sdp</dimen>
+    <dimen name="grid_5">@dimen/_40sdp</dimen>
+    <dimen name="grid_6">@dimen/_48sdp</dimen>
+    <dimen name="grid_7">@dimen/_56sdp</dimen>
+    <dimen name="grid_7_5">@dimen/_60sdp</dimen>
+    <dimen name="grid_8">@dimen/_64sdp</dimen>
+    <dimen name="grid_9">@dimen/_72sdp</dimen>
 
 </resources>

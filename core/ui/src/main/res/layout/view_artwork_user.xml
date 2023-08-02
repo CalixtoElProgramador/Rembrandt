@@ -122,7 +122,7 @@
                 android:maxLines="1"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="@id/textTitle"
                 app:layout_constraintStart_toStartOf="@id/textTitle"
@@ -142,9 +142,9 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="@id/textNameArtist"
                 app:layout_constraintTop_toBottomOf="@id/textNameArtist"
-                app:srcCompat="@{artwork.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
-                app:tint="@{artwork.favorite ? R.attr.colorTertiary : R.attr.colorOutline}"
-                tools:src="@drawable/ic_favorite_border"
+                app:srcCompat="@{artwork.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_outlined}"
+                app:tint="@{artwork.favorite ? R.attr.colorPrimary : R.attr.colorOutline}"
+                tools:src="@drawable/ic_favorite_outlined"
                 tools:tint="?attr/colorOutline" />
 
             <ImageButton

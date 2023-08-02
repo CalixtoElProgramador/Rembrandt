@@ -13,25 +13,28 @@
         android:id="@+id/artworkDetailFragment"
         android:name="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment"
         android:label="ArtworkDetailFragment"
-        tools:layout="@layout/fragment_artwork_detail" >
+        tools:layout="@layout/fragment_artwork_detail">
         <argument
             android:name="id"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="previousImageMemoryKey"
             app:argType="string"
             app:nullable="true" />
         <argument
             android:name="showEnterAnimations"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="previousImageAmbientColor"
             app:argType="integer" />
         <action
             android:id="@+id/action_artworkDetailFragment_self"
             app:destination="@id/artworkDetailFragment" />
+        <argument
+            android:name="comesFrom"
+            app:argType="com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType" />
     </fragment>
 
 </navigation>

@@ -16,6 +16,8 @@ import com.listocalixto.android.rembrandt.core.ui.R.string.no_description_availa
 import com.listocalixto.android.rembrandt.core.ui.R.string.uncategorized
 import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_artist
 import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_title
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType.Home
 import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
@@ -30,6 +32,8 @@ data class ArtworkDetailUiState(
     val shouldShowOriginalLanguage: Boolean = true,
     val isLoadingTranslation: Boolean = false,
     val triggerTranslationAnimation: Unit? = null,
+    val extraHighDefinitionImageUrl: String = "",
+    val comesFrom: BottomNavTabType = Home,
     private val artworkUser: ArtworkUser? = null,
     private val manifest: Manifest? = null,
     private val translation: Translation? = null,

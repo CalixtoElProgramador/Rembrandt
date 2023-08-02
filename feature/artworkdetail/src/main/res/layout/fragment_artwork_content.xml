@@ -23,9 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorAnimationMode="fade"
             app:tabIndicatorFullWidth="true"
-            app:tabMode="auto">
-
-        </com.google.android.material.tabs.TabLayout>
+            app:tabMode="auto"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"

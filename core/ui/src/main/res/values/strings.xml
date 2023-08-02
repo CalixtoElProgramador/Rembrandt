@@ -42,4 +42,10 @@
     <string name="uncategorized">Uncategorized</string>
     <string name="unknown_artist">Unknown artist</string>
     <string name="unknown_title">Unknown title</string>
+    <string name="copy">Copy</string>
+    <string name="copied_to_the_clipboard">Copied to the clipboard!</string>
+    <string name="set_favorite">Set favorite</string>
+    <string name="remove_favorite">Remove favorite</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
 </resources>

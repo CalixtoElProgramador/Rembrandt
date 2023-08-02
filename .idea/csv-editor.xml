@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="$USER_HOME$/Library/Android/sdk/platforms/android-34/data/res/raw/fallback_categories.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/app/src/test/java/com/listocalixto/android/rembrandt/assets/domain/usecase/main/getartworksaccordingsearch/get_artworks_according_search_test_01_parameters.csv">
           <value>
             <Attribute>

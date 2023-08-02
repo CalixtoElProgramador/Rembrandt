@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.entities.Translation
+import com.listocalixto.android.rembrandt.core.domain.usecase.GetImageUrlUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.GetKeysAndTranslationRequestsForArtworkUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.GetManifestByArtworkIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.GetRecommendedArtworksByArtworkIdkUseCase
@@ -14,12 +15,16 @@ import com.listocalixto.android.rembrandt.core.domain.usecase.GetTranslationByAr
 import com.listocalixto.android.rembrandt.core.domain.usecase.GetTranslationsUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveArtworkUserByIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
+import com.listocalixto.android.rembrandt.core.domain.utility.QualityImageType.ExtraHigh
 import com.listocalixto.android.rembrandt.core.domain.utility.TranslationFromType.Artwork
 import com.listocalixto.android.rembrandt.core.ui.R.string.frag_artwork_detail_err_translation_not_available
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType.Home
 import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.AMBIENT_COLOR_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.ARTWORK_ID_KEY
+import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.COMES_FROM_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.SHOW_ENTER_ANIMATIONS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +43,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,6 +53,7 @@ class ArtworkDetailViewModel @Inject constructor(
     getManifestByArtworkId: GetManifestByArtworkIdUseCase,
     getRecommendedArtworksByArtworkId: GetRecommendedArtworksByArtworkIdkUseCase,
     getTranslationByArtworkId: GetTranslationByArtworkIdUseCase,
+    getImageUrl: GetImageUrlUseCase,
     private val toggleFavoriteArtworkById: ToggleFavoriteArtworkByIdUseCase,
     private val getKeysAndTranslationRequestsForArtwork: GetKeysAndTranslationRequestsForArtworkUseCase,
     private val getTranslations: GetTranslationsUseCase,
@@ -68,6 +75,7 @@ class ArtworkDetailViewModel @Inject constructor(
         val imageMemoryCacheKey: String?,
         val shouldShowEnterAnimations: Boolean,
         val imageAmbientColor: Int,
+        val comesFrom: BottomNavTabType,
     )
 
     init {
@@ -79,6 +87,7 @@ class ArtworkDetailViewModel @Inject constructor(
                 getManifestByArtworkId,
                 getRecommendedArtworksByArtworkId,
                 getTranslationByArtworkId,
+                getImageUrl,
             )
         }
     }
@@ -89,6 +98,7 @@ class ArtworkDetailViewModel @Inject constructor(
         getManifestByArtworkId: GetManifestByArtworkIdUseCase,
         getRecommendedArtworksByArtworkId: GetRecommendedArtworksByArtworkIdkUseCase,
         getTranslationByArtworkId: GetTranslationByArtworkIdUseCase,
+        getImageUrl: GetImageUrlUseCase,
     ) {
         viewModelScope.launch(viewModelDispatcher) {
             launch {
@@ -97,7 +107,15 @@ class ArtworkDetailViewModel @Inject constructor(
                         it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
                     }
                 }.onEach { artworkUser ->
-                    _uiState.update { it.copy(artworkUser = artworkUser) }
+                    _uiState.update {
+                        it.copy(
+                            artworkUser = artworkUser,
+                            extraHighDefinitionImageUrl = getImageUrl(
+                                artworkUser.imageId,
+                                ExtraHigh,
+                            ),
+                        )
+                    }
                 }.launchIn(this)
             }
 
@@ -192,7 +210,7 @@ class ArtworkDetailViewModel @Inject constructor(
         translateJob = viewModelScope.launch(viewModelDispatcher) {
             _uiState.update { it.copy(isLoadingTranslation = true) }
             flow {
-                emit(getTranslations(artworkId, Artwork, keysAndTranslationRequests))
+                emit(getTranslations(artworkId, fromType = Artwork, keysAndTranslationRequests))
             }.catch { throwable ->
                 _uiState.update {
                     it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
@@ -221,11 +239,12 @@ class ArtworkDetailViewModel @Inject constructor(
                 artworkId = args.artworkId,
                 triggerEnterAnimations = if (args.shouldShowEnterAnimations) Unit else null,
                 wereEnterAnimationsShown = !args.shouldShowEnterAnimations,
+                comesFrom = args.comesFrom,
             )
         }
     }
 
-    fun onChipFavoriteClick() {
+    fun toggleFavorite() {
         val artworkId = _uiState.value.artworkId
         val isFavorite = _uiState.value.isFavorite
         viewModelScope.launch(viewModelDispatcher) {
@@ -242,11 +261,13 @@ class ArtworkDetailViewModel @Inject constructor(
         val shouldShowEnterAnimations: Boolean =
             savedStateHandle[SHOW_ENTER_ANIMATIONS] ?: false
         val imageAmbientColor: Int = savedStateHandle[AMBIENT_COLOR_KEY] ?: TRANSPARENT
+        val comesFrom: BottomNavTabType = savedStateHandle[COMES_FROM_KEY] ?: Home
         return ArtworkDetailFragmentArgs(
             artworkId = artworkId,
             imageMemoryCacheKey = imageMemoryCacheKey,
             shouldShowEnterAnimations = shouldShowEnterAnimations,
             imageAmbientColor = imageAmbientColor,
+            comesFrom = comesFrom,
         )
     }
 
@@ -257,5 +278,9 @@ class ArtworkDetailViewModel @Inject constructor(
                 wereEnterAnimationsShown = true,
             )
         }
+    }
+
+    fun shouldShowTranslatorButton(): Boolean {
+        return Locale.getDefault().language != Locale.ENGLISH.language
     }
 }

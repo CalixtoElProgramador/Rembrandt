@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -22,14 +21,14 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.colorize
 import com.listocalixto.android.rembrandt.core.ui.extensions.getNavHost
 import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
+import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
-import com.listocalixto.android.rembrandt.databinding.FragmentPrincipalBinding
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragmentArgs
 import com.listocalixto.android.rembrandt.feature.explore.ExploreFragment
 import com.listocalixto.android.rembrandt.feature.favorites.FavoritesFragment
 import com.listocalixto.android.rembrandt.feature.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
-import com.listocalixto.android.rembrandt.core.ui.R as Rui
+import com.listocalixto.android.rembrandt.databinding.FragmentPrincipalBinding as Binding
 
 @AndroidEntryPoint
 internal class PrincipalFragmentImpl :
@@ -49,18 +48,20 @@ internal class PrincipalFragmentImpl :
             ?: currentNavigationFragment as? ExploreFragment
             ?: currentNavigationFragment as? FavoritesFragment
 
-    private var binding: FragmentPrincipalBinding? = null
+    private var binding: Binding? = null
     private var appBarDefaultBackground: Drawable? = null
     private var lastGradientColor: Int? = null
 
     override val navHostFragmentIdRes: Int = R.id.navHostMainFragment
     override val extendedFabIdRes: Int = R.id.extendedFab
+    override val smallFabIdRes: Int = R.id.smallFab
     override val linearProgressIdRes: Int = R.id.linearProgress
     override val appBarIdRes: Int = R.id.appBar
+    override val containerFABs: Int = R.id.containerFABs
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentPrincipalBinding.bind(view)
+        binding = Binding.bind(view)
         binding?.run {
             lifecycleOwner = this@PrincipalFragmentImpl.viewLifecycleOwner
             mainViewModel = viewModel
@@ -80,6 +81,7 @@ internal class PrincipalFragmentImpl :
         imageMemoryCacheKey: String?,
         shouldShowEnterAnimations: Boolean,
         imageAmbientColor: Int,
+        comesFrom: BottomNavTabType,
         extras: FragmentNavigator.Extras,
     ) {
         val direction = ArtworkDetailGraphDirections.showArtworkDetail(
@@ -87,6 +89,7 @@ internal class PrincipalFragmentImpl :
             previousImageAmbientColor = imageAmbientColor,
             id = artworkId,
             showEnterAnimations = shouldShowEnterAnimations,
+            comesFrom = comesFrom,
         )
         currentNavigationFragment?.findNavController()?.navigate(direction, extras)
     }
@@ -123,48 +126,58 @@ internal class PrincipalFragmentImpl :
                 R.id.homeFragment -> onHomeFragment()
                 R.id.artworkDetailFragment -> onArtworkDetailFragment(arguments)
                 R.id.favoritesFragment -> onFavoritesFragment()
-                else -> appBar.background = appBarDefaultBackground
+                else -> {
+                    appBar.background = appBarDefaultBackground
+                }
             }
         }
     }
 
-    private fun FragmentPrincipalBinding.onExploreFragment() {
-        extendedFab.show()
-        appBar.background = appBarDefaultBackground
-        topLevelFragment?.apply {
-            applyFadeThroughExitTransition()
-        }
-    }
-
-    private fun FragmentPrincipalBinding.onHomeFragment() {
-        appBar.background = appBarDefaultBackground
+    private fun Binding.onExploreFragment() {
         extendedFab.hide()
-        topLevelFragment?.apply {
-            applyFadeThroughExitTransition()
-        }
-    }
-
-    private fun FragmentPrincipalBinding.onFavoritesFragment() {
-        extendedFab.hide()
+        smallFab.hide()
+        updateIconSelected(BottomNavTabType.Explore)
         appBar.background = appBarDefaultBackground
         topLevelFragment?.apply {
             applyFadeThroughExitTransition()
         }
     }
 
-    private fun FragmentPrincipalBinding.onArtworkDetailFragment(
+    private fun Binding.updateIconSelected(tabSelected: BottomNavTabType) {
+        val theme = activity?.theme
+        BottomNavTabType.values().forEach { tab ->
+            val menuItem = bottomNav.menu.getItem(tab.ordinal)
+            menuItem.icon = tab.getIcon(resources, theme, isSelected = tab == tabSelected)
+        }
+    }
+
+    private fun Binding.onHomeFragment() {
+        appBar.background = appBarDefaultBackground
+        updateIconSelected(BottomNavTabType.Home)
+        extendedFab.hide()
+        smallFab.hide()
+        topLevelFragment?.apply {
+            applyFadeThroughExitTransition()
+        }
+    }
+
+    private fun Binding.onFavoritesFragment() {
+        extendedFab.hide()
+        smallFab.hide()
+        updateIconSelected(BottomNavTabType.Favorites)
+        appBar.background = appBarDefaultBackground
+        topLevelFragment?.apply {
+            applyFadeThroughExitTransition()
+        }
+    }
+
+    private fun Binding.onArtworkDetailFragment(
         arguments: Bundle?,
     ) {
-        extendedFab.apply {
-            icon = ResourcesCompat.getDrawable(
-                context.resources,
-                Rui.drawable.ic_translate,
-                activity?.theme,
-            )
-        }
         bottomNav.setOnItemReselectedListener {}
         arguments?.let {
             val args = ArtworkDetailFragmentArgs.fromBundle(arguments)
+            updateIconSelected(args.comesFrom)
             if (isDarkMode()) {
                 val currentColorBackground: Int =
                     when (val currentAppBarBackground = appBar.background) {
