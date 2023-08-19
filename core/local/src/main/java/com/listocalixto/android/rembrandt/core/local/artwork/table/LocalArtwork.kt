@@ -31,6 +31,7 @@ data class LocalArtwork(
     val hasNotBeenViewedMuch: Boolean,
     @PrimaryKey(autoGenerate = false)
     val id: Long,
+    val inscriptions: String?,
     val imageId: String,
     val imageUrl: String,
     val latitude: Double?,
@@ -38,6 +39,8 @@ data class LocalArtwork(
     val mediumDisplay: String?,
     val placeOfOrigin: String?,
     val score: Double,
+    val styleId: String?,
+    val styleTitle: String?,
     @TypeConverters(value = [ListConverter::class])
     val termTitles: List<String>,
     @Embedded

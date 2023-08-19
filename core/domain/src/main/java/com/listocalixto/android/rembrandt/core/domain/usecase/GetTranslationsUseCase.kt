@@ -15,7 +15,7 @@ class GetTranslationsUseCase @Inject constructor(
     suspend operator fun <T : Enum<T>> invoke(
         itemId: Long,
         fromType: TranslationFromType,
-        keysAndRequests: Map<String, String?>,
+        keysAndRequests: Map<String, String>,
     ): Translation {
         val id = getTranslationId(itemId, fromType)
         return repo.getTranslations(id, keysAndRequests, getUserTargetLanguage())

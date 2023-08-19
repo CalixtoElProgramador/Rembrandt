@@ -28,19 +28,16 @@ internal class TranslatorRepoImpl @Inject constructor(
 
     override suspend fun getTranslations(
         id: String,
-        keysAndRequests: Map<String, String?>,
+        keysAndRequests: Map<String, String>,
         targetLanguage: String,
     ): Translation {
         return localDataSource.getTranslationById(id = id) ?: run {
             val keysAndTranslations = mutableMapOf<String, String>()
             val translatedTextsDeferred = mutableListOf<Deferred<String>>()
             withContext(ioDispatcher) {
-                keysAndRequests.values.forEach { text ->
-                    text?.let {
-                        val deferredText =
-                            async { remoteDataSource.translateText(text, targetLanguage) }
-                        translatedTextsDeferred.add(deferredText)
-                    }
+                keysAndRequests.values.forEach {
+                    val deferredText = async { remoteDataSource.translateText(it, targetLanguage) }
+                    translatedTextsDeferred.add(deferredText)
                 }
                 keysAndRequests.keys.forEachIndexed { index, key ->
                     keysAndTranslations[key] = translatedTextsDeferred[index].await()

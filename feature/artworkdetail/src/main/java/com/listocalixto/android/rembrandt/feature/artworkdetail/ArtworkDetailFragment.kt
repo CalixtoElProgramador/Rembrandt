@@ -48,6 +48,7 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.startFragmentTransi
 import com.listocalixto.android.rembrandt.core.ui.extensions.visible
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
+import com.listocalixto.android.rembrandt.core.ui.utility.SnackbarDuration
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding
 import com.ortiz.touchview.OnTouchCoordinatesListener
@@ -212,6 +213,14 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
                 state.isLoadingTranslation,
                 state.triggerTranslationAnimation,
             )
+            if (state.errorMessage != null) {
+                showSnackbar(
+                    root,
+                    state.errorMessage,
+                    duration = SnackbarDuration.LONG,
+                    isAnError = true,
+                )
+            }
             displayFragmentWHenArtworkIsAlreadyLoaded(state.shouldStartFragmentTransition)
         }
     }
@@ -232,15 +241,14 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         loadingTranslation: Boolean,
         triggerTranslationAnimation: Unit?,
     ) {
+        linearProgressIndicator?.isVisible = loadingTranslation
         if (loadingTranslation) {
-            linearProgressIndicator?.visible()
             textCategory.emphasizes(EmphasisType.Disable)
             textTitle.emphasizes(EmphasisType.Disable)
             textNameArtist.emphasizes(EmphasisType.Disable)
         }
 
         if (triggerTranslationAnimation != null) {
-            linearProgressIndicator?.gone()
             textCategory.fader(emphasisType = EmphasisType.Medium)
             textTitle.fader(emphasisType = EmphasisType.High)
             textNameArtist.fader(emphasisType = EmphasisType.Medium)

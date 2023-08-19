@@ -9,15 +9,35 @@ import com.listocalixto.android.rembrandt.common.entities.Translation
 import com.listocalixto.android.rembrandt.common.entities.composite.ArtworkUser
 import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey
 import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.ArtistDisplay
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.ArtistTitle
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.ArtworkType
 import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.Category
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.CreditLine
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.DateDisplay
 import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.Description
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.Inscriptions
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.MediumDisplay
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.PhysicalDimensions
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.PlaceOfOrigin
+import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.StyleTitle
 import com.listocalixto.android.rembrandt.common.entities.utility.ArtworkTranslationKey.Title
+import com.listocalixto.android.rembrandt.core.ui.R
+import com.listocalixto.android.rembrandt.core.ui.R.string.label_characteristic_title
 import com.listocalixto.android.rembrandt.core.ui.R.string.no_description_available
+import com.listocalixto.android.rembrandt.core.ui.R.string.no_inscriptions
 import com.listocalixto.android.rembrandt.core.ui.R.string.uncategorized
 import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_artist
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_artwork_type
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_credit_line
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_date
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_medium
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_physical_dimensions
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_place_of_origin
+import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_style
 import com.listocalixto.android.rembrandt.core.ui.R.string.unknown_title
 import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType
 import com.listocalixto.android.rembrandt.core.ui.navigation.BottomNavTabType.Home
+import com.listocalixto.android.rembrandt.core.ui.states.ArtworkCharacteristicUiState
 import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
@@ -52,6 +72,17 @@ data class ArtworkDetailUiState(
     val artistDisplay: String? = artworkUser?.artistDisplay
     private val artistDisplayTranslated: String? = getTranslation(ArtistDisplay)
     val artistDisplayUiText = getUiText(artistDisplayTranslated, artistDisplay, unknown_artist)
+    val artistTitle: String? = artworkUser?.artistTitle
+    private val artistTitleTranslated: String? = getTranslation(ArtistTitle)
+    private val artistTitleUiText = getUiText(artistTitleTranslated, artistTitle, unknown_artist)
+    val dateDisplay: String? = artworkUser?.dateDisplay
+    private val dateDisplayTranslated: String? = getTranslation(DateDisplay)
+    private val dateDisplayUiText =
+        getUiText(dateDisplayTranslated, dateDisplay, unknown_date)
+    val dimensions: String? = artworkUser?.dimensions
+    private val dimensionsTranslated = getTranslation(PhysicalDimensions)
+    private val dimensionsUiText =
+        getUiText(dimensionsTranslated, dimensions, unknown_physical_dimensions)
     val alternativeText: String = artworkUser?.thumbnail?.altText.orEmpty()
     val imageAmbientGradient: Drawable = getImageAmbientGradient()
     val shouldStartFragmentTransition: Boolean = artworkUser != null
@@ -59,6 +90,70 @@ data class ArtworkDetailUiState(
     private val descriptionTranslated: String? = getTranslation(key = Description)
     val descriptionUiText: UiText =
         getUiText(descriptionTranslated, description, no_description_available)
+    val mediumDisplay: String? = artworkUser?.mediumDisplay
+    private val mediumDisplayTranslated: String? = getTranslation(MediumDisplay)
+    private val mediumDisplayUiText =
+        getUiText(mediumDisplayTranslated, mediumDisplay, unknown_medium)
+    val artworkTypeTitle: String? = artworkUser?.artworkTypeTitle
+    private val artworkTypeTitleTranslated: String? = getTranslation(ArtworkType)
+    private val artworkTypeTitleUiText =
+        getUiText(artworkTypeTitleTranslated, artworkTypeTitle, unknown_artwork_type)
+    val placeOfOrigin: String? = artworkUser?.placeOfOrigin
+    private val placeOfOriginTranslated: String? = getTranslation(PlaceOfOrigin)
+    private val placeOfOriginUiText =
+        getUiText(placeOfOriginTranslated, placeOfOrigin, unknown_place_of_origin)
+    val creditLine: String? = artworkUser?.creditLine
+    private val creditLineTranslated: String? = getTranslation(CreditLine)
+    private val creditLineUiText = getUiText(creditLineTranslated, creditLine, unknown_credit_line)
+    val inscriptions: String? = artworkUser?.inscriptions
+    private val inscriptionsTranslated: String? = getTranslation(Inscriptions)
+    private val inscriptionsUiText =
+        getUiText(inscriptionsTranslated, inscriptions, no_inscriptions)
+    val styleTitle: String? = artworkUser?.styleTitle
+    private val styleTitleTranslated: String? = getTranslation(StyleTitle)
+    private val styleTitleUiText = getUiText(styleTitleTranslated, styleTitle, unknown_style)
+    val characteristics = listOf(
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_author,
+            value = artistTitleUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = label_characteristic_title,
+            value = titleUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_place_of_origin,
+            value = placeOfOriginUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_date,
+            value = dateDisplayUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_medium,
+            value = mediumDisplayUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_style,
+            value = styleTitleUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_inscriptions,
+            value = inscriptionsUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_physical_dimensions,
+            value = dimensionsUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_artwork_type,
+            value = artworkTypeTitleUiText,
+        ),
+        ArtworkCharacteristicUiState(
+            label = R.string.label_characteristic_credit_line,
+            value = creditLineUiText,
+        ),
+    )
 
     private fun getUiText(
         textTranslated: String?,

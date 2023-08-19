@@ -196,16 +196,23 @@ class ArtworkDetailViewModel @Inject constructor(
 
     private fun requestTranslations() {
         if (translateJob != null) return
-        val category = _uiState.value.category
-        val title = _uiState.value.title
-        val artistDisplay = _uiState.value.artistDisplay
-        val description = _uiState.value.description
-        val keysAndTranslationRequests = getKeysAndTranslationRequestsForArtwork(
-            category,
-            title,
-            artistDisplay,
-            description,
-        )
+        val keysAndTranslationRequests = _uiState.value.run {
+            getKeysAndTranslationRequestsForArtwork(
+                category = category,
+                title = title,
+                artistDisplay = artistDisplay,
+                description = description,
+                mediumDisplay = mediumDisplay,
+                artworkTypeTitle = artworkTypeTitle,
+                placeOfOrigin = placeOfOrigin,
+                creditLine = creditLine,
+                physicalDimensions = dimensions,
+                artistTitle = artistTitle,
+                dateDisplay = dateDisplay,
+                inscriptions = inscriptions,
+                styleTitle = styleTitle,
+            )
+        }
         val artworkId = _uiState.value.artworkId
         translateJob = viewModelScope.launch(viewModelDispatcher) {
             _uiState.update { it.copy(isLoadingTranslation = true) }
@@ -213,7 +220,9 @@ class ArtworkDetailViewModel @Inject constructor(
                 emit(getTranslations(artworkId, fromType = Artwork, keysAndTranslationRequests))
             }.catch { throwable ->
                 _uiState.update {
-                    it.copy(errorMessage = UiText.StringValue(throwable.message.orEmpty()))
+                    it.copy(
+                        errorMessage = UiText.StringValue(throwable.message.orEmpty()),
+                    )
                 }
             }.onEach { translation ->
                 _uiState.update { it.copy(triggerTranslationAnimation = Unit) }

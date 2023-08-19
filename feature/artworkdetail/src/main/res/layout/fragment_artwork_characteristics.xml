@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/characteristics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".feature.artworkdetail.content.page.ArtworkCharacteristicsFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:padding="@dimen/grid_1_5"
+        android:transitionGroup="true"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:spanCount="2"
+        tools:listitem="@layout/view_artwork_characteristic" />
 
 </layout>

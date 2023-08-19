@@ -39,6 +39,8 @@ data class RemoteArtwork(
     val hasNotBeenViewedMuch: Boolean,
     @SerialName("id")
     val id: Long,
+    @SerialName("inscriptions")
+    val inscriptions: String?,
     @SerialName("image_id")
     val imageId: String,
     @SerialName("latitude")
@@ -51,6 +53,10 @@ data class RemoteArtwork(
     val placeOfOrigin: String?,
     @SerialName("_score")
     val score: Double,
+    @SerialName("style_id")
+    val styleId: String?,
+    @SerialName("style_title")
+    val styleTitle: String?,
     @SerialName("term_titles")
     val termTitles: List<String>,
     @SerialName("thumbnail")

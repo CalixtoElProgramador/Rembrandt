@@ -42,6 +42,14 @@
     <string name="uncategorized">Uncategorized</string>
     <string name="unknown_artist">Unknown artist</string>
     <string name="unknown_title">Unknown title</string>
+    <string name="unknown_date">Unknown date</string>
+    <string name="unknown_medium">Unknown medium</string>
+    <string name="unknown_artwork_type">Unknown artwork type</string>
+    <string name="unknown_place_of_origin">Unknown artwork type</string>
+    <string name="unknown_physical_dimensions">Unknown physical dimensions</string>
+    <string name="unknown_credit_line">Unknown credit line</string>
+    <string name="unknown_style">Unknown style</string>
+    <string name="no_inscriptions">No inscriptions</string>
     <string name="copy">Copy</string>
     <string name="copied_to_the_clipboard">Copied to the clipboard!</string>
     <string name="set_favorite">Set favorite</string>
@@ -49,4 +57,14 @@
     <string name="save">Save</string>
     <string name="saved">Saved</string>
     <string name="see_more">See more</string>
+    <string name="label_characteristic_title">Title</string>
+    <string name="label_characteristic_author">Author</string>
+    <string name="label_characteristic_date">Date</string>
+    <string name="label_characteristic_physical_dimensions">Physical dimensions</string>
+    <string name="label_characteristic_medium">Medium</string>
+    <string name="label_characteristic_artwork_type">Artwork type</string>
+    <string name="label_characteristic_place_of_origin">Place of origin</string>
+    <string name="label_characteristic_credit_line">Credit line</string>
+    <string name="label_characteristic_inscriptions">Inscriptions</string>
+    <string name="label_characteristic_style">Style</string>
 </resources>

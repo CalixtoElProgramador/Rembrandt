@@ -23,29 +23,24 @@ import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
 @SuppressLint("RestrictedApi")
 fun View.fader(
     emphasisType: EmphasisType,
-    viewTrigger: View? = null,
     @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
 ) {
-    MaterialAttributes.resolve(context, emphasisType.valueAttrRes)?.float?.let { targetAlpha ->
-        val duration = resources.getInteger(durationRes).toLong()
-        val set = AnimatorSet().apply { this.duration = duration }
-        val fromCurrentAlphaToZero = ObjectAnimator.ofFloat(this, ALPHA, this.alpha, 0f)
-        val fromZeroToTargetAlpha = ObjectAnimator.ofFloat(this, ALPHA, 0f, targetAlpha)
-        set.playSequentially(fromCurrentAlphaToZero, fromZeroToTargetAlpha)
-        set.start()
-
-        /*ObjectAnimator.ofFloat(
-            this,
-            ALPHA,
-            0f,
-        ).run {
-            this.duration = resources.getInteger(durationRes).toLong()
-            repeatCount = 1
-            repeatMode = ObjectAnimator.REVERSE
-            viewTrigger?.let { disableClickDuringAnimation(it) }
-            start()
-        }*/
+    MaterialAttributes.resolve(context, emphasisType.valueAttrRes)?.float?.let { alphaTarget ->
+        fader(alphaTarget)
     }
+}
+
+@SuppressLint("RestrictedApi")
+fun View.fader(
+    alphaTarget: Float,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
+) {
+    val duration = resources.getInteger(durationRes).toLong()
+    val set = AnimatorSet().apply { this.duration = duration }
+    val fromCurrentAlphaToZero = ObjectAnimator.ofFloat(this, ALPHA, this.alpha, 0f)
+    val fromZeroToTargetAlpha = ObjectAnimator.ofFloat(this, ALPHA, 0f, alphaTarget)
+    set.playSequentially(fromCurrentAlphaToZero, fromZeroToTargetAlpha)
+    set.start()
 }
 
 @SuppressLint("RestrictedApi")
