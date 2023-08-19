@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.listocalixto.android.rembrandt.core.ui.utility.IconButtonType" />
+
+        <import type="kotlin.jvm.functions.Function2" />
+
+        <import type="android.widget.ImageView" />
+
+        <import type="kotlin.Unit" />
+
+        <variable
+            name="artworkCollage"
+            type="com.listocalixto.android.rembrandt.core.ui.states.ArtworkCollageUiState" />
+
+        <variable
+            name="onArtworkClick"
+            type="Function2&lt;Long, ImageView, Unit>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/grid_8">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:alpha="?attr/emphasisHighAlpha"
+            android:text="@{artworkCollage.title}"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toEndOf="@id/imageBottomEnd"
+            app:layout_constraintStart_toStartOf="@id/imageBottomStart"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:maxLines="2"
+            tools:text="@tools:sample/lorem/random" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_0_5"
+            android:alpha="?attr/emphasisMediumAlpha"
+            android:text="@{artworkCollage.subtitle}"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/textTitle"
+            app:layout_constraintStart_toStartOf="@id/textTitle"
+            app:layout_constraintTop_toBottomOf="@id/textTitle"
+            app:visibleIf="@{artworkCollage.subtitle != null}"
+            tools:maxLines="2"
+            tools:text="@tools:sample/lorem/random"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerImageTop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_2"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> onArtworkClick.invoke(artworkCollage.topArtwork.id, imageTop)}"
+            android:transitionGroup="true"
+            android:transitionName="@{@string/item_card_transition_name(artworkCollage.topArtwork.id)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textSubtitle"
+            app:layout_goneMarginTop="@dimen/grid_2">
+
+            <ImageView
+                android:id="@+id/imageTop"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_180sdp"
+                android:contentDescription="@{artworkCollage.topArtwork.altText}"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImage="@{artworkCollage.topArtwork.imageUrl}"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/iconButtonFavorite"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@{artworkCollage.topArtwork.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_outlined}"
+                app:layout_constraintEnd_toStartOf="@id/iconButtonShare"
+                app:layout_constraintTop_toTopOf="@id/iconButtonShare"
+                app:toggle="@{artworkCollage.topArtwork.favorite}"
+                app:type="@{IconButtonType.Filled}"
+                tools:icon="@drawable/ic_favorite" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/iconButtonShare"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/grid_1"
+                app:icon="@drawable/ic_share"
+                app:layout_constraintEnd_toEndOf="@id/imageTop"
+                app:layout_constraintTop_toTopOf="@id/imageTop" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imageCenterStart"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_220sdp"
+            android:layout_marginTop="@dimen/collage_item_margin_top"
+            android:layout_marginEnd="@dimen/collage_item_margin_horizontal"
+            android:contentDescription="@{artworkCollage.centerStartArtwork.altText}"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> onArtworkClick.invoke(artworkCollage.centerStartArtwork.id, imageCenterStart)}"
+            android:scaleType="centerCrop"
+            android:transitionName="@{@string/item_card_transition_name(artworkCollage.centerStartArtwork.id)}"
+            app:layout_constraintEnd_toStartOf="@id/imageCenterEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerImageTop"
+            app:loadImage="@{artworkCollage.centerStartArtwork.imageUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/imageCenterEnd"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginStart="@dimen/collage_item_margin_horizontal"
+            android:layout_marginTop="@dimen/collage_item_margin_top"
+            android:contentDescription="@{artworkCollage.centerEndArtwork.altText}"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> onArtworkClick.invoke(artworkCollage.centerEndArtwork.id, imageCenterEnd)}"
+            android:scaleType="centerCrop"
+            android:transitionName="@{@string/item_card_transition_name(artworkCollage.centerEndArtwork.id)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageCenterStart"
+            app:layout_constraintTop_toBottomOf="@id/containerImageTop"
+            app:loadImage="@{artworkCollage.centerEndArtwork.imageUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/imageBottomStart"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/collage_item_margin_top"
+            android:layout_marginEnd="@dimen/collage_item_margin_horizontal"
+            android:contentDescription="@{artworkCollage.bottomStartArtwork.altText}"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> onArtworkClick.invoke(artworkCollage.bottomStartArtwork.id, imageBottomStart)}"
+            android:scaleType="centerCrop"
+            android:transitionName="@{@string/item_card_transition_name(artworkCollage.bottomStartArtwork.id)}"
+            app:layout_constraintEnd_toStartOf="@id/imageBottomEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageCenterStart"
+            app:loadImage="@{artworkCollage.bottomStartArtwork.imageUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/imageBottomEnd"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_220sdp"
+            android:layout_marginStart="@dimen/collage_item_margin_horizontal"
+            android:layout_marginTop="@dimen/collage_item_margin_top"
+            android:contentDescription="@{artworkCollage.bottomEndArtwork.altText}"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> onArtworkClick.invoke(artworkCollage.bottomEndArtwork.id, imageBottomEnd)}"
+            android:scaleType="centerCrop"
+            android:transitionName="@{@string/item_card_transition_name(artworkCollage.bottomEndArtwork.id)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageBottomStart"
+            app:layout_constraintTop_toBottomOf="@id/imageCenterEnd"
+            app:loadImage="@{artworkCollage.bottomEndArtwork.imageUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

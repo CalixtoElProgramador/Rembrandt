@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.touch.image.view)
+    implementation(libs.androidx.recycler.view)
 
 //    androidTestImplementation(project(":core:testing"))
 }

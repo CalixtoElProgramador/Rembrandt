@@ -16,12 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/grid_0_5"
+        android:paddingHorizontal="@dimen/grid_2"
         android:paddingTop="@dimen/grid_0_5"
         android:paddingBottom="@dimen/_56sdp"
         android:transitionGroup="true"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:spanCount="2"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:spanCount="1"
         tools:listitem="@layout/view_artwork_user" />
 
 </layout>

@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:fillViewport="true"
+        android:paddingBottom="@dimen/_56sdp"
         android:transitionGroup="true">
 
         <com.google.android.material.card.MaterialCardView
@@ -39,7 +40,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:animateLayoutChanges="true"
-                android:paddingBottom="@dimen/_56sdp"
                 tools:context=".feature.artworkdetail.ArtworkDetailFragment">
 
                 <View

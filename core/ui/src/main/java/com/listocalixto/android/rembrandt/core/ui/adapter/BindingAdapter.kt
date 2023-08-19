@@ -12,7 +12,11 @@ import androidx.annotation.AttrRes
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
+import com.listocalixto.android.rembrandt.core.ui.extensions.gone
+import com.listocalixto.android.rembrandt.core.ui.extensions.visible
+import com.listocalixto.android.rembrandt.core.ui.utility.IconButtonType
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
 @BindingAdapter("layoutFullscreen")
@@ -185,6 +189,11 @@ fun ImageView.bindLoadImage(imageUrl: String?) {
     }
 }
 
+@BindingAdapter("visibleIf")
+fun View.bindVisibleIf(condition: Boolean) {
+    if (condition) visible() else gone()
+}
+
 @BindingAdapter("loadFromCache", "memoryCacheKey", requireAll = true)
 fun ImageView.bindLoadFromCache(imageUrl: String?, memoryCacheKey: String?) {
     memoryCacheKey?.let { key ->
@@ -209,4 +218,10 @@ fun ImageView.bindTint(@AttrRes attr: Int) {
 @BindingAdapter("srcCompat")
 fun ImageView.bindSrc(drawable: Drawable) {
     setImageDrawable(drawable)
+}
+
+@BindingAdapter("toggle", "type", requireAll = true)
+fun MaterialButton.bindToggle(toggle: Boolean, type: IconButtonType) {
+    iconTint = ColorStateList.valueOf(type.getIconTint(context, toggle))
+    setBackgroundColor(type.getBackgroundColor(context, toggle))
 }

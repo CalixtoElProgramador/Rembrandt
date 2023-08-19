@@ -56,10 +56,10 @@ fun Fragment.showSnackbar(
         is UiText.StringValue -> uiText.value
     }
     val containerColor =
-        if (isAnError) getColor(colorErrorContainer) else getColor(colorSurfaceInverse)
+        if (isAnError) getAttrColor(colorErrorContainer) else getAttrColor(colorSurfaceInverse)
     val textColor =
-        if (isAnError) getColor(colorOnErrorContainer) else getColor(colorOnSurfaceInverse)
-    val actionColor = if (isAnError) getColor(colorError) else getColor(colorPrimaryInverse)
+        if (isAnError) getAttrColor(colorOnErrorContainer) else getAttrColor(colorOnSurfaceInverse)
+    val actionColor = if (isAnError) getAttrColor(colorError) else getAttrColor(colorPrimaryInverse)
 
     Snackbar.make(context, view, message, duration.value).apply {
         setBackgroundTint(containerColor)
@@ -200,7 +200,6 @@ fun Fragment.isDarkMode(): Boolean {
     return context?.isDarkMode() == true
 }
 
-fun Fragment.getColor(@AttrRes colorAttr: Int): Int {
-    val context = context ?: return Color.MAGENTA
-    return MaterialColors.getColor(context, colorAttr, Color.MAGENTA)
+fun Fragment.getAttrColor(@AttrRes colorAttr: Int): Int {
+    return context.getAttrColor(colorAttr)
 }

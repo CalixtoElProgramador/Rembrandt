@@ -7,6 +7,8 @@ import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.De
 import com.listocalixto.android.rembrandt.core.domain.usecase.ObserveAllArtworksUserUseCase
 import com.listocalixto.android.rembrandt.core.domain.usecase.ToggleFavoriteArtworkByIdUseCase
 import com.listocalixto.android.rembrandt.core.domain.utility.ArtworkQuery
+import com.listocalixto.android.rembrandt.core.ui.states.ArtworkCarouselUiState
+import com.listocalixto.android.rembrandt.core.ui.states.ArtworkCollageUiState
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,10 +39,27 @@ internal class HomeViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             observeAllArtworksUser(ArtworkQuery()).catch {
                 // TODO: Manage exceptions
-            }.map { artworksUser ->
-                artworksUser.map { ArtworkUserUiState(it) }
-            }.flowOn(defaultDispatcher).collect { artworksUiState ->
-                _uiState.update { it.copy(artworks = artworksUiState, isLoading = false) }
+            }.map { artworksUsers ->
+                mutableListOf(
+                    ArtworkCarouselUiState(artworksUsers.subList(0, 5)),
+                    ArtworkUserUiState(artworksUsers[6]),
+                    ArtworkUserUiState(artworksUsers[7]),
+                    ArtworkUserUiState(artworksUsers[8]),
+                    ArtworkUserUiState(artworksUsers[9]),
+                    ArtworkCollageUiState(
+                        artworksUsers.subList(10, 15),
+                        title = "Impressionism Collection",
+                        subtitle = "Discover the new paintings we have for you from the impressionist artistic period.",
+                    ),
+                ).also { list ->
+                    list.addAll(
+                        artworksUsers.subList(16, artworksUsers.lastIndex).map {
+                            ArtworkUserUiState(it)
+                        },
+                    )
+                }
+            }.flowOn(defaultDispatcher).collect { homeItems ->
+                _uiState.update { it.copy(items = homeItems, isLoading = false) }
             }
         }
     }

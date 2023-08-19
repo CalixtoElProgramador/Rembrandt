@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="artwork"
+            type="com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState" />
+
+    </data>
+
+    <com.google.android.material.carousel.MaskableFrameLayout
+        android:id="@+id/container"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/grid_0_5"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:foreground="?attr/selectableItemBackground"
+        app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@{artwork.altText}"
+            android:scaleType="centerCrop"
+            android:transitionName="@{@string/item_card_transition_name(artwork.id)}"
+            app:loadImage="@{artwork.imageUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="@dimen/grid_1"
+            android:layout_marginBottom="@dimen/grid_2"
+            android:maxLines="3"
+            android:text="@{artwork.title}"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="@tools:sample/lorem/random" />
+
+    </com.google.android.material.carousel.MaskableFrameLayout>
+
+</layout>

@@ -7,27 +7,23 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import coil.result
 import com.listocalixto.android.rembrandt.core.ui.adapter.ArtworkClick
-import com.listocalixto.android.rembrandt.core.ui.adapter.FavoriteClick
-import com.listocalixto.android.rembrandt.core.ui.databinding.ViewArtworkUserBinding
+import com.listocalixto.android.rembrandt.core.ui.databinding.ViewArtworkCarouselItemBinding
 import com.listocalixto.android.rembrandt.core.ui.extensions.palette
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState
 
-internal class ArtworkUserViewHolder private constructor(
-    val binding: ViewArtworkUserBinding,
+class ArtworkCarouselItemViewHolder internal constructor(
+    val binding: ViewArtworkCarouselItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    inline fun bind(
+    fun bind(
         item: ArtworkUserUiState,
-        crossinline onArtworkClick: ArtworkClick,
-        crossinline onFavoriteClick: FavoriteClick,
-    ) = binding.apply {
+        onArtworkClick: ArtworkClick,
+    ) = binding.run {
         artwork = item
-        iconButtonFavorite.setOnClickListener { onFavoriteClick(item.id, item.isFavorite) }
-        iconButtonShare.setOnClickListener {}
         root.setOnClickListener {
             onArtworkClick(
                 item.id,
-                card,
+                image,
                 image.result?.request?.memoryCacheKey?.key,
                 image.drawable?.toBitmap()?.palette()?.darkMutedSwatch?.rgb ?: Color.TRANSPARENT,
             )
@@ -36,10 +32,10 @@ internal class ArtworkUserViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): ArtworkUserViewHolder {
+        fun from(parent: ViewGroup): ArtworkCarouselItemViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ViewArtworkUserBinding.inflate(layoutInflater, parent, false)
-            return ArtworkUserViewHolder(binding)
+            val binding = ViewArtworkCarouselItemBinding.inflate(layoutInflater, parent, false)
+            return ArtworkCarouselItemViewHolder(binding)
         }
     }
 }

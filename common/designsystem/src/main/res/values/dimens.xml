@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="collage_item_margin_top">@dimen/grid_1</dimen>
+    <dimen name="collage_item_margin_horizontal">@dimen/grid_0_5</dimen>
+
+</resources>

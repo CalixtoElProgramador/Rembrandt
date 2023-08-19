@@ -2,7 +2,6 @@ package com.listocalixto.android.rembrandt.core.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
 
 class FragmentAdapter(
     private val fragments: List<Fragment>,

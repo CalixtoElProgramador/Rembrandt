@@ -10,7 +10,7 @@ import com.listocalixto.android.rembrandt.core.ui.databinding.ViewArtworkRecomme
 import com.listocalixto.android.rembrandt.core.ui.extensions.palette
 import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 
-class RecommendedArtworkViewHolder private constructor(
+internal class RecommendedArtworkViewHolder private constructor(
     val binding: ViewArtworkRecommendedBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -23,7 +23,7 @@ class RecommendedArtworkViewHolder private constructor(
             onArtwork(
                 item.id,
                 image.result?.request?.memoryCacheKey?.key,
-                image?.drawable?.toBitmap()?.palette()?.darkMutedSwatch?.rgb ?: Color.TRANSPARENT,
+                image.drawable?.toBitmap()?.palette()?.darkMutedSwatch?.rgb ?: Color.TRANSPARENT,
             )
         }
         executePendingBindings()

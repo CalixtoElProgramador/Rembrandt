@@ -10,6 +10,7 @@
 
     <!--8dp grid-->
     <dimen name="grid_1">@dimen/_8sdp</dimen>
+    <dimen name="grid_1_5">@dimen/_12sdp</dimen>
     <dimen name="grid_2">@dimen/_16sdp</dimen>
     <dimen name="grid_3">@dimen/_24sdp</dimen>
     <dimen name="grid_4">@dimen/_32sdp</dimen>
@@ -19,5 +20,11 @@
     <dimen name="grid_7_5">@dimen/_60sdp</dimen>
     <dimen name="grid_8">@dimen/_64sdp</dimen>
     <dimen name="grid_9">@dimen/_72sdp</dimen>
+    <dimen name="grid_10">@dimen/_80sdp</dimen>
+    <dimen name="grid_11">@dimen/_88sdp</dimen>
+    <dimen name="grid_12">@dimen/_96sdp</dimen>
+    <dimen name="grid_13">@dimen/_104sdp</dimen>
+    <dimen name="grid_14">@dimen/_112sdp</dimen>
+    <dimen name="grid_15">@dimen/_120sdp</dimen>
 
 </resources>

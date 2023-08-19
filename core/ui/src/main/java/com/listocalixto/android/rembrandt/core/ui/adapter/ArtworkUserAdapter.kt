@@ -2,9 +2,9 @@ package com.listocalixto.android.rembrandt.core.ui.adapter
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.listocalixto.android.rembrandt.core.ui.diffutil.ArtworkDiffUtil
 import com.listocalixto.android.rembrandt.core.ui.states.ArtworkUserUiState
 import com.listocalixto.android.rembrandt.core.ui.viewholder.ArtworkUserViewHolder
 
@@ -23,16 +23,6 @@ class ArtworkUserAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ArtworkUserViewHolder)?.apply {
             bind(getItem(position), onArtworkClick, onFavoriteClick)
-        }
-    }
-
-    object ArtworkDiffUtil : DiffUtil.ItemCallback<ArtworkUserUiState>() {
-        override fun areItemsTheSame(oldItem: ArtworkUserUiState, newItem: ArtworkUserUiState): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: ArtworkUserUiState, newItem: ArtworkUserUiState): Boolean {
-            return oldItem == newItem
         }
     }
 }
