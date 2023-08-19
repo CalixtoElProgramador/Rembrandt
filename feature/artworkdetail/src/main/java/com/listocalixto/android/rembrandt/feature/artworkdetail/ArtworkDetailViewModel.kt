@@ -27,6 +27,8 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFra
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.COMES_FROM_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.MEMORY_CACHE_KEY
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailFragment.Companion.SHOW_ENTER_ANIMATIONS
+import com.listocalixto.android.rembrandt.feature.artworkdetail.content.page.ArtworkCharacteristicsFragment
+import com.listocalixto.android.rembrandt.feature.artworkdetail.content.page.ArtworkDescriptionFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +69,7 @@ class ArtworkDetailViewModel @Inject constructor(
         initialValue = ArtworkDetailUiState(),
     )
     private val viewModelDispatcher = viewModelScope.coroutineContext + Dispatchers.Main
+    val contentFragments = listOf(ArtworkDescriptionFragment(), ArtworkCharacteristicsFragment())
 
     private var translateJob: Job? = null
 

@@ -9,18 +9,17 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
 import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
 import com.listocalixto.android.rembrandt.core.ui.extensions.fader
-import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
+import com.listocalixto.android.rembrandt.core.ui.utility.FragmentPage
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkCharacteristicsBinding as Binding
 
 class ArtworkCharacteristicsFragment :
-    ArtworkContentPage(R.layout.fragment_artwork_characteristics) {
+    FragmentPage(R.layout.fragment_artwork_characteristics) {
 
     override val tabTitleRes: Int = Rui.string.frag_artwork_content_tab_characteristics_text
     override val instance: Fragment = this
-
     private val viewModel: ArtworkDetailViewModel by viewModels({ requireParentFragment() })
     private val adapter = ArtworkCharacteristicAdapter()
 
@@ -45,6 +44,10 @@ class ArtworkCharacteristicsFragment :
             }
             if (state.triggerTranslationAnimation != null) {
                 characteristics.fader(alphaTarget = 1.0f)
+            } else {
+                characteristics.post {
+                    viewPagerFragment?.updatePagerHeightForChild(root)
+                }
             }
         }
     }

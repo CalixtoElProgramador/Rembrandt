@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.listocalixto.android.rembrandt.core.ui.extensions.EmphasisType
 import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLifeCycle
 import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
 import com.listocalixto.android.rembrandt.core.ui.extensions.fader
-import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
-import com.listocalixto.android.rembrandt.core.ui.utility.ArtworkContentPage
+import com.listocalixto.android.rembrandt.core.ui.utility.FragmentPage
 import com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel
 import com.listocalixto.android.rembrandt.feature.artworkdetail.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,31 +16,20 @@ import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDescriptionBinding as Binding
 
 @AndroidEntryPoint
-class ArtworkDescriptionFragment : ArtworkContentPage(R.layout.fragment_artwork_description) {
+class ArtworkDescriptionFragment : FragmentPage(R.layout.fragment_artwork_description) {
 
     override val tabTitleRes: Int = Rui.string.frag_artwork_content_tab_description_text
     override val instance: Fragment = this
     private val viewModel: ArtworkDetailViewModel by viewModels({ requireParentFragment() })
 
-    private val principalFragment: PrincipalFragment?
-        get() = ((parentFragment as? NavHostFragment)?.parentFragment as? PrincipalFragment)
-
     private var binding: Binding? = null
-    var extendedFab: ExtendedFloatingActionButton? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Binding.bind(view)
         binding?.run {
             setupBinding()
-            initExternalViews()
             collectUiState()
-        }
-    }
-
-    private fun initExternalViews() {
-        principalFragment?.let {
-            extendedFab = activity?.findViewById(it.extendedFabIdRes)
         }
     }
 
@@ -60,6 +46,10 @@ class ArtworkDescriptionFragment : ArtworkContentPage(R.layout.fragment_artwork_
             }
             if (state.triggerTranslationAnimation != null) {
                 textDescription.fader(emphasisType = EmphasisType.Medium)
+            } else {
+                textDescription.post {
+                    viewPagerFragment?.updatePagerHeightForChild(root)
+                }
             }
         }
     }

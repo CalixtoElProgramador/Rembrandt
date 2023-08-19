@@ -4,12 +4,14 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Build
 import android.view.View
 import android.view.View.ALPHA
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.IntegerRes
@@ -43,18 +45,30 @@ fun View.fader(
     set.start()
 }
 
+fun View.animateHeightChanges(
+    targetHeight: Int,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
+) {
+    val duration = resources.getInteger(durationRes).toLong()
+    ValueAnimator.ofInt(measuredHeight, targetHeight).run {
+        addUpdateListener { valueAnimator ->
+            val height = valueAnimator.animatedValue as Int
+            val layoutParams: ViewGroup.LayoutParams = layoutParams
+            layoutParams.height = height
+            setLayoutParams(layoutParams)
+        }
+        this.duration = duration
+        start()
+    }
+}
+
 @SuppressLint("RestrictedApi")
 fun View.emphasizes(
     emphasisType: EmphasisType,
     @IntegerRes durationRes: Int = RDS.integer.motion_duration_small,
 ) {
     MaterialAttributes.resolve(context, emphasisType.valueAttrRes)?.float?.let {
-        ObjectAnimator.ofFloat(
-            this,
-            ALPHA,
-            this.alpha,
-            it,
-        ).run {
+        ObjectAnimator.ofFloat(this, ALPHA, this.alpha, it).run {
             duration = resources.getInteger(durationRes).toLong()
             start()
         }

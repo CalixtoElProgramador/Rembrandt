@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorAnimationMode="fade"
             app:tabIndicatorFullWidth="true"
-            app:tabMode="auto"/>
+            app:tabMode="fixed" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"

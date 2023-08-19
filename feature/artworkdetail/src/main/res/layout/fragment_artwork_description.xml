@@ -14,12 +14,13 @@
             type="com.listocalixto.android.rembrandt.feature.artworkdetail.ArtworkDetailViewModel" />
     </data>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textDescription"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:alpha="?attr/emphasisMediumAlpha"
-        android:padding="@dimen/grid_2"
+        android:paddingHorizontal="@dimen/grid_2"
+        android:paddingTop="@dimen/grid_2"
         android:text="@string/hello_blank_fragment"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:textColor="?attr/colorOnBackground"
