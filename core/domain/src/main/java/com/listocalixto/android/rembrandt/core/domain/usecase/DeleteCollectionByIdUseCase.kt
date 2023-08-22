@@ -1,0 +1,12 @@
+package com.listocalixto.android.rembrandt.core.domain.usecase
+
+import com.listocalixto.android.rembrandt.core.domain.repository.CollectionRepo
+import javax.inject.Inject
+
+class DeleteCollectionByIdUseCase @Inject constructor(
+    private val repo: CollectionRepo,
+) {
+    suspend operator fun invoke(id: String) {
+        repo.deleteCollectionById(id)
+    }
+}

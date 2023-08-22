@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkContentBinding as Binding
 
 @AndroidEntryPoint
-class ArtworkContentFragment : FragmentViewPager(R.layout.fragment_artwork_content) {
+internal class ArtworkContentFragment : FragmentViewPager(R.layout.fragment_artwork_content) {
 
     private var binding: Binding? = null
     private val viewModel: ArtworkDetailViewModel by viewModels({ requireParentFragment() })

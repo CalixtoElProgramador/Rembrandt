@@ -14,7 +14,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface ArtworkModule {
-
     @Binds
     fun bindsRemoteArtworkDataSource(impl: RemoteArtworkDataSourceImpl): RemoteArtworkDataSource
 

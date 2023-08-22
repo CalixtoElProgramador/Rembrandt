@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.data.artwork.mapper
 
 import com.listocalixto.android.rembrandt.common.dependencies.Mapper
 import com.listocalixto.android.rembrandt.common.entities.Artwork
-import com.listocalixto.android.rembrandt.core.local.artwork.table.LocalArtwork
+import com.listocalixto.android.rembrandt.core.local.entities.artwork.table.LocalArtwork
 import javax.inject.Inject
 
 internal class LocalArtworkToEntity @Inject constructor(

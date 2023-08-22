@@ -1,0 +1,131 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="addEditCollectionFragment"
+            type="com.listocalixto.android.feature.savetocollection.addedit.AddEditCollectionFragment" />
+
+        <variable
+            name="addEditCollectionViewModel"
+            type="com.listocalixto.android.feature.savetocollection.addedit.AddEditCollectionViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/grid_2"
+        tools:context="com.listocalixto.android.feature.savetocollection.addedit.AddEditCollectionFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutName"
+            style="?attr/textInputOutlinedDenseStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            app:counterEnabled="true"
+            app:counterMaxLength="@{addEditCollectionViewModel.COLLECTION_NAME_MAX_LENGTH}"
+            app:helperText="@{context.getString(addEditCollectionViewModel.uiState.helperText)}"
+            app:helperTextTextColor="@{addEditCollectionViewModel.uiState.shouldEnableErrorNameCollection}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:counterMaxLength="60"
+            tools:helperText="*required">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={addEditCollectionViewModel.name}"
+                tools:text="" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutDescription"
+            style="?attr/textInputOutlinedDenseStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_2"
+            android:hint="@string/description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:text="@={addEditCollectionViewModel.description}"
+                tools:text="@tools:sample/lorem/random" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/grid_2"
+            android:enabled="@{addEditCollectionViewModel.uiState.shouldEnableCreateButton}"
+            android:onClick="@{_ -> addEditCollectionFragment.onCreateClick()}"
+            android:text="@string/create"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutDescription"
+            app:layout_constraintVertical_bias="0.0"
+            app:visibleIf="@{addEditCollectionViewModel.uiState.shouldDisplayAddCollectionState}"
+            tools:visibility="gone" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/grid_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutDescription"
+            app:layout_constraintVertical_bias="0.0"
+            app:visibleIf="@{!addEditCollectionViewModel.uiState.shouldDisplayAddCollectionState}"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonDelete"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/grid_0_5"
+                android:onClick="@{_ -> addEditCollectionFragment.onDeleteClick()}"
+                android:text="@string/delete"
+                app:layout_constraintEnd_toStartOf="@id/buttonUpdate"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonUpdate"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_0_5"
+                android:enabled="@{addEditCollectionViewModel.uiState.shouldEnableCreateButton}"
+                android:onClick="@{_ -> addEditCollectionFragment.onUpdateClick()}"
+                android:text="@string/update"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/buttonDelete"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

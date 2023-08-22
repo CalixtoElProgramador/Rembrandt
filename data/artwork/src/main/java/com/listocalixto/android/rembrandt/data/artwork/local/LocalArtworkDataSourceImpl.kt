@@ -4,7 +4,7 @@ import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.entities.Artwork
 import com.listocalixto.android.rembrandt.core.domain.utility.ArtworkQuery
-import com.listocalixto.android.rembrandt.core.local.artwork.ArtworkDao
+import com.listocalixto.android.rembrandt.core.local.entities.artwork.ArtworkDao
 import com.listocalixto.android.rembrandt.data.artwork.mapper.LocalArtworkToEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

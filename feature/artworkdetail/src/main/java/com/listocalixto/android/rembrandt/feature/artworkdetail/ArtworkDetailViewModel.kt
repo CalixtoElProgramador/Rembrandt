@@ -49,7 +49,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class ArtworkDetailViewModel @Inject constructor(
+internal class ArtworkDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     observeArtworkUserById: ObserveArtworkUserByIdUseCase,
     getManifestByArtworkId: GetManifestByArtworkIdUseCase,

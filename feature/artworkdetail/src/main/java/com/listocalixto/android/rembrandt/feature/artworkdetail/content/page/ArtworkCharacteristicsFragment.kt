@@ -15,7 +15,7 @@ import com.listocalixto.android.rembrandt.feature.artworkdetail.R
 import com.listocalixto.android.rembrandt.core.ui.R as Rui
 import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkCharacteristicsBinding as Binding
 
-class ArtworkCharacteristicsFragment :
+internal class ArtworkCharacteristicsFragment :
     FragmentPage(R.layout.fragment_artwork_characteristics) {
 
     override val tabTitleRes: Int = Rui.string.frag_artwork_content_tab_characteristics_text

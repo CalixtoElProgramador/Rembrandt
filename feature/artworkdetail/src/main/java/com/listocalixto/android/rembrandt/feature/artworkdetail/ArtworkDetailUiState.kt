@@ -41,7 +41,7 @@ import com.listocalixto.android.rembrandt.core.ui.states.ArtworkCharacteristicUi
 import com.listocalixto.android.rembrandt.core.ui.states.RecommendedArtworksUiState
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
 
-data class ArtworkDetailUiState(
+internal data class ArtworkDetailUiState(
     val imageMemoryCacheKey: String? = null,
     val triggerEnterAnimations: Unit? = null,
     val wereEnterAnimationsShown: Boolean = false,

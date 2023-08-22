@@ -50,7 +50,7 @@
             android:alpha="?attr/emphasisMediumAlpha"
             android:text="@{artworkCollage.subtitle}"
             android:textAlignment="center"
-            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="@id/textTitle"
             app:layout_constraintStart_toStartOf="@id/textTitle"

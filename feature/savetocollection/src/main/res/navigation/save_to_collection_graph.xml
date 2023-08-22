@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/save_to_collection_graph"
+    app:startDestination="@id/saveToCollectionFragment">
+
+    <fragment
+        android:id="@+id/saveToCollectionFragment"
+        android:name="com.listocalixto.android.feature.savetocollection.saveto.SaveToCollectionFragment"
+        android:label="fragment_save_to_collection"
+        tools:layout="@layout/fragment_save_to_collection">
+        <action
+            android:id="@+id/to_addEditCollectionFragment"
+            app:destination="@id/addEditCollectionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditCollectionFragment"
+        android:name="com.listocalixto.android.feature.savetocollection.addedit.AddEditCollectionFragment"
+        android:label="fragment_add_edit_collection"
+        tools:layout="@layout/fragment_add_edit_collection" >
+        <argument
+            android:name="collectionId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+</navigation>

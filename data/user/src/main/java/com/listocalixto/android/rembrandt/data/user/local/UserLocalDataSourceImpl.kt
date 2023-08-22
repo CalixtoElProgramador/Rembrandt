@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt.data.user.local
 import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.entities.User
-import com.listocalixto.android.rembrandt.core.local.user.UserDataStore
+import com.listocalixto.android.rembrandt.core.local.entities.user.UserDataStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -16,7 +16,7 @@ internal class UserLocalDataSourceImpl @Inject constructor(
 ) : UserLocalDataSource {
     override val user: Flow<User> = datsStore.preferences.map { localUser ->
         User(
-            favoriteArtworks = localUser.favoriteArtworksId,
+            favoriteArtworkIds = localUser.favoriteArtworkIds,
         )
     }.flowOn(defaultDispatcher)
 

@@ -16,6 +16,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.listocalixto.android.rembrandt.ArtworkDetailGraphDirections
 import com.listocalixto.android.rembrandt.DisplayImageGraphDirections
 import com.listocalixto.android.rembrandt.R
+import com.listocalixto.android.rembrandt.SaveToCollectionFeatureDirections
 import com.listocalixto.android.rembrandt.core.ui.extensions.applyFadeThroughExitTransition
 import com.listocalixto.android.rembrandt.core.ui.extensions.colorize
 import com.listocalixto.android.rembrandt.core.ui.extensions.getNavHost
@@ -42,7 +43,6 @@ internal class PrincipalFragmentImpl :
             ?.childFragmentManager
             ?.fragments
             ?.first()
-
     private val topLevelFragment: Fragment?
         get() = currentNavigationFragment as? HomeFragment
             ?: currentNavigationFragment as? ExploreFragment
@@ -131,6 +131,11 @@ internal class PrincipalFragmentImpl :
                 }
             }
         }
+    }
+
+    override fun showSaveToCollectionBottomSheet(artworkId: Long) {
+        val direction = SaveToCollectionFeatureDirections.showSaveToCollection(artworkId)
+        findNavController().navigate(direction)
     }
 
     private fun Binding.onExploreFragment() {

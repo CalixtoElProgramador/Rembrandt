@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.data.translator.mapper
 
 import com.listocalixto.android.rembrandt.common.dependencies.Mapper
 import com.listocalixto.android.rembrandt.common.entities.Translation
-import com.listocalixto.android.rembrandt.core.local.translator.LocalTranslation
+import com.listocalixto.android.rembrandt.core.local.entities.translator.LocalTranslation
 import javax.inject.Inject
 
 class LocalTranslationToEntity @Inject constructor() : Mapper<LocalTranslation, Translation>() {

@@ -60,7 +60,7 @@ data class ArtworkUser internal constructor(
         hasNotBeenViewedMuch = artwork.hasNotBeenViewedMuch,
         id = artwork.id,
         inscriptions = artwork.inscriptions,
-        isFavorite = artwork.id in user.favoriteArtworks,
+        isFavorite = artwork.id in user.favoriteArtworkIds,
         imageId = artwork.imageId,
         imageUrl = artwork.imageUrl,
         latitude = artwork.latitude,

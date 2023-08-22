@@ -32,6 +32,7 @@ import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialFadeThrough
+import com.google.android.material.transition.MaterialSharedAxis
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.AllContainerColors
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType.DifferentContainerColors
@@ -202,4 +203,34 @@ fun Fragment.isDarkMode(): Boolean {
 
 fun Fragment.getAttrColor(@AttrRes colorAttr: Int): Int {
     return context.getAttrColor(colorAttr)
+}
+
+fun Fragment.applyEnterSharedAxisTransition(
+    transitionType: SharedAxisTransitionType,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large
+) {
+    enterTransition = MaterialSharedAxis(transitionType.value, true).apply {
+        duration = resources.getInteger(durationRes).toLong()
+    }
+    returnTransition = MaterialSharedAxis(transitionType.value, false).apply {
+        duration = resources.getInteger(durationRes).toLong()
+    }
+}
+
+fun Fragment.applyExitSharedAxisTransition(
+    transitionType: SharedAxisTransitionType,
+    @IntegerRes durationRes: Int = RDS.integer.motion_duration_large,
+) {
+    exitTransition = MaterialSharedAxis(transitionType.value, true).apply {
+        duration = resources.getInteger(durationRes).toLong()
+    }
+    reenterTransition = MaterialSharedAxis(transitionType.value, false).apply {
+        duration = resources.getInteger(durationRes).toLong()
+    }
+}
+
+enum class SharedAxisTransitionType(val value: Int) {
+    TRANSITION_X(MaterialSharedAxis.X),
+    TRANSITION_Y(MaterialSharedAxis.Y),
+    TRANSITION_Z(MaterialSharedAxis.Z),
 }

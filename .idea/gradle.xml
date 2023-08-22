@@ -40,6 +40,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/artwork" />
+            <option value="$PROJECT_DIR$/data/collection" />
             <option value="$PROJECT_DIR$/data/manifest" />
             <option value="$PROJECT_DIR$/data/translator" />
             <option value="$PROJECT_DIR$/data/user" />
@@ -49,6 +50,7 @@
             <option value="$PROJECT_DIR$/feature/explore" />
             <option value="$PROJECT_DIR$/feature/favorites" />
             <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/savetocollection" />
           </set>
         </option>
       </GradleProjectSettings>

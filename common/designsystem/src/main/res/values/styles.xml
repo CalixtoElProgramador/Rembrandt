@@ -16,5 +16,27 @@
         <item name="cornerSize">@dimen/_8sdp</item>
     </style>
 
+    <style name="Widget.Rembrandt.TextInputLayout.OutlinedBox.Dense" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.Rembrandt.TextInputLayout.OutlinedBox.Dense
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.Rembrandt.TextInputLayout.OutlinedBox.Dense" parent="">
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Rembrandt.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Rembrandt.LabelSmall</item>
+        <item name="editTextStyle">@style/Widget.Rembrandt.TextInputEditText.OutlinedBox.Dense
+        </item>
+    </style>
+
+    <style name="Widget.Rembrandt.TextInputEditText.OutlinedBox.Dense" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.Rembrandt.TextInputEditText.OutlinedBox.Dense
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.Rembrandt.TextInputEditText.OutlinedBox.Dense" parent="">
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Rembrandt.LabelLarge</item>
+    </style>
 
 </resources>

@@ -42,4 +42,6 @@ abstract class PrincipalFragment(@LayoutRes contentLayoutId: Int) : Fragment(con
         zoom: Float,
         extras: FragmentNavigator.Extras = FragmentNavigatorExtras(),
     )
+
+    abstract fun showSaveToCollectionBottomSheet(artworkId: Long)
 }

@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt.data.manifest.local
 import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.entities.Manifest
-import com.listocalixto.android.rembrandt.core.local.manifest.ManifestDao
+import com.listocalixto.android.rembrandt.core.local.entities.manifest.ManifestDao
 import com.listocalixto.android.rembrandt.data.manifest.mapper.LocalManifestToEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.data.artwork.mapper
 
 import com.listocalixto.android.rembrandt.common.dependencies.Mapper
 import com.listocalixto.android.rembrandt.common.entities.model.Color
-import com.listocalixto.android.rembrandt.core.local.artwork.dto.LocalColor
+import com.listocalixto.android.rembrandt.core.local.entities.artwork.dto.LocalColor
 import javax.inject.Inject
 
 internal class LocalColorToModel @Inject constructor() : Mapper<LocalColor, Color>() {

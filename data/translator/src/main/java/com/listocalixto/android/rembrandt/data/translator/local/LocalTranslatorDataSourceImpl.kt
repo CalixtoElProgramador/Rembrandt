@@ -3,7 +3,7 @@ package com.listocalixto.android.rembrandt.data.translator.local
 import com.listocalixto.android.rembrandt.common.dependencies.di.Dispatcher
 import com.listocalixto.android.rembrandt.common.dependencies.di.RDispatchers.Default
 import com.listocalixto.android.rembrandt.common.entities.Translation
-import com.listocalixto.android.rembrandt.core.local.translator.TranslatorDao
+import com.listocalixto.android.rembrandt.core.local.entities.translator.TranslatorDao
 import com.listocalixto.android.rembrandt.data.translator.mapper.LocalTranslationToEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

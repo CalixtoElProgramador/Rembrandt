@@ -2,7 +2,7 @@ package com.listocalixto.android.rembrandt.data.manifest.mapper
 
 import com.listocalixto.android.rembrandt.common.dependencies.Mapper
 import com.listocalixto.android.rembrandt.common.entities.Manifest
-import com.listocalixto.android.rembrandt.core.local.manifest.LocalManifest
+import com.listocalixto.android.rembrandt.core.local.entities.manifest.LocalManifest
 import javax.inject.Inject
 
 class LocalManifestToEntity @Inject constructor() : Mapper<LocalManifest, Manifest>() {

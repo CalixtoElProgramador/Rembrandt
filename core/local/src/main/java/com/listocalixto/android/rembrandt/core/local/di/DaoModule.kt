@@ -1,9 +1,10 @@
 package com.listocalixto.android.rembrandt.core.local.di
 
 import com.listocalixto.android.rembrandt.core.local.RembrandtDatabase
-import com.listocalixto.android.rembrandt.core.local.artwork.ArtworkDao
-import com.listocalixto.android.rembrandt.core.local.manifest.ManifestDao
-import com.listocalixto.android.rembrandt.core.local.translator.TranslatorDao
+import com.listocalixto.android.rembrandt.core.local.entities.artwork.ArtworkDao
+import com.listocalixto.android.rembrandt.core.local.entities.manifest.ManifestDao
+import com.listocalixto.android.rembrandt.core.local.entities.translator.TranslatorDao
+import com.listocalixto.android.rembrandt.core.local.entities.collection.CollectionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,8 @@ object DaoModule {
 
     @Provides
     fun provideTranslatorDao(database: RembrandtDatabase): TranslatorDao = database.translatorDao()
+
+    @Provides
+    fun provideCollectionDao(database: RembrandtDatabase): CollectionDao =
+        database.collectionDao()
 }

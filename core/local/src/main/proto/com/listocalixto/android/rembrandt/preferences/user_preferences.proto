@@ -6,5 +6,5 @@ option java_multiple_files = true;
 message UserPreferences {
     // Each map is used to store a set of string IDs. The bool has no meaning, but proto3 doesn't
     // have a Set type so this is the closest we can get to a Set.
-    map<int64, bool> favorite_artworks_id = 1;
+    map<int64, bool> favorite_artworks_ids = 1;
 }

@@ -14,9 +14,8 @@ class ObserveAllFavoriteArtworksUseCase @Inject constructor(
     private val userRepo: UserRepo,
     private val observeAllArtworksUser: ObserveAllArtworksUserUseCase,
 ) {
-
     operator fun invoke(): Flow<List<ArtworkUser>> {
-        return userRepo.user.map { it.favoriteArtworks }
+        return userRepo.user.map { it.favoriteArtworkIds }
             .distinctUntilChanged()
             .flatMapLatest { favoritesArtworks ->
                 when {

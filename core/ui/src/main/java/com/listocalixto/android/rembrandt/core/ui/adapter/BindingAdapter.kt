@@ -12,8 +12,12 @@ import androidx.annotation.AttrRes
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.google.android.material.R.attr.colorError
+import com.google.android.material.R.attr.colorOnSurfaceVariant
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.textfield.TextInputLayout
+import com.listocalixto.android.rembrandt.core.ui.extensions.getAttrColor
 import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import com.listocalixto.android.rembrandt.core.ui.extensions.visible
 import com.listocalixto.android.rembrandt.core.ui.utility.IconButtonType
@@ -224,4 +228,13 @@ fun ImageView.bindSrc(drawable: Drawable) {
 fun MaterialButton.bindToggle(toggle: Boolean, type: IconButtonType) {
     iconTint = ColorStateList.valueOf(type.getIconTint(context, toggle))
     setBackgroundColor(type.getBackgroundColor(context, toggle))
+}
+
+@BindingAdapter("helperTextTextColor")
+fun TextInputLayout.bindHelperTextTextColor(isError: Boolean) {
+    if (isError) {
+        setHelperTextColor(ColorStateList.valueOf(context.getAttrColor(colorError)))
+    } else {
+        setHelperTextColor(ColorStateList.valueOf(context.getAttrColor(colorOnSurfaceVariant)))
+    }
 }

@@ -1,0 +1,144 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.listocalixto.android.rembrandt.core.ui.utility.IconButtonType" />
+
+        <variable
+            name="saveToCollectionFragment"
+            type="com.listocalixto.android.feature.savetocollection.saveto.SaveToCollectionFragment" />
+
+        <variable
+            name="saveToCollectionViewModel"
+            type="com.listocalixto.android.feature.savetocollection.saveto.SaveToCollectionViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.listocalixto.android.feature.savetocollection.saveto.SaveToCollectionFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerPopulatedState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{!saveToCollectionViewModel.uiState.shouldDisplayEmptyState}">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:paddingHorizontal="@dimen/grid_2"
+                android:text="@{saveToCollectionViewModel.uiState.editModeActivated ? @string/edit : @string/save_to}"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintBottom_toBottomOf="@id/iconButtonEdit"
+                app:layout_constraintEnd_toStartOf="@id/iconButtonEdit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iconButtonEdit"
+                tools:text="Save to..." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/iconButtonEdit"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/grid_0_5"
+                android:onClick="@{_ -> saveToCollectionViewModel.toggleEditMode()}"
+                app:icon="@{saveToCollectionViewModel.uiState.editModeActivated ? @drawable/ic_edit : @drawable/ic_outline_edit}"
+                app:layout_constraintBottom_toBottomOf="@id/iconButtonAdd"
+                app:layout_constraintEnd_toStartOf="@id/iconButtonAdd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:toggle="@{saveToCollectionViewModel.uiState.editModeActivated}"
+                app:type="@{saveToCollectionViewModel.uiState.editModeActivated ? IconButtonType.Filled : IconButtonType.Standard}"
+                tools:icon="@drawable/ic_edit" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/iconButtonAdd"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/grid_1"
+                android:onClick="@{() -> saveToCollectionFragment.onCreateNewCollectionClick()}"
+                app:icon="@drawable/ic_add"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/collections"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/grid_1"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/grid_1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:listitem="@layout/view_save_to_collection" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerEmptyState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/grid_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{saveToCollectionViewModel.uiState.shouldDisplayEmptyState}"
+            tools:visibility="gone">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:alpha="?attr/emphasisMediumAlpha"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_space_bar"
+                app:tint="?attr/colorOnSurface" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:alpha="?attr/emphasisMediumAlpha"
+                android:text="@string/save_to_collection_empty_state_description"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/icon" />
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/grid_2"
+                android:onClick="@{_ -> saveToCollectionFragment.onCreateNewCollectionClick()}"
+                android:text="@string/create_a_new_collection"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textDescription"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

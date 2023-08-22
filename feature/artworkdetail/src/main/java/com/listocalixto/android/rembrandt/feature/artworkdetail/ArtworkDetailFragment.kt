@@ -8,6 +8,7 @@ import android.graphics.PointF
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -41,16 +42,13 @@ import com.listocalixto.android.rembrandt.core.ui.extensions.collectFlowWithLife
 import com.listocalixto.android.rembrandt.core.ui.extensions.emphasizes
 import com.listocalixto.android.rembrandt.core.ui.extensions.fader
 import com.listocalixto.android.rembrandt.core.ui.extensions.getInterpolator
-import com.listocalixto.android.rembrandt.core.ui.extensions.gone
 import com.listocalixto.android.rembrandt.core.ui.extensions.isDarkMode
 import com.listocalixto.android.rembrandt.core.ui.extensions.showSnackbar
 import com.listocalixto.android.rembrandt.core.ui.extensions.startFragmentTransition
-import com.listocalixto.android.rembrandt.core.ui.extensions.visible
 import com.listocalixto.android.rembrandt.core.ui.navigation.PrincipalFragment
 import com.listocalixto.android.rembrandt.core.ui.utility.ColorContainerType
 import com.listocalixto.android.rembrandt.core.ui.utility.SnackbarDuration
 import com.listocalixto.android.rembrandt.core.ui.utility.UiText
-import com.listocalixto.android.rembrandt.feature.artworkdetail.databinding.FragmentArtworkDetailBinding
 import com.ortiz.touchview.OnTouchCoordinatesListener
 import dagger.hilt.android.AndroidEntryPoint
 import com.listocalixto.android.rembrandt.common.designsystem.R as RDS
@@ -119,14 +117,16 @@ class ArtworkDetailFragment : Fragment(R.layout.fragment_artwork_detail) {
         artworkDetailFragment = this@ArtworkDetailFragment
         setupArtworkImageClick()
         gradientView.isVisible = isDarkMode()
-        setupChipCopyClick()
     }
 
-    private fun FragmentArtworkDetailBinding.setupChipCopyClick() {
-        chipCopy.setOnClickListener {
-            image.clipboardImage()
-            showSnackbar(containerFABs, UiText.StringResource(copied_to_the_clipboard))
-        }
+    fun onChipCopy(image: ImageView) {
+        image.clipboardImage()
+        showSnackbar(containerFABs, UiText.StringResource(copied_to_the_clipboard))
+    }
+
+    fun onSaveToCollection() {
+        val artworkId = viewModel.uiState.value.artworkId
+        principalFragment?.showSaveToCollectionBottomSheet(artworkId)
     }
 
     private fun Binding.setupArtworkImageClick() {

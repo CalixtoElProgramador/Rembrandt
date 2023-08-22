@@ -39,10 +39,10 @@ object LocalModule {
         @ApplicationContext context: Context,
         @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
-        userPreferencesSerializer: UserPreferencesSerializer,
+        serializer: UserPreferencesSerializer,
     ): DataStore<UserPreferences> =
         DataStoreFactory.create(
-            serializer = userPreferencesSerializer,
+            serializer = serializer,
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
         ) {
             context.dataStoreFile("user_preferences.pb")

@@ -2,9 +2,11 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
+      <module name="AndroidStudioProjects.Rembrandt.data.collectionb" target="17" />
       <module name="AndroidStudioProjects.Rembrandt.navigation.main" target="17" />
       <module name="Rembrandt.common.extfunctions" target="17" />
       <module name="Rembrandt.data.userartwork" target="17" />
+      <module name="Rembrandt.feature.addeditcollection" target="17" />
       <module name="Rembrandt.navigation.authentication" target="17" />
       <module name="Rembrandt.navigation.principal" target="17" />
       <module name="Rembrandt.navigation.settings" target="17" />

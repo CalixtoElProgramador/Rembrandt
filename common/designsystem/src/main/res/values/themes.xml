@@ -72,9 +72,13 @@
         <item name="textAppearanceBodySmall">@style/TextAppearance.Rembrandt.BodySmall</item>
 
         <item name="android:windowBackground">?attr/android:colorBackground</item>
-        
+
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
+
+        <item name="textInputOutlinedDenseStyle">
+            @style/Widget.Rembrandt.TextInputLayout.OutlinedBox.Dense
+        </item>
 
     </style>
 
